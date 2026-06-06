@@ -1,5 +1,5 @@
-import logoAsset from "@/assets/daleel-logo.png.asset.json";
+import iconSrc from "@/assets/icon.png";
 
 export function Logo({ className }: { className?: string }) {
-  return <img src={logoAsset.url} alt="دليل" className={className} />;
+  return <img src={iconSrc} alt="دليل" className={className} />;
 }
