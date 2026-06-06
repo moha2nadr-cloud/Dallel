@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Logo } from "@/components/Logo";
 import { getProfile, setProfile, type Profile } from "@/lib/storage";
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const CLIENT_ID = "1036057874420-d2h6r8s755huud2336qqanvqj16soh4j.apps.googleusercontent.com";
 
@@ -18,52 +18,54 @@ export const Route = createFileRoute("/login")({
 function Login() {
   const navigate = useNavigate();
   const btnRef = useRef<HTMLButtonElement>(null);
-  const initialized = useRef(false);
-
-  const onGoogleCredential = useCallback((response: google.accounts.id.CredentialResponse) => {
-    const data = JSON.parse(atob(response.credential.split(".")[1]));
-    const profile: Profile = {
-      name: data.name,
-      email: data.email,
-      picture: data.picture,
-      age: 0,
-      specialization: "",
-      university: "",
-    };
-    setProfile(profile);
-    const p = getProfile();
-    navigate({ to: p ? "/home" : "/onboarding" });
-  }, [navigate]);
-
-  const handleGoogleSignIn = useCallback(() => {
-    if (typeof google !== "undefined" && google.accounts?.id) {
-      google.accounts.id.prompt();
-    }
-  }, []);
+  const [loading, setLoading] = useState(false);
+  const loadedRef = useRef(false);
 
   useEffect(() => {
-    if (initialized.current) return;
-    initialized.current = true;
+    if (loadedRef.current) return;
+    loadedRef.current = true;
 
-    const f = () => {
-      google.accounts.id.initialize({
-        client_id: CLIENT_ID,
-        callback: onGoogleCredential,
-        cancel_on_tap_outside: false,
-      });
-    };
-
-    if (typeof google !== "undefined" && google.accounts?.id) {
-      f();
-    } else {
+    if (typeof google === "undefined" || !google.accounts?.oauth2) {
       const s = document.createElement("script");
       s.src = "https://accounts.google.com/gsi/client";
       s.async = true;
       s.defer = true;
-      s.onload = f;
       document.head.appendChild(s);
     }
-  }, [onGoogleCredential]);
+  }, []);
+
+  const handleGoogleSignIn = () => {
+    setLoading(true);
+    const client = google.accounts.oauth2.initTokenClient({
+      client_id: CLIENT_ID,
+      scope: "openid email profile",
+      callback: (response: { access_token?: string; error?: string }) => {
+        if (response.access_token) {
+          fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+            headers: { Authorization: `Bearer ${response.access_token}` },
+          })
+            .then((r) => r.json())
+            .then((data) => {
+              const profile: Profile = {
+                name: data.name,
+                email: data.email,
+                picture: data.picture,
+                age: 0,
+                specialization: "",
+                university: "",
+              };
+              setProfile(profile);
+              setLoading(false);
+              navigate({ to: "/home" });
+            })
+            .catch(() => setLoading(false));
+        } else {
+          setLoading(false);
+        }
+      },
+    });
+    client.requestAccessToken();
+  };
 
   const goNext = () => {
     const p = getProfile();
@@ -95,10 +97,15 @@ function Login() {
           ref={btnRef}
           type="button"
           onClick={handleGoogleSignIn}
-          className="flex w-full items-center justify-center gap-3 rounded-2xl bg-cream px-5 py-3.5 text-sm font-semibold text-ink shadow-[0_10px_30px_-12px_rgba(0,0,0,0.6)] transition active:scale-[0.98]"
+          disabled={loading}
+          className="flex w-full items-center justify-center gap-3 rounded-2xl bg-cream px-5 py-3.5 text-sm font-semibold text-ink shadow-[0_10px_30px_-12px_rgba(0,0,0,0.6)] transition active:scale-[0.98] disabled:opacity-60"
         >
-          <GoogleIcon />
-          تسجيل الدخول بحساب Google
+          {loading ? (
+            <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-ink border-t-transparent" />
+          ) : (
+            <GoogleIcon />
+          )}
+          {loading ? "جاري تسجيل الدخول..." : "تسجيل الدخول بحساب Google"}
         </button>
 
         <button
