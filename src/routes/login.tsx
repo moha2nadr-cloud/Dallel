@@ -1,6 +1,9 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Logo } from "@/components/Logo";
-import { getProfile } from "@/lib/storage";
+import { getProfile, setProfile, type Profile } from "@/lib/storage";
+import { useEffect, useRef, useCallback } from "react";
+
+const CLIENT_ID = "1036057874420-d2h6r8s755huud2336qqanvqj16soh4j.apps.googleusercontent.com";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -14,10 +17,59 @@ export const Route = createFileRoute("/login")({
 
 function Login() {
   const navigate = useNavigate();
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const initialized = useRef(false);
+
+  const onGoogleCredential = useCallback((response: google.accounts.id.CredentialResponse) => {
+    const data = JSON.parse(atob(response.credential.split(".")[1]));
+    const profile: Profile = {
+      name: data.name,
+      email: data.email,
+      picture: data.picture,
+      age: 0,
+      specialization: "",
+      university: "",
+    };
+    setProfile(profile);
+    const p = getProfile();
+    navigate({ to: p ? "/home" : "/onboarding" });
+  }, [navigate]);
+
+  const handleGoogleSignIn = useCallback(() => {
+    if (typeof google !== "undefined" && google.accounts?.id) {
+      google.accounts.id.prompt();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (initialized.current) return;
+    initialized.current = true;
+
+    const f = () => {
+      google.accounts.id.initialize({
+        client_id: CLIENT_ID,
+        callback: onGoogleCredential,
+        cancel_on_tap_outside: false,
+      });
+    };
+
+    if (typeof google !== "undefined" && google.accounts?.id) {
+      f();
+    } else {
+      const s = document.createElement("script");
+      s.src = "https://accounts.google.com/gsi/client";
+      s.async = true;
+      s.defer = true;
+      s.onload = f;
+      document.head.appendChild(s);
+    }
+  }, [onGoogleCredential]);
+
   const goNext = () => {
     const p = getProfile();
     navigate({ to: p ? "/home" : "/onboarding" });
   };
+
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-between overflow-hidden bg-ink px-6 py-14">
       <div
@@ -40,8 +92,9 @@ function Login() {
 
       <div className="relative w-full max-w-sm space-y-3">
         <button
+          ref={btnRef}
           type="button"
-          onClick={goNext}
+          onClick={handleGoogleSignIn}
           className="flex w-full items-center justify-center gap-3 rounded-2xl bg-cream px-5 py-3.5 text-sm font-semibold text-ink shadow-[0_10px_30px_-12px_rgba(0,0,0,0.6)] transition active:scale-[0.98]"
         >
           <GoogleIcon />
