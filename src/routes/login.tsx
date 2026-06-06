@@ -2,6 +2,8 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Logo } from "@/components/Logo";
 import { getProfile, setProfile, setUserId, setUserEmail, isOnboarded, type Profile } from "@/lib/storage";
 import { useEffect, useRef, useCallback, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { getProfile as getServerProfile } from "@/lib/api/sync.functions";
 
 const CLIENT_ID = "1036057874420-d2h6r8s755huud2336qqanvqj16soh4j.apps.googleusercontent.com";
 
@@ -20,14 +22,15 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const googleBtnRef = useRef<HTMLDivElement>(null);
   const loadedRef = useRef(false);
+  const loadServerProfile = useServerFn(getServerProfile);
 
   const handleCredential = useCallback(
-    (response: google.accounts.id.CredentialResponse) => {
+    async (response: google.accounts.id.CredentialResponse) => {
       const data = JSON.parse(atob(response.credential.split(".")[1]));
       const userId = data.sub as string;
       setUserId(userId);
       setUserEmail(data.email as string);
-      const profile: Profile = {
+      const googleProfile: Profile = {
         name: data.name,
         email: data.email,
         picture: data.picture,
@@ -35,10 +38,29 @@ function Login() {
         specialization: "",
         university: "",
       };
-      setProfile(profile);
-      navigate({ to: isOnboarded() ? "/home" : "/onboarding" });
+      setProfile(googleProfile);
+      if (isOnboarded()) {
+        try {
+          const server = await loadServerProfile({ data: { userId } });
+          if (server) {
+            setProfile({
+              name: server.name || googleProfile.name,
+              email: googleProfile.email || server.email,
+              picture: googleProfile.picture || server.picture,
+              age: server.age ?? 0,
+              specialization: server.specialization || "",
+              university: server.university || "",
+            });
+          }
+        } catch {
+          // fallback to google profile
+        }
+        navigate({ to: "/home" });
+      } else {
+        navigate({ to: "/onboarding" });
+      }
     },
-    [navigate],
+    [navigate, loadServerProfile],
   );
 
   useEffect(() => {
