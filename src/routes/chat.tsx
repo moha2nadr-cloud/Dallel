@@ -10,7 +10,9 @@ import {
   clearChatHistory,
   getChatHistory,
   setChatHistory,
+  getUserId,
 } from "@/lib/storage";
+import { syncChat } from "@/lib/api/sync.functions";
 import { toast } from "sonner";
 import { useCMS } from "@/lib/admin-store";
 import { useLang } from "@/lib/i18n";
@@ -29,6 +31,7 @@ const SUGGESTIONS = [
 
 function Chat() {
   const send = useServerFn(sendChat);
+  const doSyncChat = useServerFn(syncChat);
   const [cms] = useCMS();
   const [, t] = useLang();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -43,6 +46,16 @@ function Chat() {
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, loading]);
+
+  async function pushChatToServer(msgs: ChatMessage[]) {
+    const userId = getUserId();
+    if (!userId) return;
+    try {
+      await doSyncChat({ data: { userId, messages: msgs } });
+    } catch {
+      // best-effort
+    }
+  }
 
   async function ask(text: string) {
     const trimmed = text.trim();
@@ -69,6 +82,7 @@ function Chat() {
       const after = [...next, botMsg];
       setMessages(after);
       setChatHistory(after);
+      pushChatToServer(after);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "حدث خطأ");
       setMessages(next);
@@ -82,6 +96,10 @@ function Chat() {
     if (confirm("هل تريد مسح المحادثة؟")) {
       clearChatHistory();
       setMessages([]);
+      const userId = getUserId();
+      if (userId) {
+        doSyncChat({ data: { userId, messages: [] } }).catch(() => {});
+      }
     }
   }
 

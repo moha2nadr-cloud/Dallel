@@ -4,10 +4,12 @@ import { Header } from "@/components/Header";
 import { HeroSlider } from "@/components/HeroSlider";
 import { timeAgoAr } from "@/lib/mock-data";
 import { useCMS, type Post } from "@/lib/admin-store";
-import { toggleLike, getLikes, toggleFav, isFav } from "@/lib/storage";
+import { toggleLike, getLikes, toggleFav, isFav, getFavs, getUserId } from "@/lib/storage";
 import { Heart, MessageCircle, Bookmark, ExternalLink, Inbox } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useLang } from "@/lib/i18n";
+import { useServerFn } from "@tanstack/react-start";
+import { syncFavorites, syncLikes } from "@/lib/api/sync.functions";
 
 export const Route = createFileRoute("/home")({
   head: () => ({
@@ -27,6 +29,29 @@ function Home() {
     () => cms.slides.map((s) => ({ id: s.id, title: s.title || "", image: s.image, url: s.link })),
     [cms.slides],
   );
+  const doSyncFavs = useServerFn(syncFavorites);
+  const doSyncLikes = useServerFn(syncLikes);
+
+  const userId = typeof window !== "undefined" ? getUserId() : null;
+
+  const handleToggleFav = (kind: "post" | "ai" | "tool" | "chat", id: string) => {
+    const result = toggleFav(kind, id);
+    if (userId) {
+      const items = getFavs(kind);
+      doSyncFavs({ data: { userId, kind, itemIds: items } }).catch(() => {});
+    }
+    return result;
+  };
+
+  const handleToggleLike = (id: string) => {
+    const result = toggleLike(id);
+    if (userId) {
+      const likesMap = getLikes();
+      const likedIds = Object.keys(likesMap).filter((k) => likesMap[k]);
+      doSyncLikes({ data: { userId, itemIds: likedIds } }).catch(() => {});
+    }
+    return result;
+  };
 
   return (
     <WithBottomBar>
@@ -73,7 +98,9 @@ function Home() {
             <EmptyState text={t.no_data} />
           ) : (
             <div className="space-y-4">
-              {cms.posts.map((p) => <PostCard key={p.id} p={p} />)}
+              {cms.posts.map((p) => (
+                <PostCard key={p.id} p={p} onToggleFav={handleToggleFav} onToggleLike={handleToggleLike} />
+              ))}
             </div>
           )}
         </section>
@@ -103,7 +130,7 @@ function EmptyState({ text }: { text: string }) {
   );
 }
 
-function PostCard({ p }: { p: Post }) {
+function PostCard({ p, onToggleFav, onToggleLike }: { p: Post; onToggleFav: (kind: "post", id: string) => boolean; onToggleLike: (id: string) => boolean }) {
   const [liked, setLiked] = useState<boolean>(() => !!getLikes()[p.id]);
   const [likes, setLikes] = useState(p.likes ?? 0);
   const [saved, setSaved] = useState<boolean>(() => isFav("post", p.id));
@@ -142,7 +169,7 @@ function PostCard({ p }: { p: Post }) {
           <div className="flex items-center gap-1.5">
             <button
               type="button"
-              onClick={() => { const n = toggleLike(p.id); setLiked(n); setLikes((x) => x + (n ? 1 : -1)); }}
+              onClick={() => { const n = onToggleLike(p.id); setLiked(n); setLikes((x) => x + (n ? 1 : -1)); }}
               className="flex items-center gap-1 rounded-full bg-background px-3 py-1.5"
             >
               <Heart className={"h-4 w-4 " + (liked ? "fill-red-500 text-red-500" : "text-muted-foreground")} />
@@ -154,7 +181,7 @@ function PostCard({ p }: { p: Post }) {
             </button>
             <button
               type="button"
-              onClick={() => setSaved(toggleFav("post", p.id))}
+              onClick={() => setSaved(onToggleFav("post", p.id))}
               className="flex items-center gap-1 rounded-full bg-background px-3 py-1.5"
               aria-label="حفظ"
             >

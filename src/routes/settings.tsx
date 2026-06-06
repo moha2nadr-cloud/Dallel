@@ -1,11 +1,14 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { WithBottomBar } from "@/components/BottomBar";
 import { Header } from "@/components/Header";
-import { clearProfile, getProfile, clearChatHistory } from "@/lib/storage";
+import { clearProfile, getProfile, clearChatHistory, getFavs, getLikes, getUserId, clearAll } from "@/lib/storage";
 import { useEffect, useState } from "react";
-import { Globe, Moon, Bell, Shield, Info, LogOut, Trash2, User, Pencil, Lock } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { syncProfile, syncFavorites, syncLikes, syncChat } from "@/lib/api/sync.functions";
+import { Globe, Moon, Bell, Shield, Info, LogOut, Trash2, User, Pencil, Lock, Upload } from "lucide-react";
 import { useLang, setLang, type Lang } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({ meta: [{ title: "الإعدادات — دليل" }] }),
@@ -19,9 +22,14 @@ function Settings() {
   const [lang, t] = useLang();
   const [theme, setTheme] = useTheme();
   const [profile, setP] = useState<ReturnType<typeof getProfile>>(null);
+  const [syncing, setSyncing] = useState(false);
   const [notif, setNotif] = useState<boolean>(() =>
     typeof window === "undefined" ? true : localStorage.getItem(NOTIF_KEY) !== "0",
   );
+  const doSyncProfile = useServerFn(syncProfile);
+  const doSyncFavs = useServerFn(syncFavorites);
+  const doSyncLikes = useServerFn(syncLikes);
+  const doSyncChat = useServerFn(syncChat);
   useEffect(() => setP(getProfile()), []);
 
   const toggleNotif = () => {
@@ -30,8 +38,34 @@ function Settings() {
     localStorage.setItem(NOTIF_KEY, next ? "1" : "0");
   };
 
-  const onLogout = () => {
+  const pushAllToServer = async () => {
+    const userId = getUserId();
+    if (!userId) { toast.error("سجّل الدخول أولاً"); return; }
+    setSyncing(true);
+    try {
+      const profile = getProfile();
+      if (profile) await doSyncProfile({ data: { userId, ...profile } });
+      for (const kind of ["post", "ai", "tool", "chat"] as const) {
+        const items = getFavs(kind);
+        if (items.length > 0) await doSyncFavs({ data: { userId, kind, itemIds: items } });
+      }
+      const likesMap = getLikes();
+      const likedIds = Object.keys(likesMap).filter((k) => likesMap[k]);
+      if (likedIds.length > 0) await doSyncLikes({ data: { userId, itemIds: likedIds } });
+      const { getChatHistory } = await import("@/lib/storage");
+      const chat = getChatHistory();
+      if (chat.length > 0) await doSyncChat({ data: { userId, messages: chat } });
+      toast.success("تمت المزامنة بنجاح");
+    } catch {
+      toast.error("فشلت المزامنة");
+    } finally {
+      setSyncing(false);
+    }
+  };
+
+  const onLogout = async () => {
     if (confirm(t.confirm_logout)) {
+      await pushAllToServer();
       clearProfile();
       clearChatHistory();
       navigate({ to: "/login" });
@@ -40,7 +74,7 @@ function Settings() {
 
   const onDelete = () => {
     if (confirm(t.confirm_delete)) {
-      localStorage.clear();
+      clearAll();
       sessionStorage.clear();
       navigate({ to: "/login" });
     }
@@ -103,6 +137,7 @@ function Settings() {
       </Group>
 
       <Group>
+        <Row icon={Upload} label="مزامنة البيانات" onClick={pushAllToServer} value={syncing ? "جارٍ..." : undefined} />
         <Row icon={Shield} label={t.privacy} />
         <Row icon={Lock} label={t.admin_panel} onClick={() => navigate({ to: "/admin" })} />
         <Row icon={Trash2} label={t.delete_account} danger onClick={onDelete} />

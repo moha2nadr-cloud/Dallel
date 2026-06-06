@@ -1,7 +1,9 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { setProfile, getProfile } from "@/lib/storage";
+import { setProfile, getProfile, getUserId } from "@/lib/storage";
 import { ChevronRight, X } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { syncProfile } from "@/lib/api/sync.functions";
 
 export const Route = createFileRoute("/onboarding")({
   head: () => ({ meta: [{ title: "أكمل ملفك — دليل" }] }),
@@ -16,6 +18,7 @@ function Onboarding() {
   const [age, setAge] = useState<number>(existing?.age ?? 20);
   const [spec, setSpec] = useState(existing?.specialization ?? "");
   const [uni, setUni] = useState(existing?.university ?? "");
+  const doSyncProfile = useServerFn(syncProfile);
 
   const total = 4;
   const progress = ((step + 1) / total) * 100;
@@ -27,14 +30,19 @@ function Onboarding() {
     uni.trim().length >= 2,
   ][step];
 
-  const onNext = () => {
+  const onNext = async () => {
     if (step < total - 1) return setStep(step + 1);
-    setProfile({
+    const profile = {
       name: name.trim(),
       age,
       specialization: spec.trim(),
       university: uni.trim(),
-    });
+    };
+    setProfile(profile);
+    const userId = getUserId();
+    if (userId) {
+      doSyncProfile({ data: { userId, ...profile } }).catch(() => {});
+    }
     navigate({ to: "/home" });
   };
   const onBack = () => (step === 0 ? navigate({ to: "/login" }) : setStep(step - 1));

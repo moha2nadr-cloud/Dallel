@@ -1,7 +1,9 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Logo } from "@/components/Logo";
-import { getProfile, setProfile, type Profile } from "@/lib/storage";
+import { getProfile, setProfile, setUserId, setUserEmail, type Profile } from "@/lib/storage";
 import { useEffect, useRef, useCallback, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { syncProfile, syncFavorites, syncLikes, syncChat } from "@/lib/api/sync.functions";
 
 const CLIENT_ID = "1036057874420-d2h6r8s755huud2336qqanvqj16soh4j.apps.googleusercontent.com";
 
@@ -20,10 +22,44 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const googleBtnRef = useRef<HTMLDivElement>(null);
   const loadedRef = useRef(false);
+  const doSyncProfile = useServerFn(syncProfile);
+  const doSyncFavs = useServerFn(syncFavorites);
+  const doSyncLikes = useServerFn(syncLikes);
+  const doSyncChat = useServerFn(syncChat);
+
+  const pushToServer = useCallback(async (userId: string, profile: Profile) => {
+    try {
+      await doSyncProfile({ data: { userId, ...profile } });
+      const favTypes = ["post", "ai", "tool", "chat"] as const;
+      for (const kind of favTypes) {
+        const { getFavs } = await import("@/lib/storage");
+        const items = getFavs(kind);
+        if (items.length > 0) {
+          await doSyncFavs({ data: { userId, kind, itemIds: items } });
+        }
+      }
+      const { getLikes } = await import("@/lib/storage");
+      const likesMap = getLikes();
+      const likedIds = Object.keys(likesMap).filter((k) => likesMap[k]);
+      if (likedIds.length > 0) {
+        await doSyncLikes({ data: { userId, itemIds: likedIds } });
+      }
+      const { getChatHistory } = await import("@/lib/storage");
+      const chat = getChatHistory();
+      if (chat.length > 0) {
+        await doSyncChat({ data: { userId, messages: chat } });
+      }
+    } catch {
+      // Sync best-effort
+    }
+  }, [doSyncProfile, doSyncFavs, doSyncLikes, doSyncChat]);
 
   const handleCredential = useCallback(
-    (response: google.accounts.id.CredentialResponse) => {
+    async (response: google.accounts.id.CredentialResponse) => {
       const data = JSON.parse(atob(response.credential.split(".")[1]));
+      const userId = data.sub as string;
+      setUserId(userId);
+      setUserEmail(data.email as string);
       const profile: Profile = {
         name: data.name,
         email: data.email,
@@ -33,9 +69,10 @@ function Login() {
         university: "",
       };
       setProfile(profile);
+      pushToServer(userId, profile);
       navigate({ to: "/home" });
     },
-    [navigate],
+    [navigate, pushToServer],
   );
 
   useEffect(() => {

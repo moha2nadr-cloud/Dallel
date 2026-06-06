@@ -11,8 +11,36 @@ const PROFILE_KEY = "daleel:profile";
 const FAV_PREFIX = "daleel:fav:";
 const LIKE_KEY = "daleel:likes";
 const CHAT_KEY = "daleel:chat";
+const USER_ID_KEY = "daleel:userid";
+const USER_EMAIL_KEY = "daleel:useremail";
 
 export type ChatMessage = { role: "user" | "assistant"; content: string; ts: number };
+
+export function getUserId(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem(USER_ID_KEY);
+}
+
+export function setUserId(id: string | null) {
+  if (typeof window === "undefined") return;
+  if (id) localStorage.setItem(USER_ID_KEY, id);
+  else localStorage.removeItem(USER_ID_KEY);
+}
+
+export function getUserEmail(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem(USER_EMAIL_KEY);
+}
+
+export function setUserEmail(email: string | null) {
+  if (typeof window === "undefined") return;
+  if (email) localStorage.setItem(USER_EMAIL_KEY, email);
+  else localStorage.removeItem(USER_EMAIL_KEY);
+}
+
+export function clearAll() {
+  localStorage.clear();
+}
 
 export function getChatHistory(): ChatMessage[] {
   if (typeof window === "undefined") return [];

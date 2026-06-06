@@ -2,10 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { WithBottomBar } from "@/components/BottomBar";
 import { Header } from "@/components/Header";
 import { useCMS, type AiToolItem } from "@/lib/admin-store";
-import { isFav, toggleFav } from "@/lib/storage";
+import { isFav, toggleFav, getFavs, getUserId } from "@/lib/storage";
 import { useLang } from "@/lib/i18n";
 import { Search, X, Star, ExternalLink, Inbox } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { syncFavorites } from "@/lib/api/sync.functions";
 
 export const Route = createFileRoute("/ai-tools")({
   head: () => ({ meta: [{ title: "أدوات الذكاء الاصطناعي — دليل" }] }),
@@ -17,6 +19,8 @@ function AiTools() {
   const [cms] = useCMS();
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<string>("all");
+  const doSyncFavs = useServerFn(syncFavorites);
+  const userId = typeof window !== "undefined" ? getUserId() : null;
 
   const cats = useMemo(() => {
     const fromTools = Array.from(new Set(cms.aiTools.map((x) => x.category).filter(Boolean)));
@@ -35,6 +39,15 @@ function AiTools() {
       );
     });
   }, [cms.aiTools, q, cat]);
+
+  const handleFav = (id: string) => {
+    const result = toggleFav("ai", id);
+    if (userId) {
+      const items = getFavs("ai");
+      doSyncFavs({ data: { userId, kind: "ai", itemIds: items } }).catch(() => {});
+    }
+    return result;
+  };
 
   return (
     <WithBottomBar>
@@ -78,7 +91,7 @@ function AiTools() {
           <p className="mt-12 text-center text-sm text-muted-foreground">{t.no_results}</p>
         ) : (
           <div className="grid grid-cols-2 gap-3">
-            {filtered.map((x) => <ToolCard key={x.id} t={x} />)}
+            {filtered.map((x) => <ToolCard key={x.id} t={x} onFav={handleFav} />)}
           </div>
         )}
       </main>
@@ -112,7 +125,7 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
   );
 }
 
-function ToolCard({ t: x }: { t: AiToolItem }) {
+function ToolCard({ t: x, onFav }: { t: AiToolItem; onFav: (id: string) => boolean }) {
   const [fav, setFav] = useState(() => isFav("ai", x.id));
   const href = x.url.startsWith("http") ? x.url : `https://${x.url}`;
   return (
@@ -125,7 +138,7 @@ function ToolCard({ t: x }: { t: AiToolItem }) {
             <span className="text-base font-extrabold text-primary">{x.name[0]}</span>
           )}
         </div>
-        <button type="button" onClick={() => setFav(toggleFav("ai", x.id))} aria-label="favorite">
+        <button type="button" onClick={() => setFav(onFav(x.id))} aria-label="favorite">
           <Star className={"h-4 w-4 " + (fav ? "fill-primary text-primary" : "text-muted-foreground")} />
         </button>
       </div>
