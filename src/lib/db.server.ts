@@ -58,16 +58,21 @@ export async function getProfileDb(userId: string) {
   return rows.length ? rows[0] : null;
 }
 
-export async function upsertProfileDb(userId: string, data: Record<string, unknown>) {
+export async function upsertProfileDb(
+  userId: string,
+  data: { name: string; email: string | null; picture: string | null; age: number; specialization: string; university: string },
+) {
   const sql = getSql();
-  const keys = Object.keys(data);
-  const setClauses = keys.map((k, i) => `${k} = $${i + 2}`);
-  const values = keys.map((k) => data[k]);
   await sql`
-    INSERT INTO profiles (id, ${sql(keys.join(", "))})
-    VALUES (${userId}, ${sql(values.join(", "))})
+    INSERT INTO profiles (id, name, email, picture, age, specialization, university)
+    VALUES (${userId}, ${data.name}, ${data.email}, ${data.picture}, ${data.age}, ${data.specialization}, ${data.university})
     ON CONFLICT (id) DO UPDATE SET
-      ${sql(setClauses.join(", "))},
+      name = EXCLUDED.name,
+      email = EXCLUDED.email,
+      picture = EXCLUDED.picture,
+      age = EXCLUDED.age,
+      specialization = EXCLUDED.specialization,
+      university = EXCLUDED.university,
       updated_at = NOW()
   `;
 }
