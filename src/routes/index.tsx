@@ -44,12 +44,12 @@ function Index() {
           (show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")
         }
       >
-        <Logo className="h-40 w-40 object-contain" />
+        <Logo className="h-52 w-52 animate-logo-float object-contain" />
         <div className="mt-8 flex flex-col items-center">
-          <span className="text-[10px] font-medium tracking-[0.5em] text-gold/70 uppercase">
-            Powered by
+          <span className="animate-fade-up text-[10px] font-medium tracking-[0.5em] text-gold/70 uppercase [animation-delay:200ms]">
+            Developed by
           </span>
-          <span className="mt-1.5 text-sm font-semibold tracking-[0.32em] text-cream/90">
+          <span className="animate-fade-up mt-1.5 bg-gradient-to-r from-gold-soft via-cream to-gold-soft bg-[length:200%_auto] bg-clip-text text-sm font-semibold tracking-[0.32em] text-transparent uppercase [animation-delay:400ms]">
             NOVA STUDIO
           </span>
         </div>
