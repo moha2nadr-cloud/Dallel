@@ -157,19 +157,31 @@
   .ring-gold-soft {
     box-shadow: 0 0 0 1px color-mix(in oklab, var(--gold) 25%, transparent);
   }
-  @keyframes logo-float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+  @keyframes logo-reveal {
+    0% { opacity: 0; transform: scale(0.5); filter: blur(16px); }
+    60% { opacity: 1; transform: scale(1.05); filter: blur(0); }
+    100% { opacity: 1; transform: scale(1); filter: blur(0); }
   }
-  @keyframes fade-up {
-    0% { opacity: 0; transform: translateY(12px); }
-    100% { opacity: 1; transform: translateY(0); }
+  @keyframes logo-glow {
+    0%, 100% { filter: drop-shadow(0 0 8px color-mix(in oklab, var(--gold) 30%, transparent)); transform: scale(1); }
+    50% { filter: drop-shadow(0 0 25px color-mix(in oklab, var(--gold) 50%, transparent)); transform: scale(1.03); }
   }
-  .animate-logo-float {
-    animation: logo-float 3s ease-in-out infinite;
+  @keyframes text-reveal {
+    0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
   }
-  .animate-fade-up {
-    animation: fade-up 0.6s ease-out both;
+  @keyframes shimmer {
+    0% { background-position: 200% center; }
+    100% { background-position: -200% center; }
+  }
+  .animate-logo-reveal {
+    animation: logo-reveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .animate-logo-glow {
+    animation: logo-glow 4s ease-in-out infinite;
+  }
+  .animate-text-reveal {
+    animation: text-reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
   .hero-glow {
     background:

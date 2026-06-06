@@ -38,18 +38,15 @@ function Index() {
             "radial-gradient(60% 50% at 50% 40%, color-mix(in oklab, var(--gold) 22%, transparent), transparent 70%)",
         }}
       />
-      <div
-        className={
-          "relative flex flex-col items-center transition-all duration-1000 ease-out " +
-          (show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3")
-        }
-      >
-        <Logo className="h-52 w-52 animate-logo-float object-contain" />
-        <div className="mt-8 flex flex-col items-center">
-          <span className="animate-fade-up text-[10px] font-medium tracking-[0.5em] text-gold/70 uppercase [animation-delay:200ms]">
+      <div className="relative flex flex-col items-center">
+        <div className={show ? "animate-logo-reveal" : "opacity-0 scale-75 blur-xl"}>
+          <Logo className="h-56 w-56 animate-logo-glow object-contain" />
+        </div>
+        <div className="mt-10 flex flex-col items-center gap-2">
+          <span className="animate-text-reveal text-sm font-medium tracking-[0.4em] text-gold/60 uppercase [animation-delay:400ms] [animation-fill-mode:both]">
             Developed by
           </span>
-          <span className="animate-fade-up mt-1.5 bg-gradient-to-r from-gold-soft via-cream to-gold-soft bg-[length:200%_auto] bg-clip-text text-sm font-semibold tracking-[0.32em] text-transparent uppercase [animation-delay:400ms]">
+          <span className="animate-text-reveal bg-gradient-to-r from-gold via-cream via-50% to-gold bg-[length:200%_auto] bg-clip-text text-2xl font-black tracking-[0.28em] text-transparent uppercase [animation-delay:600ms] [animation-fill-mode:both] [animation:shimmer 3s ease-in-out infinite,text-reveal 0.8s cubic-bezier(0.16,1,0.3,1) 600ms both]">
             NOVA STUDIO
           </span>
         </div>
