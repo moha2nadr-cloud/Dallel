@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { getProfile, setProfile, setUserId, setUserEmail, isOnboarded, type Profile } from "@/lib/storage";
+import { setProfile, setUserId, setUserEmail, isOnboarded, type Profile } from "@/lib/storage";
 import { useEffect, useRef, useCallback, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { getProfile as getServerProfile } from "@/lib/api/sync.functions";
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
       { title: "تسجيل الدخول — دليل" },
-      { name: "description", content: "سجّل الدخول بحساب Google أو تخطَّ للدخول مباشرة." },
+      { name: "description", content: "سجّل الدخول بحساب Google." },
     ],
   }),
   component: Login,
@@ -105,11 +105,6 @@ function Login() {
     }
   };
 
-  const goNext = () => {
-    const p = getProfile();
-    navigate({ to: p ? "/home" : "/onboarding" });
-  };
-
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-between overflow-hidden bg-ink px-6 py-14">
       <div
@@ -129,7 +124,7 @@ function Login() {
         </p>
       </div>
 
-      <div className="relative w-full max-w-sm space-y-3">
+      <div className="relative w-full max-w-sm -mt-20">
         <div className="relative">
           <button
             type="button"
@@ -151,15 +146,7 @@ function Login() {
           />
         </div>
 
-        <button
-          type="button"
-          onClick={goNext}
-          className="flex w-full items-center justify-center rounded-2xl border border-border bg-transparent px-5 py-3.5 text-sm font-semibold text-cream/90 transition hover:border-gold/40 active:scale-[0.98]"
-        >
-          تخطّي والدخول كزائر
-        </button>
-
-        <p className="pt-3 text-center text-[11px] leading-relaxed text-muted-foreground">
+        <p className="pt-6 text-center text-[11px] leading-relaxed text-muted-foreground">
           بدخولك فأنت توافق على شروط الاستخدام وسياسة الخصوصية
         </p>
       </div>

@@ -214,13 +214,6 @@ function Settings() {
                     : "نعم، احذف"}
               </button>
             </div>
-            <button
-              type="button"
-              onClick={closeModal}
-              className="mt-4 text-[12px] text-muted-foreground underline underline-offset-2"
-            >
-              إغلاق
-            </button>
           </div>
         </div>
       )}
