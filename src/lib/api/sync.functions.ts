@@ -27,7 +27,7 @@ export const syncProfile = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-export const getProfile = createServerFn({ method: "GET" })
+export const getProfile = createServerFn({ method: "POST" })
   .inputValidator(z.object({ userId: z.string().min(1) }))
   .handler(async ({ data }) => {
     await ensureDb;
@@ -46,7 +46,7 @@ export const syncFavorites = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-export const getFavorites = createServerFn({ method: "GET" })
+export const getFavorites = createServerFn({ method: "POST" })
   .inputValidator(z.object({ userId: z.string().min(1) }))
   .handler(async ({ data }) => {
     await ensureDb;
@@ -64,7 +64,7 @@ export const syncLikes = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-export const getLikes = createServerFn({ method: "GET" })
+export const getLikes = createServerFn({ method: "POST" })
   .inputValidator(z.object({ userId: z.string().min(1) }))
   .handler(async ({ data }) => {
     await ensureDb;
@@ -86,7 +86,7 @@ export const syncChat = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-export const getChat = createServerFn({ method: "GET" })
+export const getChat = createServerFn({ method: "POST" })
   .inputValidator(z.object({ userId: z.string().min(1) }))
   .handler(async ({ data }) => {
     await ensureDb;
