@@ -2,10 +2,10 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { WithBottomBar } from "@/components/BottomBar";
 import { Header } from "@/components/Header";
 import { clearProfile, getProfile, clearChatHistory, getFavs, getLikes, getUserId, clearAll } from "@/lib/storage";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { syncProfile, syncFavorites, syncLikes, syncChat } from "@/lib/api/sync.functions";
-import { Globe, Moon, Bell, Shield, Info, LogOut, Trash2, User, Pencil, Lock, Upload } from "lucide-react";
+import { Globe, Moon, Bell, Shield, Info, LogOut, Trash2, User, Pencil, Lock, Upload, AlertTriangle, X } from "lucide-react";
 import { useLang, setLang, type Lang } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
 import { toast } from "sonner";
@@ -31,6 +31,27 @@ function Settings() {
   const doSyncLikes = useServerFn(syncLikes);
   const doSyncChat = useServerFn(syncChat);
   useEffect(() => setP(getProfile()), []);
+
+  const [modal, setModal] = useState<"logout" | "delete" | null>(null);
+  const [countdown, setCountdown] = useState(7);
+  const countRef = useRef(countdown);
+  countRef.current = countdown;
+  const timerRef = useRef<ReturnType<typeof setInterval>>();
+
+  useEffect(() => {
+    if (modal === "delete") {
+      setCountdown(7);
+      timerRef.current = setInterval(() => {
+        setCountdown((c) => {
+          if (c <= 1) { clearInterval(timerRef.current); return 0; }
+          return c - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timerRef.current);
+  }, [modal]);
+
+  const closeModal = () => { clearInterval(timerRef.current); setModal(null); };
 
   const toggleNotif = () => {
     const next = !notif;
@@ -64,20 +85,18 @@ function Settings() {
   };
 
   const onLogout = async () => {
-    if (confirm(t.confirm_logout)) {
-      await pushAllToServer();
-      clearProfile();
-      clearChatHistory();
-      navigate({ to: "/login" });
-    }
+    closeModal();
+    await pushAllToServer();
+    clearProfile();
+    clearChatHistory();
+    navigate({ to: "/login" });
   };
 
   const onDelete = () => {
-    if (confirm(t.confirm_delete)) {
-      clearAll();
-      sessionStorage.clear();
-      navigate({ to: "/login" });
-    }
+    closeModal();
+    clearAll();
+    sessionStorage.clear();
+    navigate({ to: "/login" });
   };
 
   const cycleTheme = () => {
@@ -140,7 +159,7 @@ function Settings() {
         <Row icon={Upload} label="مزامنة البيانات" onClick={pushAllToServer} value={syncing ? "جارٍ..." : undefined} />
         <Row icon={Shield} label={t.privacy} />
         <Row icon={Lock} label={t.admin_panel} onClick={() => navigate({ to: "/admin" })} />
-        <Row icon={Trash2} label={t.delete_account} danger onClick={onDelete} />
+        <Row icon={Trash2} label={t.delete_account} danger onClick={() => setModal("delete")} />
       </Group>
 
       <Group>
@@ -150,7 +169,7 @@ function Settings() {
       <div className="px-5 pt-4">
         <button
           type="button"
-          onClick={onLogout}
+          onClick={() => setModal("logout")}
           className="flex w-full items-center justify-center gap-2 rounded-2xl border border-destructive/40 bg-destructive/10 px-4 py-3.5 text-sm font-bold text-destructive transition active:scale-[0.98]"
         >
           <LogOut className="h-4 w-4" />
@@ -161,6 +180,50 @@ function Settings() {
       <p className="mt-8 text-center text-[10px] tracking-[0.3em] text-muted-foreground/60">
         {t.powered_by}
       </p>
+
+      {modal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-5">
+          <div className="w-full max-w-sm rounded-3xl border border-border bg-card p-6 text-center shadow-2xl">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-destructive/15 mb-4">
+              <AlertTriangle className="h-7 w-7 text-destructive" />
+            </div>
+            <h2 className="text-lg font-extrabold text-foreground">
+              {modal === "logout" ? "تسجيل الخروج" : "حذف الحساب"}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {modal === "logout" ? t.confirm_logout : t.confirm_delete}
+            </p>
+            <div className="mt-6 flex gap-3">
+              <button
+                type="button"
+                onClick={closeModal}
+                className="flex-1 rounded-2xl border border-border bg-background px-4 py-3 text-sm font-semibold text-foreground transition active:scale-[0.98]"
+              >
+                إلغاء
+              </button>
+              <button
+                type="button"
+                disabled={modal === "delete" && countdown > 0}
+                onClick={modal === "logout" ? onLogout : onDelete}
+                className="flex-1 rounded-2xl bg-destructive px-4 py-3 text-sm font-bold text-destructive-foreground transition disabled:opacity-40 active:scale-[0.98]"
+              >
+                {modal === "delete" && countdown > 0
+                  ? `تأكيد (${countdown})`
+                  : modal === "logout"
+                    ? "تسجيل الخروج"
+                    : "نعم، احذف"}
+              </button>
+            </div>
+            <button
+              type="button"
+              onClick={closeModal}
+              className="mt-4 text-[12px] text-muted-foreground underline underline-offset-2"
+            >
+              إغلاق
+            </button>
+          </div>
+        </div>
+      )}
     </WithBottomBar>
   );
 }

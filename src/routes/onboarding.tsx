@@ -56,7 +56,7 @@ function Onboarding() {
         <button type="button" onClick={onBack} className="rounded-full p-2 text-foreground/80 hover:text-foreground" aria-label="رجوع">
           <ChevronRight className="h-5 w-5" />
         </button>
-        <span className="text-[11px] text-muted-foreground">{step + 1} / {total}</span>
+        <span />
         <button type="button" onClick={() => navigate({ to: "/login" })} className="rounded-full p-2 text-foreground/60 hover:text-foreground" aria-label="إغلاق">
           <X className="h-5 w-5" />
         </button>
@@ -90,7 +90,7 @@ function Onboarding() {
               max={80}
               value={age}
               onChange={(e) => setAge(parseInt(e.target.value || "0", 10))}
-              className="mt-2 w-full rounded-2xl border border-border bg-card px-4 py-3.5 text-foreground focus:border-primary/50 focus:outline-none"
+              className="mt-2 w-full rounded-2xl border border-border bg-card px-4 py-3.5 text-foreground focus:border-primary/50 focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-moz-appearance]:textfield"
             />
           </>
         )}

@@ -1,5 +1,4 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Logo } from "@/components/Logo";
 import { getProfile, setProfile, setUserId, setUserEmail, isOnboarded, type Profile } from "@/lib/storage";
 import { useEffect, useRef, useCallback, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
@@ -122,8 +121,7 @@ function Login() {
         }}
       />
       <div className="relative flex flex-1 flex-col items-center justify-center text-center">
-        <Logo className="mb-10 h-28 w-28 object-contain" />
-        <h1 className="text-[26px] font-extrabold leading-tight text-cream">
+        <h1 className="text-[36px] font-extrabold leading-tight text-cream">
           مرحباً بك في دليل
         </h1>
         <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
