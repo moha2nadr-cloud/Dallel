@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { WithBottomBar } from "@/components/BottomBar";
 import { Header } from "@/components/Header";
-import { Bot, Send, Trash2, Loader2 } from "lucide-react";
+import { Bot, Send, Trash2, Loader2, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { sendChat } from "@/lib/chat.functions";
@@ -39,9 +39,7 @@ function Chat() {
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    setMessages(getChatHistory());
-  }, []);
+  useEffect(() => { setMessages(getChatHistory()); }, []);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -50,11 +48,7 @@ function Chat() {
   async function pushChatToServer(msgs: ChatMessage[]) {
     const userId = getUserId();
     if (!userId) return;
-    try {
-      await doSyncChat({ data: { userId, messages: msgs } });
-    } catch {
-      // best-effort
-    }
+    try { await doSyncChat({ data: { userId, messages: msgs } }); } catch {}
   }
 
   async function ask(text: string) {
@@ -74,11 +68,7 @@ function Chat() {
           model: cms.chatModel,
         },
       });
-      const botMsg: ChatMessage = {
-        role: "assistant",
-        content: res.reply || "تعذّر الحصول على رد.",
-        ts: Date.now(),
-      };
+      const botMsg: ChatMessage = { role: "assistant", content: res.reply || "تعذّر الحصول على رد.", ts: Date.now() };
       const after = [...next, botMsg];
       setMessages(after);
       setChatHistory(after);
@@ -97,9 +87,7 @@ function Chat() {
       clearChatHistory();
       setMessages([]);
       const userId = getUserId();
-      if (userId) {
-        doSyncChat({ data: { userId, messages: [] } }).catch(() => {});
-      }
+      if (userId) doSyncChat({ data: { userId, messages: [] } }).catch(() => {});
     }
   }
 
@@ -107,39 +95,88 @@ function Chat() {
     <WithBottomBar>
       <Header />
       <div className="flex h-[calc(100dvh-140px)] flex-col">
-        <header className="flex items-center justify-between px-5 pt-4">
+
+        {/* Chat header */}
+        <header className="flex items-center justify-between px-5 pt-4 pb-3">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gold/10 ring-1 ring-gold/30">
-              <Bot className="h-5 w-5 text-gold" />
+            <div
+              className="relative flex h-11 w-11 items-center justify-center rounded-2xl"
+              style={{
+                background: "linear-gradient(145deg, rgba(53,87,125,0.40), rgba(20,30,48,0.50))",
+                border: "1px solid rgba(255,255,255,0.12)",
+                boxShadow: "0 4px 16px rgba(53,87,125,0.30)",
+              }}
+            >
+              <Bot className="h-5 w-5 text-[#96b8d6]" />
+              {/* Online dot */}
+              <span
+                className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2"
+                style={{
+                  background: "#4ade80",
+                  borderColor: "#141E30",
+                  boxShadow: "0 0 6px rgba(74,222,128,0.55)",
+                }}
+              />
             </div>
             <div>
-              <h1 className="text-base font-extrabold text-cream">مساعد دليل</h1>
-              <p className="text-[10px] text-muted-foreground">يجيب عن أسئلتك داخل التطبيق</p>
+              <h1
+                className="text-[15px] font-extrabold"
+                style={{
+                  background: "linear-gradient(135deg, #c4d8ea, #6b92ba)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                مساعد دليل
+              </h1>
+              <p className="text-[10px] text-[#35577D]">يجيب عن أسئلتك داخل التطبيق</p>
             </div>
           </div>
           <button
             type="button"
             onClick={reset}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition active:scale-95"
+            className="flex h-9 w-9 items-center justify-center rounded-full transition-glass"
+            style={{
+              background: "rgba(53,87,125,0.12)",
+              border: "1px solid rgba(255,255,255,0.07)",
+            }}
             aria-label="مسح"
           >
-            <Trash2 className="h-4 w-4" />
+            <Trash2 className="h-4 w-4 text-[#6b92ba]" />
           </button>
         </header>
 
-        <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-5 py-4">
+        {/* Messages area */}
+        <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-2 no-scrollbar">
           {messages.length === 0 && (
-            <div className="pt-6">
-              <p className="mb-3 text-center text-[12px] text-muted-foreground">
-                ابدأ بسؤال أو جرّب أحد الاقتراحات
-              </p>
+            <div className="pt-6 animate-reveal-up">
+              {/* Welcome card */}
+              <div
+                className="mb-5 rounded-3xl p-5 text-center"
+                style={{
+                  background: "linear-gradient(145deg, rgba(53,87,125,0.18), rgba(20,30,48,0.25))",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  backdropFilter: "blur(16px)",
+                }}
+              >
+                <Sparkles className="mx-auto mb-2 h-8 w-8 text-[#4a70a0]" />
+                <p className="text-[13px] font-semibold text-[#96b8d6]">
+                  كيف يمكنني مساعدتك اليوم؟
+                </p>
+                <p className="mt-1 text-[11px] text-[#35577D]">
+                  ابدأ بسؤال أو جرّب أحد الاقتراحات أدناه
+                </p>
+              </div>
+
               <div className="grid grid-cols-1 gap-2">
-                {SUGGESTIONS.map((s) => (
+                {SUGGESTIONS.map((s, idx) => (
                   <button
                     key={s}
                     type="button"
                     onClick={() => ask(s)}
-                    className="rounded-2xl border border-border bg-card px-4 py-3 text-right text-[12.5px] font-medium text-cream transition active:scale-[0.98] hover:border-gold/40"
+                    className="glass-card rounded-2xl px-4 py-3 text-right text-[12.5px] font-medium text-[#c4d8ea] transition-glass animate-reveal-up active:scale-[0.98]"
+                    style={{ animationDelay: `${idx * 0.07}s` }}
                   >
                     {s}
                   </button>
@@ -147,60 +184,91 @@ function Chat() {
               </div>
             </div>
           )}
+
           {messages.map((m, i) => (
             <div
               key={i}
-              className={
-                "flex " + (m.role === "user" ? "justify-start" : "justify-end")
-              }
+              className={"flex " + (m.role === "user" ? "justify-start" : "justify-end")}
             >
               <div
-                className={
-                  "max-w-[82%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-[13.5px] leading-relaxed " +
-                  (m.role === "user"
-                    ? "bg-gold text-ink"
-                    : "border border-border bg-card text-cream")
+                className="max-w-[82%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-[13px] leading-relaxed"
+                style={
+                  m.role === "user"
+                    ? {
+                        background: "linear-gradient(135deg, #35577D, #4a70a0)",
+                        color: "#ffffff",
+                        boxShadow: "0 4px 14px rgba(53,87,125,0.40)",
+                      }
+                    : {
+                        background: "rgba(53,87,125,0.15)",
+                        border: "1px solid rgba(255,255,255,0.08)",
+                        color: "#c4d8ea",
+                        backdropFilter: "blur(12px)",
+                      }
                 }
               >
                 {m.content}
               </div>
             </div>
           ))}
+
           {loading && (
             <div className="flex justify-end">
-              <div className="flex items-center gap-2 rounded-2xl border border-border bg-card px-4 py-2.5 text-[12px] text-muted-foreground">
-                <Loader2 className="h-3.5 w-3.5 animate-spin text-gold" />
+              <div
+                className="flex items-center gap-2 rounded-2xl px-4 py-2.5 text-[12px] text-[#6b92ba]"
+                style={{
+                  background: "rgba(53,87,125,0.15)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  backdropFilter: "blur(12px)",
+                }}
+              >
+                <Loader2 className="h-3.5 w-3.5 animate-spin text-[#4a70a0]" />
                 يكتب…
               </div>
             </div>
           )}
         </div>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            ask(input);
+        {/* Input area */}
+        <div
+          className="px-3 py-3"
+          style={{
+            background: "rgba(14,22,37,0.75)",
+            backdropFilter: "blur(20px)",
+            borderTop: "1px solid rgba(255,255,255,0.06)",
           }}
-          className="border-t border-border bg-card/60 px-3 py-3 backdrop-blur"
         >
-          <div className="flex items-center gap-2 rounded-full border border-border bg-ink px-3 py-1.5">
+          <div
+            className="flex items-center gap-2 rounded-full px-3 py-1.5"
+            style={{
+              background: "rgba(53,87,125,0.14)",
+              border: "1px solid rgba(255,255,255,0.09)",
+              backdropFilter: "blur(16px)",
+            }}
+          >
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); ask(input); } }}
               placeholder="اكتب رسالتك…"
-              className="flex-1 bg-transparent px-2 py-2 text-[13.5px] text-cream outline-none placeholder:text-muted-foreground"
+              className="flex-1 bg-transparent px-2 py-2 text-[13px] text-[#c4d8ea] outline-none placeholder:text-[#35577D]"
               dir="rtl"
             />
             <button
-              type="submit"
+              type="button"
+              onClick={() => ask(input)}
               disabled={loading || !input.trim()}
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-gold text-ink transition active:scale-95 disabled:opacity-40"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-white transition-all active:scale-90 disabled:opacity-35"
+              style={{
+                background: "linear-gradient(135deg, #35577D, #4a70a0)",
+                boxShadow: "0 2px 10px rgba(53,87,125,0.45)",
+              }}
               aria-label="إرسال"
             >
               <Send className="h-4 w-4" />
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </WithBottomBar>
   );

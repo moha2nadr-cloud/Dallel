@@ -52,7 +52,7 @@ function Login() {
             });
           }
         } catch {
-          // fallback to google profile
+          // fallback
         }
         navigate({ to: "/home" });
       } else {
@@ -106,47 +106,170 @@ function Login() {
   };
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-between overflow-hidden bg-ink px-6 py-14">
+    <div
+      className="relative flex min-h-screen flex-col items-center justify-between overflow-hidden px-6 py-16"
+      style={{ background: "linear-gradient(160deg, #141E30 0%, #0a1220 100%)" }}
+    >
+      {/* Background orbs */}
       <div
+        className="pointer-events-none fixed inset-0"
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[55%] opacity-50"
         style={{
-          background:
-            "radial-gradient(70% 60% at 50% 0%, color-mix(in oklab, var(--gold) 18%, transparent), transparent 70%)",
+          background: `
+            radial-gradient(ellipse 70% 55% at 20% 10%, rgba(53,87,125,0.32) 0%, transparent 60%),
+            radial-gradient(ellipse 50% 45% at 80% 15%, rgba(42,65,102,0.22) 0%, transparent 55%),
+            radial-gradient(ellipse 60% 50% at 50% 90%, rgba(35,50,82,0.28) 0%, transparent 60%)
+          `,
         }}
       />
-      <div className="relative flex flex-1 flex-col items-center justify-center text-center">
-        <h1 className="text-[36px] font-extrabold leading-tight text-cream">
-          مرحباً بك في دليل
-        </h1>
-        <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
-          بوابتك الذكية لاكتشاف أدوات الذكاء الاصطناعي حسب تخصصك الجامعي.
-        </p>
-      </div>
 
-      <div className="relative w-full max-w-sm -mt-20">
-        <div className="relative">
-          <button
-            type="button"
-            onClick={handleGoogleSignIn}
-            disabled={loading}
-            className="flex w-full items-center justify-center gap-3 rounded-2xl bg-cream px-5 py-3.5 text-sm font-semibold text-ink shadow-[0_10px_30px_-12px_rgba(0,0,0,0.6)] transition active:scale-[0.98] disabled:opacity-60"
-          >
-            {loading ? (
-              <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-ink border-t-transparent" />
-            ) : (
-              <GoogleIcon />
-            )}
-            {loading ? "جاري تسجيل الدخول..." : "تسجيل الدخول بحساب Google"}
-          </button>
+      {/* Floating rings */}
+      <div
+        className="pointer-events-none fixed"
+        style={{
+          top: "-10vh",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "130vw",
+          height: "130vw",
+          borderRadius: "50%",
+          border: "1px solid rgba(53,87,125,0.12)",
+        }}
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none fixed"
+        style={{
+          top: "-5vh",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "90vw",
+          height: "90vw",
+          borderRadius: "50%",
+          border: "1px solid rgba(53,87,125,0.08)",
+        }}
+        aria-hidden
+      />
+
+      {/* Logo section */}
+      <div className="relative flex flex-1 flex-col items-center justify-center text-center gap-5">
+        {/* Logo mark */}
+        <div
+          className="relative flex h-20 w-20 items-center justify-center rounded-3xl animate-logo-enter"
+          style={{
+            background: "linear-gradient(145deg, rgba(53,87,125,0.35), rgba(20,30,48,0.50))",
+            border: "1px solid rgba(255,255,255,0.12)",
+            boxShadow: "0 16px 48px rgba(53,87,125,0.35), inset 0 1px 0 rgba(255,255,255,0.08)",
+            backdropFilter: "blur(20px)",
+          }}
+        >
+          <svg viewBox="0 0 48 48" className="h-12 w-12" aria-hidden>
+            <text
+              x="24" y="37"
+              textAnchor="middle"
+              fontFamily="Tajawal, sans-serif"
+              fontWeight="900"
+              fontSize="34"
+              fill="url(#login-grad)"
+            >
+              د
+            </text>
+            <defs>
+              <linearGradient id="login-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#c4d8ea" />
+                <stop offset="100%" stopColor="#6b92ba" />
+              </linearGradient>
+            </defs>
+          </svg>
+          {/* Glow */}
           <div
-            ref={googleBtnRef}
-            className="absolute inset-0 opacity-0"
-            aria-hidden
+            className="absolute inset-0 rounded-3xl"
+            style={{
+              background: "radial-gradient(circle at 50% 20%, rgba(255,255,255,0.06), transparent 60%)",
+            }}
           />
         </div>
 
-        <p className="pt-6 text-center text-[11px] leading-relaxed text-muted-foreground">
+        <div className="animate-reveal-up" style={{ animationDelay: "0.25s" }}>
+          <h1
+            className="text-[32px] font-extrabold leading-tight"
+            style={{
+              background: "linear-gradient(135deg, #e8f0f8 0%, #96b8d6 60%, #6b92ba 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            مرحباً بك في دليل
+          </h1>
+          <p className="mt-2 max-w-[260px] text-[13px] leading-relaxed text-[#6b92ba]">
+            بوابتك الذكية لاكتشاف أدوات الذكاء الاصطناعي حسب تخصصك الجامعي
+          </p>
+        </div>
+
+        {/* Feature badges */}
+        <div
+          className="mt-2 flex flex-wrap justify-center gap-2 animate-reveal-up"
+          style={{ animationDelay: "0.35s" }}
+        >
+          {["أدوات AI", "دراسة ذكية", "مجتمع طلابي"].map((f) => (
+            <span
+              key={f}
+              className="rounded-full px-3 py-1 text-[11px] font-semibold text-[#96b8d6]"
+              style={{
+                background: "rgba(53,87,125,0.15)",
+                border: "1px solid rgba(107,146,186,0.20)",
+              }}
+            >
+              {f}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Sign-in area */}
+      <div
+        className="relative w-full max-w-sm animate-reveal-up"
+        style={{ animationDelay: "0.45s" }}
+      >
+        {/* Glass card */}
+        <div
+          className="rounded-3xl p-5"
+          style={{
+            background: "rgba(53,87,125,0.12)",
+            border: "1px solid rgba(255,255,255,0.10)",
+            backdropFilter: "blur(24px)",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.06)",
+          }}
+        >
+          <p className="mb-4 text-center text-[12px] text-[#6b92ba]">
+            تسجيل الدخول للوصول إلى كل المميزات
+          </p>
+
+          <div className="relative">
+            <button
+              type="button"
+              onClick={handleGoogleSignIn}
+              disabled={loading}
+              className="flex w-full items-center justify-center gap-3 rounded-2xl px-5 py-3.5 text-[13px] font-bold transition-glass active:scale-[0.98] disabled:opacity-60"
+              style={{
+                background: "linear-gradient(145deg, rgba(255,255,255,0.92), rgba(232,240,248,0.88))",
+                color: "#141E30",
+                boxShadow: "0 6px 20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.60)",
+              }}
+            >
+              {loading ? (
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#35577D] border-t-transparent" />
+              ) : (
+                <GoogleIcon />
+              )}
+              {loading ? "جاري تسجيل الدخول..." : "تسجيل الدخول بـ Google"}
+            </button>
+            <div ref={googleBtnRef} className="absolute inset-0 opacity-0" aria-hidden />
+          </div>
+        </div>
+
+        <p className="pt-5 text-center text-[10px] leading-relaxed text-[#35577D]">
           بدخولك فأنت توافق على شروط الاستخدام وسياسة الخصوصية
         </p>
       </div>

@@ -16,21 +16,44 @@ import { applyLang, getLang } from "../lib/i18n";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+    <div
+      className="flex min-h-screen items-center justify-center px-4"
+      style={{ background: "linear-gradient(160deg, #141E30 0%, #0a1220 100%)" }}
+    >
+      <div
+        className="max-w-sm w-full text-center rounded-3xl p-8"
+        style={{
+          background: "rgba(53,87,125,0.14)",
+          border: "1px solid rgba(255,255,255,0.08)",
+          backdropFilter: "blur(20px)",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.30)",
+        }}
+      >
+        <h1
+          className="text-[80px] font-extrabold leading-none"
+          style={{
+            background: "linear-gradient(135deg, #c4d8ea, #4a70a0)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}
+        >
+          404
+        </h1>
+        <h2 className="mt-3 text-lg font-bold text-[#c4d8ea]">الصفحة غير موجودة</h2>
+        <p className="mt-2 text-[12px] text-[#6b92ba]">
+          الصفحة التي تبحث عنها غير موجودة أو تمت إزالتها.
         </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
-        </div>
+        <Link
+          to="/"
+          className="mt-6 inline-flex items-center justify-center rounded-2xl px-6 py-3 text-sm font-bold text-white transition-all hover:scale-[0.98]"
+          style={{
+            background: "linear-gradient(135deg, #35577D, #4a70a0)",
+            boxShadow: "0 4px 16px rgba(53,87,125,0.40)",
+          }}
+        >
+          العودة للرئيسية
+        </Link>
       </div>
     </div>
   );
@@ -44,29 +67,36 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
+    <div
+      className="flex min-h-screen items-center justify-center px-4"
+      style={{ background: "linear-gradient(160deg, #141E30 0%, #0a1220 100%)" }}
+    >
+      <div
+        className="max-w-sm w-full text-center rounded-3xl p-8"
+        style={{
+          background: "rgba(53,87,125,0.14)",
+          border: "1px solid rgba(255,255,255,0.08)",
+          backdropFilter: "blur(20px)",
+        }}
+      >
+        <h1 className="text-lg font-bold text-[#c4d8ea]">حدث خطأ</h1>
+        <p className="mt-2 text-[12px] text-[#6b92ba]">
+          حدث خطأ أثناء تحميل الصفحة. يمكنك المحاولة مجدداً.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
-            onClick={() => {
-              router.invalidate();
-              reset();
-            }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            onClick={() => { router.invalidate(); reset(); }}
+            className="rounded-2xl px-5 py-2.5 text-sm font-bold text-white"
+            style={{ background: "linear-gradient(135deg, #35577D, #4a70a0)" }}
           >
-            Try again
+            حاول مجدداً
           </button>
           <a
             href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+            className="rounded-2xl px-5 py-2.5 text-sm font-semibold text-[#96b8d6]"
+            style={{ background: "rgba(53,87,125,0.15)", border: "1px solid rgba(255,255,255,0.08)" }}
           >
-            Go home
+            الرئيسية
           </a>
         </div>
       </div>
@@ -81,25 +111,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "دليل — بوابتك الذكية لأدوات الطلاب" },
       { name: "description", content: "دليل: اكتشف أفضل أدوات الذكاء الاصطناعي حسب كليتك وتخصصك." },
+      { name: "theme-color", content: "#141E30" },
       { name: "author", content: "NOVA STUDIO" },
       { property: "og:title", content: "دليل" },
       { property: "og:description", content: "بوابتك الذكية لأدوات الطلاب" },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: appCss,
-      },
-      {
-        rel: "preconnect",
-        href: "https://fonts.googleapis.com",
-      },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap",
       },
     ],
   }),
@@ -133,7 +157,6 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>
   );

@@ -31,7 +31,6 @@ function Home() {
   );
   const doSyncFavs = useServerFn(syncFavorites);
   const doSyncLikes = useServerFn(syncLikes);
-
   const userId = typeof window !== "undefined" ? getUserId() : null;
 
   const handleToggleFav = (kind: "post" | "ai" | "tool" | "chat", id: string) => {
@@ -57,49 +56,72 @@ function Home() {
     <WithBottomBar>
       <Header />
       <main className="space-y-7 pb-4">
-        <section className="px-4 pt-4">
+
+        {/* Hero Slider */}
+        <section className="px-4 pt-3 animate-reveal-up">
           <HeroSlider slides={sliderItems} />
         </section>
 
+        {/* Suggested AI Tools */}
         {suggested.length > 0 && (
-          <section>
+          <section className="animate-reveal-up" style={{ animationDelay: "0.08s" }}>
             <SectionHeader title={t.suggested_for_you} to="/ai-tools" viewAll={t.view_all} />
-            <div className="flex gap-3 overflow-x-auto px-5 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {suggested.map((tool) => (
+            <div className="flex gap-3 overflow-x-auto px-5 pb-2 no-scrollbar">
+              {suggested.map((tool, idx) => (
                 <a
                   key={tool.id}
                   href={tool.url.startsWith("http") ? tool.url : `https://${tool.url}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex w-[140px] shrink-0 flex-col items-center justify-between rounded-2xl border border-border bg-card p-3 transition hover:border-primary/40"
-                  style={{ minHeight: 160 }}
+                  className="glass-card transition-glass flex w-[130px] shrink-0 flex-col items-center justify-between rounded-3xl p-3"
+                  style={{ minHeight: 150, animationDelay: `${idx * 0.04}s` }}
                 >
-                  <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-primary/10 ring-1 ring-primary/25">
+                  <div
+                    className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl"
+                    style={{
+                      background: "rgba(53,87,125,0.25)",
+                      border: "1px solid rgba(255,255,255,0.10)",
+                    }}
+                  >
                     {tool.icon ? (
                       <img src={tool.icon} alt="" className="h-full w-full object-cover" />
                     ) : (
-                      <span className="text-base font-extrabold text-primary">{tool.name[0]}</span>
+                      <span className="text-sm font-extrabold text-[#96b8d6]">{tool.name[0]}</span>
                     )}
                   </div>
-                  <p className="line-clamp-2 mt-2 text-center text-[12px] font-semibold text-foreground">{tool.name}</p>
-                  <span className="mt-2 inline-flex w-full items-center justify-center rounded-full bg-primary px-3 py-1 text-[11px] font-bold text-primary-foreground">{t.open}</span>
+                  <p className="line-clamp-2 mt-2 text-center text-[11px] font-semibold text-[#c4d8ea]">
+                    {tool.name}
+                  </p>
+                  <span
+                    className="mt-2 inline-flex w-full items-center justify-center rounded-full py-1 text-[10px] font-bold text-white"
+                    style={{
+                      background: "linear-gradient(135deg, #35577D, #4a70a0)",
+                      boxShadow: "0 2px 8px rgba(53,87,125,0.40)",
+                    }}
+                  >
+                    {t.open}
+                  </span>
                 </a>
               ))}
             </div>
           </section>
         )}
 
-        <section className="px-5">
-          <h2 className="mb-3 flex items-center gap-2 text-sm font-bold text-foreground">
-            <span className="h-4 w-1 rounded-full bg-gradient-to-b from-gold to-gold-soft" />
-            {t.feed}
-          </h2>
+        {/* Feed */}
+        <section className="px-4 animate-reveal-up" style={{ animationDelay: "0.14s" }}>
+          <SectionHeader title={t.feed} to="/home" viewAll="" />
           {cms.posts.length === 0 ? (
             <EmptyState text={t.no_data} />
           ) : (
             <div className="space-y-4">
-              {cms.posts.map((p) => (
-                <PostCard key={p.id} p={p} onToggleFav={handleToggleFav} onToggleLike={handleToggleLike} />
+              {cms.posts.map((p, idx) => (
+                <PostCard
+                  key={p.id}
+                  p={p}
+                  onToggleFav={handleToggleFav}
+                  onToggleLike={handleToggleLike}
+                  delay={idx * 0.05}
+                />
               ))}
             </div>
           )}
@@ -109,43 +131,69 @@ function Home() {
   );
 }
 
-function SectionHeader({ title, to, viewAll }: { title: string; to: string; viewAll: string }) {
+function SectionHeader({
+  title, to, viewAll,
+}: { title: string; to: string; viewAll: string }) {
   return (
     <div className="mb-3 flex items-center justify-between px-5">
-      <h2 className="flex items-center gap-2 text-sm font-bold text-foreground">
-        <span className="h-4 w-1 rounded-full bg-gradient-to-b from-gold to-gold-soft" />
+      <h2 className="flex items-center gap-2 text-[13px] font-bold text-[#c4d8ea]">
+        {/* Liquid accent bar */}
+        <span
+          className="h-4 w-1 rounded-full"
+          style={{ background: "linear-gradient(180deg, #96b8d6, #4a70a0)" }}
+        />
         {title}
       </h2>
-      <Link to={to} className="text-[11px] font-semibold text-primary">{viewAll}</Link>
+      {viewAll && (
+        <Link to={to} className="text-[11px] font-semibold text-[#6b92ba] hover:text-[#96b8d6] transition-colors">
+          {viewAll}
+        </Link>
+      )}
     </div>
   );
 }
 
 function EmptyState({ text }: { text: string }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-border py-12 text-center">
-      <Inbox className="h-7 w-7 text-muted-foreground" />
-      <p className="mt-3 text-sm text-muted-foreground">{text}</p>
+    <div
+      className="flex flex-col items-center justify-center rounded-3xl py-12 text-center"
+      style={{
+        background: "rgba(53,87,125,0.06)",
+        border: "1px dashed rgba(107,146,186,0.30)",
+      }}
+    >
+      <Inbox className="h-7 w-7 text-[#35577D]" />
+      <p className="mt-3 text-sm text-[#6b92ba]">{text}</p>
     </div>
   );
 }
 
-function PostCard({ p, onToggleFav, onToggleLike }: { p: Post; onToggleFav: (kind: "post", id: string) => boolean; onToggleLike: (id: string) => boolean }) {
+function PostCard({
+  p, onToggleFav, onToggleLike, delay = 0,
+}: {
+  p: Post;
+  onToggleFav: (kind: "post", id: string) => boolean;
+  onToggleLike: (id: string) => boolean;
+  delay?: number;
+}) {
   const [liked, setLiked] = useState<boolean>(() => !!getLikes()[p.id]);
   const [likes, setLikes] = useState(p.likes ?? 0);
   const [saved, setSaved] = useState<boolean>(() => isFav("post", p.id));
   const [expanded, setExpanded] = useState(false);
 
   const badge = { new: "أداة جديدة", tip: "نصيحة", update: "تحديث", ai: "AI" }[p.type];
-  const badgeColor = {
-    new: "bg-emerald-500/15 text-emerald-300",
-    tip: "bg-sky-500/15 text-sky-300",
-    update: "bg-violet-500/15 text-violet-300",
-    ai: "bg-primary/20 text-primary",
+  const badgeCls = {
+    new:    "bg-[rgba(52,211,153,0.12)] text-[#6ee7b7]",
+    tip:    "bg-[rgba(56,189,248,0.12)] text-[#7dd3fc]",
+    update: "bg-[rgba(167,139,250,0.12)] text-[#c4b5fd]",
+    ai:     "bg-[rgba(53,87,125,0.25)] text-[#96b8d6]",
   }[p.type];
 
   return (
-    <article className="overflow-hidden rounded-3xl border border-border bg-card">
+    <article
+      className="glass-card overflow-hidden rounded-3xl transition-glass animate-reveal-up"
+      style={{ animationDelay: `${delay}s` }}
+    >
       {p.image && (
         <div className="w-full overflow-hidden" style={{ aspectRatio: "16 / 9" }}>
           <img src={p.image} alt="" className="h-full w-full object-cover" loading="lazy" />
@@ -153,47 +201,83 @@ function PostCard({ p, onToggleFav, onToggleLike }: { p: Post; onToggleFav: (kin
       )}
       <div className="p-4">
         <div className="flex items-center justify-between">
-          <span className={`rounded-full px-2.5 py-1 text-[10px] font-bold ${badgeColor}`}>{badge}</span>
-          <span className="text-[10px] text-muted-foreground">{timeAgoAr(p.date)}</span>
+          <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${badgeCls}`}>{badge}</span>
+          <span className="text-[10px] text-[#6b92ba]">{timeAgoAr(p.date)}</span>
         </div>
-        <h3 className="mt-2.5 text-[15px] font-bold text-foreground">{p.title}</h3>
-        <p className={"mt-1.5 text-[13px] leading-relaxed text-muted-foreground " + (expanded ? "" : "line-clamp-3")}>
+
+        <h3 className="mt-2.5 text-[14px] font-bold text-[#d2e6fa]">{p.title}</h3>
+        <p
+          className={
+            "mt-1.5 text-[12px] leading-relaxed text-[#6b92ba] " +
+            (expanded ? "" : "line-clamp-3")
+          }
+        >
           {p.description}
         </p>
         {!expanded && p.description.length > 100 && (
-          <button type="button" onClick={() => setExpanded(true)} className="mt-1 text-[12px] font-semibold text-primary">
+          <button
+            type="button"
+            onClick={() => setExpanded(true)}
+            className="mt-1 text-[11px] font-semibold text-[#4a70a0] hover:text-[#6b92ba] transition-colors"
+          >
             اقرأ المزيد
           </button>
         )}
+
+        {/* Actions */}
         <div className="mt-4 flex items-center justify-between">
           <div className="flex items-center gap-1.5">
+            {/* Like */}
             <button
               type="button"
-              onClick={() => { const n = onToggleLike(p.id); setLiked(n); setLikes((x) => x + (n ? 1 : -1)); }}
-              className="flex items-center gap-1 rounded-full bg-background px-3 py-1.5"
+              onClick={() => {
+                const n = onToggleLike(p.id);
+                setLiked(n);
+                setLikes((x) => x + (n ? 1 : -1));
+              }}
+              className="flex items-center gap-1 rounded-full px-3 py-1.5 transition-glass"
+              style={{ background: "rgba(53,87,125,0.12)", border: "1px solid rgba(255,255,255,0.06)" }}
             >
-              <Heart className={"h-4 w-4 " + (liked ? "fill-red-500 text-red-500" : "text-muted-foreground")} />
-              <span className="text-[11px] text-foreground/90">{likes}</span>
+              <Heart
+                className={"h-3.5 w-3.5 " + (liked ? "fill-red-400 text-red-400" : "text-[#6b92ba]")}
+              />
+              <span className="text-[10px] text-[#96b8d6]">{likes}</span>
             </button>
-            <button type="button" className="flex items-center gap-1 rounded-full bg-background px-3 py-1.5">
-              <MessageCircle className="h-4 w-4 text-muted-foreground" />
-              <span className="text-[11px] text-foreground/90">{p.comments ?? 0}</span>
+
+            {/* Comment */}
+            <button
+              type="button"
+              className="flex items-center gap-1 rounded-full px-3 py-1.5"
+              style={{ background: "rgba(53,87,125,0.12)", border: "1px solid rgba(255,255,255,0.06)" }}
+            >
+              <MessageCircle className="h-3.5 w-3.5 text-[#6b92ba]" />
+              <span className="text-[10px] text-[#96b8d6]">{p.comments ?? 0}</span>
             </button>
+
+            {/* Bookmark */}
             <button
               type="button"
               onClick={() => setSaved(onToggleFav("post", p.id))}
-              className="flex items-center gap-1 rounded-full bg-background px-3 py-1.5"
+              className="flex items-center gap-1 rounded-full px-3 py-1.5 transition-glass"
+              style={{ background: "rgba(53,87,125,0.12)", border: "1px solid rgba(255,255,255,0.06)" }}
               aria-label="حفظ"
             >
-              <Bookmark className={"h-4 w-4 " + (saved ? "fill-primary text-primary" : "text-muted-foreground")} />
+              <Bookmark
+                className={"h-3.5 w-3.5 " + (saved ? "fill-[#96b8d6] text-[#96b8d6]" : "text-[#6b92ba]")}
+              />
             </button>
           </div>
+
           {p.url && (
             <a
               href={p.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1.5 text-[11px] font-bold text-primary-foreground"
+              className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[11px] font-bold text-white transition-glass"
+              style={{
+                background: "linear-gradient(135deg, #35577D, #4a70a0)",
+                boxShadow: "0 2px 10px rgba(53,87,125,0.45)",
+              }}
             >
               جرّب الآن
               <ExternalLink className="h-3 w-3" />
