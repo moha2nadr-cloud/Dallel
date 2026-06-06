@@ -1,0 +1,6204 @@
+{
+  "colleges": [
+    {
+      "id": "eng",
+      "name": "كلية الهندسة",
+      "emoji": "⚙️",
+      "departments": [
+        {
+          "id": "eng-sw",
+          "name": "هندسة البرمجيات",
+          "cats": [
+            "cat-82557",
+            "cat-86290",
+            "cat-50221"
+          ]
+        },
+        {
+          "id": "eng-mech",
+          "name": "الهندسة الميكانيكية",
+          "cats": [
+            "cat-53322",
+            "cat-86642",
+            "cat-90538"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "med",
+      "name": "كلية الطب",
+      "emoji": "🩺",
+      "departments": [
+        {
+          "id": "med-clin",
+          "name": "الطب السريري",
+          "cats": [
+            "cat-58038",
+            "cat-74528",
+            "cat-15818"
+          ]
+        },
+        {
+          "id": "med-psy",
+          "name": "الصحة النفسية",
+          "cats": [
+            "cat-20239"
+          ]
+        },
+        {
+          "id": "med-vet",
+          "name": "الطب البيطري",
+          "cats": [
+            "cat-87164"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sci",
+      "name": "كلية العلوم",
+      "emoji": "🔬",
+      "departments": [
+        {
+          "id": "sci-agri",
+          "name": "العلوم الزراعية",
+          "cats": [
+            "cat-68354"
+          ]
+        },
+        {
+          "id": "sci-env",
+          "name": "العلوم البيئية",
+          "cats": [
+            "cat-55759"
+          ]
+        },
+        {
+          "id": "sci-data",
+          "name": "علوم البيانات",
+          "cats": [
+            "cat-50221",
+            "cat-86710"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "biz",
+      "name": "كلية الأعمال",
+      "emoji": "💼",
+      "departments": [
+        {
+          "id": "biz-fin",
+          "name": "المالية والمحاسبة",
+          "cats": [
+            "cat-41383"
+          ]
+        },
+        {
+          "id": "biz-mkt",
+          "name": "التسويق",
+          "cats": [
+            "cat-80155"
+          ]
+        },
+        {
+          "id": "biz-log",
+          "name": "اللوجستيات",
+          "cats": [
+            "cat-43209"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "arts",
+      "name": "كلية الآداب والفنون",
+      "emoji": "🎨",
+      "departments": [
+        {
+          "id": "arts-design",
+          "name": "التصميم والإبداع",
+          "cats": [
+            "cat-73843",
+            "cat-44423",
+            "cat-37115",
+            "cat-3424",
+            "cat-2958"
+          ]
+        },
+        {
+          "id": "arts-media",
+          "name": "الإعلام والصحافة",
+          "cats": [
+            "cat-42855"
+          ]
+        },
+        {
+          "id": "arts-lang",
+          "name": "اللغات والترجمة",
+          "cats": [
+            "cat-35370",
+            "cat-4337",
+            "cat-38479"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "law",
+      "name": "كلية الحقوق",
+      "emoji": "⚖️",
+      "departments": [
+        {
+          "id": "law-res",
+          "name": "البحث القانوني",
+          "cats": [
+            "cat-83938"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sharia",
+      "name": "كلية الشريعة",
+      "emoji": "📖",
+      "departments": [
+        {
+          "id": "sharia-txt",
+          "name": "الدراسات الإسلامية",
+          "cats": [
+            "cat-80139"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "edu",
+      "name": "كلية التربية",
+      "emoji": "🎓",
+      "departments": [
+        {
+          "id": "edu-digital",
+          "name": "التعليم الرقمي",
+          "cats": [
+            "cat-96639",
+            "cat-28534",
+            "cat-83491",
+            "cat-42700"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sport",
+      "name": "كلية التربية الرياضية",
+      "emoji": "🏆",
+      "departments": [
+        {
+          "id": "sport-perf",
+          "name": "الأداء الرياضي",
+          "cats": [
+            "cat-66418"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tour",
+      "name": "كلية السياحة",
+      "emoji": "✈️",
+      "departments": [
+        {
+          "id": "tour-hosp",
+          "name": "السياحة والضيافة",
+          "cats": [
+            "cat-86927"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "general",
+      "name": "عام لجميع الطلاب",
+      "emoji": "📚",
+      "departments": [
+        {
+          "id": "gen-write",
+          "name": "الكتابة والبحث",
+          "cats": [
+            "cat-43475",
+            "cat-67290",
+            "cat-24668",
+            "cat-47880",
+            "cat-33551",
+            "cat-4819"
+          ]
+        }
+      ]
+    }
+  ],
+  "categories": {
+    "cat-82557": {
+      "id": "cat-82557",
+      "name": "برمجة ذكية",
+      "tools": [
+        {
+          "name": "GitHub Copilot",
+          "url": "github.com/copilot"
+        },
+        {
+          "name": "ChatGPT",
+          "url": "chat.openai.com"
+        },
+        {
+          "name": "Claude",
+          "url": "claude.ai"
+        },
+        {
+          "name": "Gemini Code",
+          "url": "gemini.google.com"
+        },
+        {
+          "name": "Amazon CodeWhisperer",
+          "url": "aws.amazon.com"
+        },
+        {
+          "name": "Tabnine",
+          "url": "tabnine.com"
+        },
+        {
+          "name": "Codeium",
+          "url": "codeium.com"
+        },
+        {
+          "name": "Cursor",
+          "url": "cursor.sh"
+        },
+        {
+          "name": "Replit Ghostwriter",
+          "url": "replit.com"
+        },
+        {
+          "name": "Phind",
+          "url": "phind.com"
+        },
+        {
+          "name": "Sourcegraph Cody",
+          "url": "sourcegraph.com"
+        },
+        {
+          "name": "JetBrains AI",
+          "url": "jetbrains.com"
+        },
+        {
+          "name": "Visual Studio IntelliCode",
+          "url": "visualstudio.microsoft.com"
+        },
+        {
+          "name": "BlackBox AI",
+          "url": "useblackbox.io"
+        },
+        {
+          "name": "Pieces for Developers",
+          "url": "pieces.app"
+        },
+        {
+          "name": "AskCodi",
+          "url": "askcodi.com"
+        },
+        {
+          "name": "Mintlify",
+          "url": "mintlify.com"
+        },
+        {
+          "name": "Mutable AI",
+          "url": "mutable.ai"
+        },
+        {
+          "name": "CodiumAI",
+          "url": "codium.ai"
+        },
+        {
+          "name": "Coderabbit",
+          "url": "coderabbit.ai"
+        },
+        {
+          "name": "Sweep AI",
+          "url": "sweep.dev"
+        },
+        {
+          "name": "Refact.ai",
+          "url": "refact.ai"
+        },
+        {
+          "name": "Warp (AI Terminal)",
+          "url": "warp.dev"
+        },
+        {
+          "name": "Continue.dev",
+          "url": "continue.dev"
+        },
+        {
+          "name": "Aider",
+          "url": "aider.chat"
+        },
+        {
+          "name": "Devin (Cognition)",
+          "url": "cognition.ai"
+        },
+        {
+          "name": "Bolt",
+          "url": "bolt.new"
+        },
+        {
+          "name": "V0 (Vercel)",
+          "url": "v0.dev"
+        },
+        {
+          "name": "Lovable",
+          "url": "lovable.dev"
+        },
+        {
+          "name": "Windsurf (Codeium)",
+          "url": "codeium.com/windsurf"
+        },
+        {
+          "name": "Stenography",
+          "url": "stenography.dev"
+        },
+        {
+          "name": "CodeT5 (Salesforce)",
+          "url": "github.com/salesforce"
+        },
+        {
+          "name": "Codiga",
+          "url": "codiga.io"
+        },
+        {
+          "name": "SWE-Agent",
+          "url": "swe-agent.com"
+        },
+        {
+          "name": "OpenDevin",
+          "url": "github.com/OpenDevin"
+        },
+        {
+          "name": "Amazon Q Developer",
+          "url": "aws.amazon.com"
+        },
+        {
+          "name": "IBM watsonx Code",
+          "url": "ibm.com/watsonx"
+        },
+        {
+          "name": "Unblocked",
+          "url": "getunblocked.com"
+        },
+        {
+          "name": "Claude Code",
+          "url": "claude.ai/code"
+        },
+        {
+          "name": "Pear AI",
+          "url": "trypear.ai"
+        }
+      ]
+    },
+    "cat-86290": {
+      "id": "cat-86290",
+      "name": "الأمن السيبراني",
+      "tools": [
+        {
+          "name": "Darktrace",
+          "url": "darktrace.com"
+        },
+        {
+          "name": "CrowdStrike Falcon AI",
+          "url": "crowdstrike.com"
+        },
+        {
+          "name": "SentinelOne",
+          "url": "sentinelone.com"
+        },
+        {
+          "name": "Microsoft Sentinel AI",
+          "url": "azure.microsoft.com"
+        },
+        {
+          "name": "IBM QRadar AI",
+          "url": "ibm.com"
+        },
+        {
+          "name": "Splunk AI",
+          "url": "splunk.com"
+        },
+        {
+          "name": "Palo Alto Cortex XSIAM",
+          "url": "paloaltonetworks.com"
+        },
+        {
+          "name": "Google Chronicle",
+          "url": "chronicle.security"
+        },
+        {
+          "name": "Recorded Future",
+          "url": "recordedfuture.com"
+        },
+        {
+          "name": "Vectra AI",
+          "url": "vectra.ai"
+        },
+        {
+          "name": "Exabeam",
+          "url": "exabeam.com"
+        },
+        {
+          "name": "LogRhythm",
+          "url": "logrhythm.com"
+        },
+        {
+          "name": "Deep Instinct",
+          "url": "deepinstinct.com"
+        },
+        {
+          "name": "Abnormal Security",
+          "url": "abnormalsecurity.com"
+        },
+        {
+          "name": "Tessian (Proofpoint)",
+          "url": "tessian.com"
+        },
+        {
+          "name": "Ironscales",
+          "url": "ironscales.com"
+        },
+        {
+          "name": "GreyNoise",
+          "url": "greynoise.io"
+        },
+        {
+          "name": "Cybereason",
+          "url": "cybereason.com"
+        },
+        {
+          "name": "Intezer",
+          "url": "intezer.com"
+        },
+        {
+          "name": "VirusTotal AI",
+          "url": "virustotal.com"
+        },
+        {
+          "name": "SecurityScorecard",
+          "url": "securityscorecard.com"
+        },
+        {
+          "name": "AttackIQ",
+          "url": "attackiq.com"
+        },
+        {
+          "name": "Pentera",
+          "url": "pentera.io"
+        },
+        {
+          "name": "Axonius",
+          "url": "axonius.com"
+        },
+        {
+          "name": "Orca Security",
+          "url": "orca.security"
+        },
+        {
+          "name": "Wiz",
+          "url": "wiz.io"
+        },
+        {
+          "name": "Lacework",
+          "url": "lacework.com"
+        },
+        {
+          "name": "Snyk AI",
+          "url": "snyk.io"
+        },
+        {
+          "name": "Semgrep",
+          "url": "semgrep.dev"
+        },
+        {
+          "name": "Socket Security",
+          "url": "socket.dev"
+        },
+        {
+          "name": "HackerGPT",
+          "url": "hackergpt.co"
+        },
+        {
+          "name": "PentestGPT",
+          "url": "github.com/GreyDGL"
+        },
+        {
+          "name": "Kali GPT",
+          "url": "kaligpt.io"
+        },
+        {
+          "name": "ThreatLocker",
+          "url": "threatlocker.com"
+        },
+        {
+          "name": "Secureworks Taegis",
+          "url": "secureworks.com"
+        },
+        {
+          "name": "Cylance (BlackBerry)",
+          "url": "cylance.com"
+        },
+        {
+          "name": "Morphisec",
+          "url": "morphisec.com"
+        },
+        {
+          "name": "Cofense AI",
+          "url": "cofense.com"
+        },
+        {
+          "name": "Trellix AI (McAfee/FireEye)",
+          "url": "trellix.com"
+        },
+        {
+          "name": "Elastic Security AI",
+          "url": "elastic.co"
+        }
+      ]
+    },
+    "cat-50221": {
+      "id": "cat-50221",
+      "name": "تحليل البيانات",
+      "tools": [
+        {
+          "name": "ChatGPT (Advanced Data Analysis)",
+          "url": "chat.openai.com"
+        },
+        {
+          "name": "Julius AI",
+          "url": "julius.ai"
+        },
+        {
+          "name": "DataRobot",
+          "url": "datarobot.com"
+        },
+        {
+          "name": "H2O.ai",
+          "url": "h2o.ai"
+        },
+        {
+          "name": "RapidMiner",
+          "url": "rapidminer.com"
+        },
+        {
+          "name": "KNIME",
+          "url": "knime.com"
+        },
+        {
+          "name": "Orange Data Mining",
+          "url": "orangedatamining.com"
+        },
+        {
+          "name": "IBM SPSS Modeler",
+          "url": "ibm.com/spss"
+        },
+        {
+          "name": "SAS Viya",
+          "url": "sas.com"
+        },
+        {
+          "name": "Dataiku",
+          "url": "dataiku.com"
+        },
+        {
+          "name": "Alteryx AI",
+          "url": "alteryx.com"
+        },
+        {
+          "name": "Power BI Copilot",
+          "url": "powerbi.microsoft.com"
+        },
+        {
+          "name": "Tableau AI (Einstein)",
+          "url": "tableau.com"
+        },
+        {
+          "name": "Google Looker AI",
+          "url": "looker.com"
+        },
+        {
+          "name": "ThoughtSpot",
+          "url": "thoughtspot.com"
+        },
+        {
+          "name": "Domo AI",
+          "url": "domo.com"
+        },
+        {
+          "name": "Obviously AI",
+          "url": "obviously.ai"
+        },
+        {
+          "name": "Akkio",
+          "url": "akkio.com"
+        },
+        {
+          "name": "Tellius",
+          "url": "tellius.com"
+        },
+        {
+          "name": "Polymer",
+          "url": "polymersearch.com"
+        },
+        {
+          "name": "Rows.com",
+          "url": "rows.com"
+        },
+        {
+          "name": "Equals",
+          "url": "equals.com"
+        },
+        {
+          "name": "Parabola",
+          "url": "parabola.io"
+        },
+        {
+          "name": "MonkeyLearn",
+          "url": "monkeylearn.com"
+        },
+        {
+          "name": "Databricks AI",
+          "url": "databricks.com"
+        },
+        {
+          "name": "Snowflake Cortex",
+          "url": "snowflake.com"
+        },
+        {
+          "name": "Amazon SageMaker",
+          "url": "aws.amazon.com"
+        },
+        {
+          "name": "Google Vertex AI",
+          "url": "cloud.google.com"
+        },
+        {
+          "name": "Azure ML",
+          "url": "azure.microsoft.com"
+        },
+        {
+          "name": "Weights & Biases",
+          "url": "wandb.ai"
+        },
+        {
+          "name": "Qlik Sense AI",
+          "url": "qlik.com"
+        },
+        {
+          "name": "MicroStrategy AI",
+          "url": "microstrategy.com"
+        },
+        {
+          "name": "Graphy",
+          "url": "graphyapp.com"
+        },
+        {
+          "name": "Aetion",
+          "url": "aetion.com"
+        },
+        {
+          "name": "Sigma Computing",
+          "url": "sigmacomputing.com"
+        },
+        {
+          "name": "Metabase",
+          "url": "metabase.com"
+        },
+        {
+          "name": "Retool",
+          "url": "retool.com"
+        },
+        {
+          "name": "Luzmo",
+          "url": "luzmo.com"
+        },
+        {
+          "name": "Claude (Data Analysis)",
+          "url": "claude.ai"
+        },
+        {
+          "name": "Gemini Advanced",
+          "url": "gemini.google.com"
+        }
+      ]
+    },
+    "cat-53322": {
+      "id": "cat-53322",
+      "name": "المحاكاة والنمذجة الهندسية",
+      "tools": [
+        {
+          "name": "ANSYS Discovery AI",
+          "url": "ansys.com"
+        },
+        {
+          "name": "Autodesk Fusion 360 AI",
+          "url": "autodesk.com"
+        },
+        {
+          "name": "COMSOL Multiphysics",
+          "url": "comsol.com"
+        },
+        {
+          "name": "MATLAB Simulink",
+          "url": "mathworks.com"
+        },
+        {
+          "name": "SimScale",
+          "url": "simscale.com"
+        },
+        {
+          "name": "NVIDIA Omniverse",
+          "url": "nvidia.com/omniverse"
+        },
+        {
+          "name": "Dassault SIMULIA",
+          "url": "3ds.com"
+        },
+        {
+          "name": "Altair HyperWorks",
+          "url": "altair.com"
+        },
+        {
+          "name": "MSC Software",
+          "url": "mscsoftware.com"
+        },
+        {
+          "name": "Siemens NX AI",
+          "url": "siemens.com"
+        },
+        {
+          "name": "PTC Creo Simulate",
+          "url": "ptc.com"
+        },
+        {
+          "name": "Abaqus (SIMULIA)",
+          "url": "3ds.com"
+        },
+        {
+          "name": "STAR-CCM+",
+          "url": "plm.automation.siemens.com"
+        },
+        {
+          "name": "Altair Inspire",
+          "url": "altair.com"
+        },
+        {
+          "name": "NVIDIA Modulus",
+          "url": "nvidia.com"
+        },
+        {
+          "name": "Simcenter (Siemens)",
+          "url": "siemens.com"
+        },
+        {
+          "name": "GT-Suite",
+          "url": "gtisoft.com"
+        },
+        {
+          "name": "LS-DYNA",
+          "url": "lstc.com"
+        },
+        {
+          "name": "OpenSim",
+          "url": "opensim.stanford.edu"
+        },
+        {
+          "name": "OpenFOAM",
+          "url": "openfoam.com"
+        },
+        {
+          "name": "PyFluent",
+          "url": "ansys.com"
+        },
+        {
+          "name": "DeepMind AlphaFold",
+          "url": "alphafold.ebi.ac.uk"
+        },
+        {
+          "name": "Adams MSC (Multibody)",
+          "url": "mscsoftware.com"
+        },
+        {
+          "name": "FLAC3D",
+          "url": "itasca.com"
+        },
+        {
+          "name": "Plaxis",
+          "url": "bentley.com"
+        },
+        {
+          "name": "Ricardo WAVE",
+          "url": "ricardo.com"
+        },
+        {
+          "name": "ESI Virtual Seat",
+          "url": "esi-group.com"
+        },
+        {
+          "name": "ParaView",
+          "url": "paraview.org"
+        },
+        {
+          "name": "Autodesk CFD",
+          "url": "autodesk.com"
+        },
+        {
+          "name": "PHOENICS",
+          "url": "cham.co.uk"
+        },
+        {
+          "name": "Ansys Fluent",
+          "url": "ansys.com"
+        },
+        {
+          "name": "RELAP5 (Nuclear)",
+          "url": "inl.gov"
+        },
+        {
+          "name": "Physics-Informed Neural Nets",
+          "url": "github.com"
+        },
+        {
+          "name": "Neural Concept",
+          "url": "neuralconcept.com"
+        },
+        {
+          "name": "Coreform Cubit",
+          "url": "coreform.com"
+        }
+      ]
+    },
+    "cat-86642": {
+      "id": "cat-86642",
+      "name": "الروبوتات والأتمتة",
+      "tools": [
+        {
+          "name": "ROS (Robot OS) + AI",
+          "url": "ros.org"
+        },
+        {
+          "name": "NVIDIA Isaac",
+          "url": "developer.nvidia.com/isaac"
+        },
+        {
+          "name": "Google DeepMind Robotics",
+          "url": "deepmind.google"
+        },
+        {
+          "name": "Boston Dynamics AI",
+          "url": "bostondynamics.com"
+        },
+        {
+          "name": "Tesla Optimus AI",
+          "url": "tesla.com"
+        },
+        {
+          "name": "Figure AI",
+          "url": "figure.ai"
+        },
+        {
+          "name": "Agility Robotics",
+          "url": "agilityrobotics.com"
+        },
+        {
+          "name": "UiPath AI",
+          "url": "uipath.com"
+        },
+        {
+          "name": "Automation Anywhere",
+          "url": "automationanywhere.com"
+        },
+        {
+          "name": "Blue Prism AI",
+          "url": "blueprism.com"
+        },
+        {
+          "name": "Zapier AI",
+          "url": "zapier.com"
+        },
+        {
+          "name": "Make (Integromat)",
+          "url": "make.com"
+        },
+        {
+          "name": "n8n AI",
+          "url": "n8n.io"
+        },
+        {
+          "name": "Power Automate AI",
+          "url": "powerautomate.microsoft.com"
+        },
+        {
+          "name": "Workato AI",
+          "url": "workato.com"
+        },
+        {
+          "name": "Bardeen",
+          "url": "bardeen.ai"
+        },
+        {
+          "name": "Robocorp",
+          "url": "robocorp.com"
+        },
+        {
+          "name": "TagUI",
+          "url": "tagui.dev"
+        },
+        {
+          "name": "Moveworks",
+          "url": "moveworks.com"
+        },
+        {
+          "name": "WorkFusion",
+          "url": "workfusion.com"
+        },
+        {
+          "name": "IBM RPA",
+          "url": "ibm.com"
+        },
+        {
+          "name": "Appian AI",
+          "url": "appian.com"
+        },
+        {
+          "name": "Kryon",
+          "url": "kryonsystems.com"
+        },
+        {
+          "name": "Electroneek",
+          "url": "electroneek.com"
+        },
+        {
+          "name": "Locus Robotics",
+          "url": "locusrobotics.com"
+        },
+        {
+          "name": "Geek+ Robotics",
+          "url": "geekplus.com"
+        },
+        {
+          "name": "GreyOrange AI",
+          "url": "greyorange.com"
+        },
+        {
+          "name": "Hai Robotics",
+          "url": "hairobotics.com"
+        },
+        {
+          "name": "Exotec AI",
+          "url": "exotec.com"
+        },
+        {
+          "name": "Berkshire Grey",
+          "url": "berkshiregrey.com"
+        },
+        {
+          "name": "6 River Systems",
+          "url": "6river.com"
+        },
+        {
+          "name": "Automate.io",
+          "url": "automate.io"
+        },
+        {
+          "name": "ServiceNow RPA",
+          "url": "servicenow.com"
+        },
+        {
+          "name": "Pegasystems AI",
+          "url": "pega.com"
+        },
+        {
+          "name": "OpenAI Robotics",
+          "url": "openai.com"
+        }
+      ]
+    },
+    "cat-90538": {
+      "id": "cat-90538",
+      "name": "التصميم الهندسي ثلاثي الأبعاد",
+      "tools": [
+        {
+          "name": "Autodesk Fusion 360 AI",
+          "url": "autodesk.com"
+        },
+        {
+          "name": "SolidWorks AI",
+          "url": "solidworks.com"
+        },
+        {
+          "name": "CATIA (Dassault)",
+          "url": "3ds.com"
+        },
+        {
+          "name": "Siemens NX",
+          "url": "siemens.com"
+        },
+        {
+          "name": "PTC Creo",
+          "url": "ptc.com"
+        },
+        {
+          "name": "Inventor (Autodesk)",
+          "url": "autodesk.com"
+        },
+        {
+          "name": "Onshape",
+          "url": "onshape.com"
+        },
+        {
+          "name": "Rhino 3D + Grasshopper",
+          "url": "rhino3d.com"
+        },
+        {
+          "name": "SketchUp AI",
+          "url": "sketchup.com"
+        },
+        {
+          "name": "Blender AI Plugins",
+          "url": "blender.org"
+        },
+        {
+          "name": "nTopology",
+          "url": "ntopology.com"
+        },
+        {
+          "name": "Hyperganic",
+          "url": "hyperganic.com"
+        },
+        {
+          "name": "Autodesk Generative Design",
+          "url": "autodesk.com"
+        },
+        {
+          "name": "SpaceClaim",
+          "url": "ansys.com"
+        },
+        {
+          "name": "KeyShot AI",
+          "url": "keyshot.com"
+        },
+        {
+          "name": "Alias (Autodesk)",
+          "url": "autodesk.com"
+        },
+        {
+          "name": "Shapr3D",
+          "url": "shapr3d.com"
+        },
+        {
+          "name": "uMake",
+          "url": "umake.io"
+        },
+        {
+          "name": "Gravity Sketch",
+          "url": "gravitysketch.com"
+        },
+        {
+          "name": "Paramatters",
+          "url": "paramatters.com"
+        },
+        {
+          "name": "Frustum AI",
+          "url": "frustum.com"
+        },
+        {
+          "name": "Neural Concept",
+          "url": "neuralconcept.com"
+        },
+        {
+          "name": "FreeCAD + AI",
+          "url": "freecad.org"
+        },
+        {
+          "name": "ZBrush",
+          "url": "pixologic.com"
+        },
+        {
+          "name": "3ds Max AI",
+          "url": "autodesk.com"
+        },
+        {
+          "name": "Vention AI",
+          "url": "vention.io"
+        },
+        {
+          "name": "Geomagic Design X AI",
+          "url": "3dsystems.com"
+        },
+        {
+          "name": "SOLIDWORKS Simulation AI",
+          "url": "solidworks.com"
+        },
+        {
+          "name": "Materialise Magics AI",
+          "url": "materialise.com"
+        },
+        {
+          "name": "Markforged AI",
+          "url": "markforged.com"
+        }
+      ]
+    },
+    "cat-58038": {
+      "id": "cat-58038",
+      "name": "تحليل الصور الطبية",
+      "tools": [
+        {
+          "name": "Aidoc",
+          "url": "aidoc.com"
+        },
+        {
+          "name": "Zebra Medical Vision",
+          "url": "zebra-med.com"
+        },
+        {
+          "name": "Enlitic",
+          "url": "enlitic.com"
+        },
+        {
+          "name": "Lunit",
+          "url": "lunit.io"
+        },
+        {
+          "name": "Viz.ai",
+          "url": "viz.ai"
+        },
+        {
+          "name": "Arterys",
+          "url": "arterys.com"
+        },
+        {
+          "name": "Google Health AI",
+          "url": "health.google"
+        },
+        {
+          "name": "IBM Watson Health Imaging",
+          "url": "ibm.com"
+        },
+        {
+          "name": "Siemens Healthineers AI",
+          "url": "siemens-healthineers.com"
+        },
+        {
+          "name": "GE HealthCare AI",
+          "url": "gehealthcare.com"
+        },
+        {
+          "name": "Philips IntelliSpace AI",
+          "url": "philips.com"
+        },
+        {
+          "name": "Butterfly Network AI",
+          "url": "butterflynetwork.com"
+        },
+        {
+          "name": "Nuance PowerScribe AI",
+          "url": "nuance.com"
+        },
+        {
+          "name": "PathAI",
+          "url": "pathai.com"
+        },
+        {
+          "name": "Paige AI (Pathology)",
+          "url": "paige.ai"
+        },
+        {
+          "name": "Proscia AI",
+          "url": "proscia.com"
+        },
+        {
+          "name": "Aiforia",
+          "url": "aiforia.com"
+        },
+        {
+          "name": "Optellum (Lung AI)",
+          "url": "optellum.com"
+        },
+        {
+          "name": "Caption Health",
+          "url": "captionhealth.com"
+        },
+        {
+          "name": "EchoGo (Echocardiogram)",
+          "url": "ultromics.com"
+        },
+        {
+          "name": "HeartFlow",
+          "url": "heartflow.com"
+        },
+        {
+          "name": "Imagen Technologies",
+          "url": "image-nology.com"
+        },
+        {
+          "name": "Nines AI",
+          "url": "nines.ai"
+        },
+        {
+          "name": "Tempus AI",
+          "url": "tempus.com"
+        },
+        {
+          "name": "iCAD",
+          "url": "icadmed.com"
+        },
+        {
+          "name": "Veracyte AI",
+          "url": "veracyte.com"
+        },
+        {
+          "name": "Huron Digital Pathology AI",
+          "url": "hurondx.com"
+        },
+        {
+          "name": "Perspectum AI",
+          "url": "perspectum.com"
+        },
+        {
+          "name": "Clarify Health",
+          "url": "clarifyhealth.com"
+        },
+        {
+          "name": "Segmed AI",
+          "url": "segmed.ai"
+        },
+        {
+          "name": "Retina AI",
+          "url": "retina.ai"
+        },
+        {
+          "name": "IDx-DR (Diabetic Retinopathy)",
+          "url": "eyediagnosis.net"
+        },
+        {
+          "name": "VUNO Med",
+          "url": "vuno.co.kr"
+        },
+        {
+          "name": "Infermedica AI",
+          "url": "infermedica.com"
+        },
+        {
+          "name": "AI Dermatologist",
+          "url": "ai-derm.com"
+        }
+      ]
+    },
+    "cat-74528": {
+      "id": "cat-74528",
+      "name": "دعم القرار السريري",
+      "tools": [
+        {
+          "name": "Isabel DDx",
+          "url": "isabelhealthcare.com"
+        },
+        {
+          "name": "DXplain",
+          "url": "dxplain.org"
+        },
+        {
+          "name": "VisualDx",
+          "url": "visualdx.com"
+        },
+        {
+          "name": "Epocrates AI",
+          "url": "epocrates.com"
+        },
+        {
+          "name": "UpToDate AI",
+          "url": "uptodate.com"
+        },
+        {
+          "name": "IBM Watson for Oncology",
+          "url": "ibm.com"
+        },
+        {
+          "name": "Tempus AI",
+          "url": "tempus.com"
+        },
+        {
+          "name": "Flatiron Health",
+          "url": "flatiron.com"
+        },
+        {
+          "name": "Komodo Health",
+          "url": "komodohealth.com"
+        },
+        {
+          "name": "Nuance DAX",
+          "url": "nuance.com"
+        },
+        {
+          "name": "Suki AI",
+          "url": "suki.ai"
+        },
+        {
+          "name": "Abridge AI",
+          "url": "abridge.com"
+        },
+        {
+          "name": "Navina AI",
+          "url": "navina.ai"
+        },
+        {
+          "name": "Clarify Health",
+          "url": "clarifyhealth.com"
+        },
+        {
+          "name": "Wolters Kluwer Health AI",
+          "url": "wolterskluwer.com"
+        },
+        {
+          "name": "Ada Health",
+          "url": "ada.com"
+        },
+        {
+          "name": "Babylon Health AI",
+          "url": "babylonhealth.com"
+        },
+        {
+          "name": "Infermedica",
+          "url": "infermedica.com"
+        },
+        {
+          "name": "Your.MD",
+          "url": "your.md"
+        },
+        {
+          "name": "Mediktor",
+          "url": "mediktor.com"
+        },
+        {
+          "name": "Buoy Health",
+          "url": "buoyhealth.com"
+        },
+        {
+          "name": "K Health",
+          "url": "khealth.com"
+        },
+        {
+          "name": "Olive AI",
+          "url": "oliveai.com"
+        },
+        {
+          "name": "Veradigm AI",
+          "url": "veradigm.com"
+        },
+        {
+          "name": "Elsevier Clinical AI",
+          "url": "elsevier.com"
+        },
+        {
+          "name": "Diagnoss AI",
+          "url": "diagnoss.com"
+        },
+        {
+          "name": "Human Dx",
+          "url": "humandx.org"
+        },
+        {
+          "name": "Zebra Medical Vision",
+          "url": "zebra-med.com"
+        },
+        {
+          "name": "IBM Micromedex AI",
+          "url": "ibm.com"
+        },
+        {
+          "name": "Ambient.ai",
+          "url": "ambient.ai"
+        }
+      ]
+    },
+    "cat-15818": {
+      "id": "cat-15818",
+      "name": "اكتشاف الأدوية والجينوم",
+      "tools": [
+        {
+          "name": "AlphaFold (Google DeepMind)",
+          "url": "alphafold.ebi.ac.uk"
+        },
+        {
+          "name": "RoseTTAFold",
+          "url": "robetta.bakerlab.org"
+        },
+        {
+          "name": "ESMFold (Meta)",
+          "url": "esmatlas.com"
+        },
+        {
+          "name": "Atomwise",
+          "url": "atomwise.com"
+        },
+        {
+          "name": "Schrödinger AI",
+          "url": "schrodinger.com"
+        },
+        {
+          "name": "Insilico Medicine",
+          "url": "insilico.com"
+        },
+        {
+          "name": "BenevolentAI",
+          "url": "benevolent.ai"
+        },
+        {
+          "name": "Exscientia",
+          "url": "exscientia.ai"
+        },
+        {
+          "name": "Recursion Pharmaceuticals",
+          "url": "recursion.com"
+        },
+        {
+          "name": "Absci",
+          "url": "absci.com"
+        },
+        {
+          "name": "Relay Therapeutics",
+          "url": "relaytx.com"
+        },
+        {
+          "name": "Generate Biomedicines",
+          "url": "generatebiomedicines.com"
+        },
+        {
+          "name": "Isomorphic Labs",
+          "url": "isomorphiclabs.com"
+        },
+        {
+          "name": "Evozyne",
+          "url": "evozyne.com"
+        },
+        {
+          "name": "OpenFold",
+          "url": "openfold.net"
+        },
+        {
+          "name": "ProteinMPNN",
+          "url": "github.com/dauparas"
+        },
+        {
+          "name": "RFDiffusion",
+          "url": "github.com/RosettaCommons"
+        },
+        {
+          "name": "Chai Discovery",
+          "url": "chaidiscovery.com"
+        },
+        {
+          "name": "Boltz-1",
+          "url": "github.com/jwohlwend"
+        },
+        {
+          "name": "NVIDIA BioNemo",
+          "url": "nvidia.com/bionemo"
+        },
+        {
+          "name": "Google DeepVariant",
+          "url": "github.com/google/deepvariant"
+        },
+        {
+          "name": "Microsoft Genomics",
+          "url": "microsoft.com/genomics"
+        },
+        {
+          "name": "Illumina AI",
+          "url": "illumina.com"
+        },
+        {
+          "name": "Tempus Genomics",
+          "url": "tempus.com"
+        },
+        {
+          "name": "Foundation Medicine AI",
+          "url": "foundationmedicine.com"
+        },
+        {
+          "name": "DNAnexus",
+          "url": "dnanexus.com"
+        },
+        {
+          "name": "Seven Bridges Genomics",
+          "url": "sevenbridges.com"
+        },
+        {
+          "name": "Geneyx AI",
+          "url": "geneyx.com"
+        },
+        {
+          "name": "Deep Genomics",
+          "url": "deepgenomics.com"
+        },
+        {
+          "name": "AbCellera AI",
+          "url": "abcellera.com"
+        },
+        {
+          "name": "Xaira Therapeutics",
+          "url": "xaira.com"
+        },
+        {
+          "name": "GeneDx AI",
+          "url": "genedx.com"
+        },
+        {
+          "name": "Twist Bioscience AI",
+          "url": "twistbioscience.com"
+        },
+        {
+          "name": "Benchling (Lab AI)",
+          "url": "benchling.com"
+        },
+        {
+          "name": "Sapio Sciences",
+          "url": "sapiosciences.com"
+        }
+      ]
+    },
+    "cat-20239": {
+      "id": "cat-20239",
+      "name": "دعم الصحة النفسية",
+      "tools": [
+        {
+          "name": "Woebot",
+          "url": "woebot.io"
+        },
+        {
+          "name": "Wysa",
+          "url": "wysa.io"
+        },
+        {
+          "name": "Youper",
+          "url": "youper.ai"
+        },
+        {
+          "name": "Elomia",
+          "url": "elomia.com"
+        },
+        {
+          "name": "Replika",
+          "url": "replika.ai"
+        },
+        {
+          "name": "Calm AI",
+          "url": "calm.com"
+        },
+        {
+          "name": "Headspace AI",
+          "url": "headspace.com"
+        },
+        {
+          "name": "Ginger AI",
+          "url": "ginger.com"
+        },
+        {
+          "name": "Spring Health AI",
+          "url": "springhealth.com"
+        },
+        {
+          "name": "Lyra Health AI",
+          "url": "lyrahealth.com"
+        },
+        {
+          "name": "Quartet Health AI",
+          "url": "quartethealth.com"
+        },
+        {
+          "name": "Cerebral AI",
+          "url": "cerebral.com"
+        },
+        {
+          "name": "Brightside AI",
+          "url": "brightside.com"
+        },
+        {
+          "name": "Talkspace AI",
+          "url": "talkspace.com"
+        },
+        {
+          "name": "7 Cups AI",
+          "url": "7cups.com"
+        },
+        {
+          "name": "Kooth AI",
+          "url": "kooth.com"
+        },
+        {
+          "name": "Sanvello AI",
+          "url": "sanvello.com"
+        },
+        {
+          "name": "Moodpath",
+          "url": "moodpath.de"
+        },
+        {
+          "name": "Daylio",
+          "url": "daylio.webflow.io"
+        },
+        {
+          "name": "Bearable",
+          "url": "bearable.app"
+        },
+        {
+          "name": "Noom AI",
+          "url": "noom.com"
+        },
+        {
+          "name": "Happify AI",
+          "url": "happify.com"
+        },
+        {
+          "name": "Innerworld",
+          "url": "innerworld.com"
+        },
+        {
+          "name": "Done AI (ADHD)",
+          "url": "donefirst.com"
+        },
+        {
+          "name": "Mindstrong AI",
+          "url": "mindstrong.com"
+        },
+        {
+          "name": "Alma AI",
+          "url": "helloalma.com"
+        },
+        {
+          "name": "MoodKit",
+          "url": "moodkitapp.com"
+        },
+        {
+          "name": "Thrive Global AI",
+          "url": "thriveglobal.com"
+        },
+        {
+          "name": "BetterHelp AI",
+          "url": "betterhelp.com"
+        },
+        {
+          "name": "Mindbot",
+          "url": "mindbot.ai"
+        }
+      ]
+    },
+    "cat-87164": {
+      "id": "cat-87164",
+      "name": "صحة الحيوان والتشخيص البيطري",
+      "tools": [
+        {
+          "name": "VetCheck AI",
+          "url": "vetcheck.it"
+        },
+        {
+          "name": "Vet-AI",
+          "url": "vet.ai"
+        },
+        {
+          "name": "Digitail AI",
+          "url": "digitail.io"
+        },
+        {
+          "name": "Provet Cloud AI",
+          "url": "provetcloud.com"
+        },
+        {
+          "name": "ezyVet AI",
+          "url": "ezyvet.com"
+        },
+        {
+          "name": "Covetrus AI",
+          "url": "covetrus.com"
+        },
+        {
+          "name": "VitusVet AI",
+          "url": "vituvet.com"
+        },
+        {
+          "name": "PetDesk AI",
+          "url": "petdesk.com"
+        },
+        {
+          "name": "Anipanion",
+          "url": "anipanion.com"
+        },
+        {
+          "name": "IDEXX AI (Laboratory)",
+          "url": "idexx.com"
+        },
+        {
+          "name": "Heska AI",
+          "url": "heska.com"
+        },
+        {
+          "name": "Zoetis AI Diagnostics",
+          "url": "zoetis.com"
+        },
+        {
+          "name": "Merck Animal Health AI",
+          "url": "merck-animal-health.com"
+        },
+        {
+          "name": "Elanco AI",
+          "url": "elanco.com"
+        },
+        {
+          "name": "Boehringer Ingelheim AI",
+          "url": "boehringer-ingelheim.com"
+        },
+        {
+          "name": "DataBiologics",
+          "url": "datbiologics.com"
+        },
+        {
+          "name": "Pawsitive Vet AI",
+          "url": "pawsitivevet.ai"
+        },
+        {
+          "name": "Shepherd Vet AI",
+          "url": "shepherd.vet"
+        },
+        {
+          "name": "PetCheck AI",
+          "url": "petcheckai.com"
+        },
+        {
+          "name": "Scil Animal Care AI",
+          "url": "scilvet.com"
+        },
+        {
+          "name": "VetSource AI",
+          "url": "vetsource.com"
+        },
+        {
+          "name": "Morphovet",
+          "url": "morphovet.com"
+        },
+        {
+          "name": "OncoK9 AI",
+          "url": "accessvmd.com"
+        },
+        {
+          "name": "TeleVet AI",
+          "url": "televet.com"
+        },
+        {
+          "name": "Airvet AI",
+          "url": "airvet.com"
+        },
+        {
+          "name": "GuardianVets AI",
+          "url": "guardianvets.com"
+        },
+        {
+          "name": "VetCT AI",
+          "url": "vetct.com"
+        },
+        {
+          "name": "Vetology AI Radiology",
+          "url": "vetology.com"
+        },
+        {
+          "name": "SignalPet AI",
+          "url": "signalpet.com"
+        },
+        {
+          "name": "Smartflow AI",
+          "url": "smartflowtech.com"
+        }
+      ]
+    },
+    "cat-68354": {
+      "id": "cat-68354",
+      "name": "الزراعة الذكية",
+      "tools": [
+        {
+          "name": "Climate Corporation (Bayer)",
+          "url": "climate.com"
+        },
+        {
+          "name": "John Deere AI (See & Spray)",
+          "url": "deere.com"
+        },
+        {
+          "name": "Trimble Agriculture AI",
+          "url": "trimble.com"
+        },
+        {
+          "name": "Cropin AI",
+          "url": "cropin.com"
+        },
+        {
+          "name": "FarmShots (Syngenta)",
+          "url": "farmshots.com"
+        },
+        {
+          "name": "Granular AI (Corteva)",
+          "url": "granular.ag"
+        },
+        {
+          "name": "Farmers Edge",
+          "url": "farmersedge.ca"
+        },
+        {
+          "name": "Taranis AI",
+          "url": "taranis.ag"
+        },
+        {
+          "name": "Gamaya",
+          "url": "gamaya.com"
+        },
+        {
+          "name": "Ceres Imaging",
+          "url": "ceresimaging.net"
+        },
+        {
+          "name": "Prospera Technologies",
+          "url": "prospera.ag"
+        },
+        {
+          "name": "Blue River Technology",
+          "url": "bluerivertechnology.com"
+        },
+        {
+          "name": "Hummingbird Technologies",
+          "url": "hummingbirdtech.com"
+        },
+        {
+          "name": "Plantix AI",
+          "url": "plantix.net"
+        },
+        {
+          "name": "aWhere",
+          "url": "awhere.com"
+        },
+        {
+          "name": "AgriForce AI",
+          "url": "agriforcegs.com"
+        },
+        {
+          "name": "Climate AI",
+          "url": "climate.ai"
+        },
+        {
+          "name": "CropX AI",
+          "url": "cropx.com"
+        },
+        {
+          "name": "Raven Applied Technology",
+          "url": "ravenprecision.com"
+        },
+        {
+          "name": "Arable AI",
+          "url": "arable.com"
+        },
+        {
+          "name": "AgLeader AI",
+          "url": "agleader.com"
+        },
+        {
+          "name": "Agmatix",
+          "url": "agmatix.com"
+        },
+        {
+          "name": "TerrAvion",
+          "url": "terravion.com"
+        },
+        {
+          "name": "EFC Systems",
+          "url": "efcsystems.com"
+        },
+        {
+          "name": "Decisive Farming",
+          "url": "decisivefarming.com"
+        },
+        {
+          "name": "640 Labs",
+          "url": "640labs.com"
+        },
+        {
+          "name": "Peat.ai",
+          "url": "peat.ai"
+        },
+        {
+          "name": "DeepField (IBM)",
+          "url": "ibm.com"
+        },
+        {
+          "name": "AgXcel AI",
+          "url": "agxcel.com"
+        },
+        {
+          "name": "FBN AI (Farmer's Business Network)",
+          "url": "fbn.com"
+        }
+      ]
+    },
+    "cat-55759": {
+      "id": "cat-55759",
+      "name": "رصد البيئة ونظم المعلومات الجغرافية",
+      "tools": [
+        {
+          "name": "Google Earth Engine + AI",
+          "url": "earthengine.google.com"
+        },
+        {
+          "name": "ESRI ArcGIS AI",
+          "url": "esri.com"
+        },
+        {
+          "name": "Maxar Technologies AI",
+          "url": "maxar.com"
+        },
+        {
+          "name": "Planet Labs AI",
+          "url": "planet.com"
+        },
+        {
+          "name": "Orbital Insight",
+          "url": "orbitalinsight.com"
+        },
+        {
+          "name": "Satellogic AI",
+          "url": "satellogic.com"
+        },
+        {
+          "name": "Descartes Labs",
+          "url": "descarteslabs.com"
+        },
+        {
+          "name": "Ecometrica",
+          "url": "ecometrica.com"
+        },
+        {
+          "name": "Global Forest Watch AI",
+          "url": "globalforestwatch.org"
+        },
+        {
+          "name": "Pachama AI",
+          "url": "pachama.com"
+        },
+        {
+          "name": "Tomorrow.io",
+          "url": "tomorrow.io"
+        },
+        {
+          "name": "IBM Environmental Intelligence",
+          "url": "ibm.com"
+        },
+        {
+          "name": "Spire Global AI",
+          "url": "spire.com"
+        },
+        {
+          "name": "Kayrros AI",
+          "url": "kayrros.com"
+        },
+        {
+          "name": "GHGSat",
+          "url": "ghgsat.com"
+        },
+        {
+          "name": "SpaceKnow AI",
+          "url": "spaceknow.com"
+        },
+        {
+          "name": "UP42",
+          "url": "up42.com"
+        },
+        {
+          "name": "Salo Sciences",
+          "url": "salosciences.com"
+        },
+        {
+          "name": "Nature Metrics AI",
+          "url": "naturemetrics.com"
+        },
+        {
+          "name": "WaterSignal AI",
+          "url": "watersignal.com"
+        },
+        {
+          "name": "Geosys (Satellite Agri)",
+          "url": "geosys.com"
+        },
+        {
+          "name": "Windfall Data",
+          "url": "windfalldata.com"
+        },
+        {
+          "name": "Verra AI",
+          "url": "verra.org"
+        },
+        {
+          "name": "Terrascope",
+          "url": "terrascope.com"
+        },
+        {
+          "name": "Carbon Direct AI",
+          "url": "carbon-direct.com"
+        },
+        {
+          "name": "BioCarbon Engineering AI",
+          "url": "biocarbonengineering.com"
+        },
+        {
+          "name": "Mapbox AI",
+          "url": "mapbox.com"
+        },
+        {
+          "name": "HERE AI (Maps)",
+          "url": "here.com"
+        },
+        {
+          "name": "Nearmap AI",
+          "url": "nearmap.com"
+        },
+        {
+          "name": "Geoapify",
+          "url": "geoapify.com"
+        },
+        {
+          "name": "SkyWatch AI",
+          "url": "skywatch.com"
+        },
+        {
+          "name": "Airbus OneAtlas AI",
+          "url": "intelligence-airbusds.com"
+        },
+        {
+          "name": "BlackSky AI",
+          "url": "blacksky.com"
+        },
+        {
+          "name": "Ursa Space AI",
+          "url": "ursaspace.com"
+        },
+        {
+          "name": "Iceye AI (SAR)",
+          "url": "iceye.com"
+        }
+      ]
+    },
+    "cat-86710": {
+      "id": "cat-86710",
+      "name": "رسوم بيانية ذكية",
+      "tools": [
+        {
+          "name": "Flourish",
+          "url": "flourish.studio"
+        },
+        {
+          "name": "Datawrapper",
+          "url": "datawrapper.de"
+        },
+        {
+          "name": "Infogram",
+          "url": "infogram.com"
+        },
+        {
+          "name": "Piktochart",
+          "url": "piktochart.com"
+        },
+        {
+          "name": "Visme",
+          "url": "visme.co"
+        },
+        {
+          "name": "Canva Charts",
+          "url": "canva.com"
+        },
+        {
+          "name": "Power BI",
+          "url": "powerbi.microsoft.com"
+        },
+        {
+          "name": "Tableau",
+          "url": "tableau.com"
+        },
+        {
+          "name": "Google Looker Studio",
+          "url": "lookerstudio.google.com"
+        },
+        {
+          "name": "Zoho Analytics",
+          "url": "zoho.com/analytics"
+        },
+        {
+          "name": "Observable",
+          "url": "observablehq.com"
+        },
+        {
+          "name": "RAWGraphs",
+          "url": "rawgraphs.io"
+        },
+        {
+          "name": "Gephi",
+          "url": "gephi.org"
+        },
+        {
+          "name": "ChartGPT",
+          "url": "chartgpt.dev"
+        },
+        {
+          "name": "Julius AI",
+          "url": "julius.ai"
+        },
+        {
+          "name": "Sigma Computing",
+          "url": "sigmacomputing.com"
+        },
+        {
+          "name": "Metabase",
+          "url": "metabase.com"
+        },
+        {
+          "name": "Polymer",
+          "url": "polymersearch.com"
+        },
+        {
+          "name": "Graphy",
+          "url": "graphyapp.com"
+        },
+        {
+          "name": "Luzmo",
+          "url": "luzmo.com"
+        },
+        {
+          "name": "Highcharts",
+          "url": "highcharts.com"
+        },
+        {
+          "name": "ApexCharts AI",
+          "url": "apexcharts.com"
+        },
+        {
+          "name": "Plotly",
+          "url": "plotly.com"
+        },
+        {
+          "name": "Chartify",
+          "url": "chartify.ai"
+        },
+        {
+          "name": "Beautiful.ai (Charts)",
+          "url": "beautiful.ai"
+        },
+        {
+          "name": "Qlik Sense",
+          "url": "qlik.com"
+        },
+        {
+          "name": "ThoughtSpot",
+          "url": "thoughtspot.com"
+        },
+        {
+          "name": "Domo",
+          "url": "domo.com"
+        },
+        {
+          "name": "Klipfolio",
+          "url": "klipfolio.com"
+        },
+        {
+          "name": "Geckoboard",
+          "url": "geckoboard.com"
+        },
+        {
+          "name": "Databox",
+          "url": "databox.com"
+        },
+        {
+          "name": "Chartblocks",
+          "url": "chartblocks.com"
+        },
+        {
+          "name": "ChartBrew",
+          "url": "chartbrew.com"
+        },
+        {
+          "name": "Redash AI",
+          "url": "redash.io"
+        },
+        {
+          "name": "Evidence.dev",
+          "url": "evidence.dev"
+        }
+      ]
+    },
+    "cat-41383": {
+      "id": "cat-41383",
+      "name": "التحليل المالي",
+      "tools": [
+        {
+          "name": "Bloomberg Terminal + AI",
+          "url": "bloomberg.com/terminal"
+        },
+        {
+          "name": "Refinitiv Eikon AI",
+          "url": "refinitiv.com"
+        },
+        {
+          "name": "FactSet AI",
+          "url": "factset.com"
+        },
+        {
+          "name": "Morningstar AI",
+          "url": "morningstar.com"
+        },
+        {
+          "name": "AlphaSense",
+          "url": "alpha-sense.com"
+        },
+        {
+          "name": "Kensho (S&P Global)",
+          "url": "kensho.com"
+        },
+        {
+          "name": "Tegus AI (Sentieo)",
+          "url": "tegus.com"
+        },
+        {
+          "name": "Visible Alpha",
+          "url": "visiblealpha.com"
+        },
+        {
+          "name": "Numerai",
+          "url": "numer.ai"
+        },
+        {
+          "name": "Two Sigma AI",
+          "url": "twosigma.com"
+        },
+        {
+          "name": "Kavout AI",
+          "url": "kavout.com"
+        },
+        {
+          "name": "Alpaca AI (Trading)",
+          "url": "alpaca.markets"
+        },
+        {
+          "name": "Tickeron AI",
+          "url": "tickeron.com"
+        },
+        {
+          "name": "Trade Ideas AI",
+          "url": "trade-ideas.com"
+        },
+        {
+          "name": "Danelfin AI",
+          "url": "danelfin.com"
+        },
+        {
+          "name": "Stock Rover AI",
+          "url": "stockrover.com"
+        },
+        {
+          "name": "Magnifi AI",
+          "url": "magnifi.com"
+        },
+        {
+          "name": "YCharts AI",
+          "url": "ycharts.com"
+        },
+        {
+          "name": "Koyfin AI",
+          "url": "koyfin.com"
+        },
+        {
+          "name": "Atom Finance AI",
+          "url": "atom.finance"
+        },
+        {
+          "name": "Simplywall.st AI",
+          "url": "simplywall.st"
+        },
+        {
+          "name": "Finviz AI",
+          "url": "finviz.com"
+        },
+        {
+          "name": "Seeking Alpha AI",
+          "url": "seekingalpha.com"
+        },
+        {
+          "name": "Betterment AI",
+          "url": "betterment.com"
+        },
+        {
+          "name": "M1 Finance AI",
+          "url": "m1.com"
+        },
+        {
+          "name": "Plaid AI",
+          "url": "plaid.com"
+        },
+        {
+          "name": "Ayasdi (Citigroup)",
+          "url": "iqvia.com"
+        },
+        {
+          "name": "ZestMoney AI",
+          "url": "zestmoney.in"
+        },
+        {
+          "name": "Upstart AI",
+          "url": "upstart.com"
+        },
+        {
+          "name": "Ocrolus AI",
+          "url": "ocrolus.com"
+        },
+        {
+          "name": "Cerebri AI",
+          "url": "cerebri.ai"
+        },
+        {
+          "name": "DataRobot Finance",
+          "url": "datarobot.com"
+        },
+        {
+          "name": "Featurespace AI",
+          "url": "featurespace.com"
+        },
+        {
+          "name": "Behavox AI",
+          "url": "behavox.com"
+        },
+        {
+          "name": "Sievert Larson AI",
+          "url": "sievertlarson.com"
+        }
+      ]
+    },
+    "cat-80155": {
+      "id": "cat-80155",
+      "name": "التسويق والأعمال الرقمية",
+      "tools": [
+        {
+          "name": "HubSpot AI",
+          "url": "hubspot.com"
+        },
+        {
+          "name": "Salesforce Einstein",
+          "url": "salesforce.com"
+        },
+        {
+          "name": "Marketo AI (Adobe)",
+          "url": "marketo.com"
+        },
+        {
+          "name": "Klaviyo AI",
+          "url": "klaviyo.com"
+        },
+        {
+          "name": "ActiveCampaign AI",
+          "url": "activecampaign.com"
+        },
+        {
+          "name": "Mailchimp AI",
+          "url": "mailchimp.com"
+        },
+        {
+          "name": "Jasper AI",
+          "url": "jasper.ai"
+        },
+        {
+          "name": "Copy.ai",
+          "url": "copy.ai"
+        },
+        {
+          "name": "Phrasee AI",
+          "url": "phrasee.co"
+        },
+        {
+          "name": "Persado",
+          "url": "persado.com"
+        },
+        {
+          "name": "Drift AI",
+          "url": "drift.com"
+        },
+        {
+          "name": "Intercom AI",
+          "url": "intercom.com"
+        },
+        {
+          "name": "ManyChat AI",
+          "url": "manychat.com"
+        },
+        {
+          "name": "Tidio AI",
+          "url": "tidio.com"
+        },
+        {
+          "name": "Hootsuite AI (Owly)",
+          "url": "hootsuite.com"
+        },
+        {
+          "name": "Sprout Social AI",
+          "url": "sproutsocial.com"
+        },
+        {
+          "name": "Buffer AI",
+          "url": "buffer.com"
+        },
+        {
+          "name": "Later AI",
+          "url": "later.com"
+        },
+        {
+          "name": "Lately AI",
+          "url": "lately.ai"
+        },
+        {
+          "name": "Brandwatch AI",
+          "url": "brandwatch.com"
+        },
+        {
+          "name": "Sprinklr AI",
+          "url": "sprinklr.com"
+        },
+        {
+          "name": "Semrush AI",
+          "url": "semrush.com"
+        },
+        {
+          "name": "Ahrefs AI",
+          "url": "ahrefs.com"
+        },
+        {
+          "name": "Moz AI",
+          "url": "moz.com"
+        },
+        {
+          "name": "SurferSEO AI",
+          "url": "surferseo.com"
+        },
+        {
+          "name": "Clearscope",
+          "url": "clearscope.io"
+        },
+        {
+          "name": "MarketMuse",
+          "url": "marketmuse.com"
+        },
+        {
+          "name": "Crayon AI",
+          "url": "crayon.co"
+        },
+        {
+          "name": "Seventh Sense AI",
+          "url": "theseventhsense.com"
+        },
+        {
+          "name": "Acrolinx",
+          "url": "acrolinx.com"
+        },
+        {
+          "name": "Mutiny AI",
+          "url": "mutinyhq.com"
+        },
+        {
+          "name": "Optimove AI",
+          "url": "optimove.com"
+        },
+        {
+          "name": "Albert AI",
+          "url": "albert.ai"
+        },
+        {
+          "name": "Acquisio AI",
+          "url": "acquisio.com"
+        },
+        {
+          "name": "Adzooma AI",
+          "url": "adzooma.com"
+        },
+        {
+          "name": "Pattern89 AI",
+          "url": "pattern89.com"
+        },
+        {
+          "name": "Personyze AI",
+          "url": "personyze.com"
+        },
+        {
+          "name": "Emarsys AI (SAP)",
+          "url": "emarsys.com"
+        },
+        {
+          "name": "Blueshift AI",
+          "url": "blueshift.com"
+        },
+        {
+          "name": "Iterable AI",
+          "url": "iterable.com"
+        }
+      ]
+    },
+    "cat-43209": {
+      "id": "cat-43209",
+      "name": "اللوجستيات وسلاسل الإمداد",
+      "tools": [
+        {
+          "name": "FourKites AI",
+          "url": "fourkites.com"
+        },
+        {
+          "name": "Project44 AI",
+          "url": "project44.com"
+        },
+        {
+          "name": "Flexport AI",
+          "url": "flexport.com"
+        },
+        {
+          "name": "Blue Yonder AI",
+          "url": "blueyonder.com"
+        },
+        {
+          "name": "Manhattan Associates AI",
+          "url": "manh.com"
+        },
+        {
+          "name": "Oracle SCM AI",
+          "url": "oracle.com"
+        },
+        {
+          "name": "SAP IBP AI",
+          "url": "sap.com"
+        },
+        {
+          "name": "Kinaxis AI",
+          "url": "kinaxis.com"
+        },
+        {
+          "name": "Llamasoft (Coupa)",
+          "url": "coupa.com"
+        },
+        {
+          "name": "Infor Nexus AI",
+          "url": "infor.com"
+        },
+        {
+          "name": "o9 Solutions AI",
+          "url": "o9solutions.com"
+        },
+        {
+          "name": "Anaplan AI",
+          "url": "anaplan.com"
+        },
+        {
+          "name": "ToolsGroup AI",
+          "url": "toolsgroup.com"
+        },
+        {
+          "name": "Logility AI",
+          "url": "logility.com"
+        },
+        {
+          "name": "Relex Solutions AI",
+          "url": "relexsolutions.com"
+        },
+        {
+          "name": "Zebra Technologies AI",
+          "url": "zebra.com"
+        },
+        {
+          "name": "Körber AI",
+          "url": "koerber.com"
+        },
+        {
+          "name": "Swisslog AI",
+          "url": "swisslog.com"
+        },
+        {
+          "name": "AutoStore AI",
+          "url": "autostoresystem.com"
+        },
+        {
+          "name": "Locus Robotics",
+          "url": "locusrobotics.com"
+        },
+        {
+          "name": "Berkshire Grey AI",
+          "url": "berkshiregrey.com"
+        },
+        {
+          "name": "6 River Systems AI",
+          "url": "6river.com"
+        },
+        {
+          "name": "Geek+ Robotics",
+          "url": "geekplus.com"
+        },
+        {
+          "name": "GreyOrange AI",
+          "url": "greyorange.com"
+        },
+        {
+          "name": "Hai Robotics",
+          "url": "hairobotics.com"
+        },
+        {
+          "name": "Exotec AI",
+          "url": "exotec.com"
+        },
+        {
+          "name": "Conveyco AI",
+          "url": "conveyco.com"
+        },
+        {
+          "name": "Bastian Solutions AI",
+          "url": "bastiansolutions.com"
+        },
+        {
+          "name": "Element Logic AI",
+          "url": "elementlogic.net"
+        },
+        {
+          "name": "DHL AI",
+          "url": "dhl.com"
+        },
+        {
+          "name": "UPS Supply Chain AI",
+          "url": "ups.com"
+        },
+        {
+          "name": "FedEx SenseAware AI",
+          "url": "fedex.com"
+        },
+        {
+          "name": "Amazon Robotics AI",
+          "url": "amazonrobotics.com"
+        },
+        {
+          "name": "Walmart Supply Chain AI",
+          "url": "walmart.com"
+        },
+        {
+          "name": "C.H. Robinson Navisphere AI",
+          "url": "chrobinson.com"
+        },
+        {
+          "name": "Transplace AI",
+          "url": "transplace.com"
+        },
+        {
+          "name": "Echo Global Logistics AI",
+          "url": "echo.com"
+        },
+        {
+          "name": "FreightWaves AI",
+          "url": "freightwaves.com"
+        },
+        {
+          "name": "Samsara AI",
+          "url": "samsara.com"
+        },
+        {
+          "name": "Motive AI (KeepTruckin)",
+          "url": "gomotive.com"
+        }
+      ]
+    },
+    "cat-73843": {
+      "id": "cat-73843",
+      "name": "التصميم الجرافيكي",
+      "tools": [
+        {
+          "name": "Canva AI",
+          "url": "canva.com"
+        },
+        {
+          "name": "Adobe Firefly",
+          "url": "firefly.adobe.com"
+        },
+        {
+          "name": "Adobe Express AI",
+          "url": "express.adobe.com"
+        },
+        {
+          "name": "Microsoft Designer",
+          "url": "designer.microsoft.com"
+        },
+        {
+          "name": "Figma AI",
+          "url": "figma.com"
+        },
+        {
+          "name": "Midjourney",
+          "url": "midjourney.com"
+        },
+        {
+          "name": "DALL-E 3",
+          "url": "openai.com"
+        },
+        {
+          "name": "Framer AI",
+          "url": "framer.com"
+        },
+        {
+          "name": "Looka",
+          "url": "looka.com"
+        },
+        {
+          "name": "Designs.ai",
+          "url": "designs.ai"
+        },
+        {
+          "name": "Simplified AI",
+          "url": "simplified.com"
+        },
+        {
+          "name": "Picsart AI",
+          "url": "picsart.com"
+        },
+        {
+          "name": "Fotor AI",
+          "url": "fotor.com"
+        },
+        {
+          "name": "VistaCreate AI",
+          "url": "create.vista.com"
+        },
+        {
+          "name": "Wix Logo Maker",
+          "url": "wix.com"
+        },
+        {
+          "name": "Brandmark.io",
+          "url": "brandmark.io"
+        },
+        {
+          "name": "LogoAI",
+          "url": "logoai.com"
+        },
+        {
+          "name": "Visme AI",
+          "url": "visme.co"
+        },
+        {
+          "name": "Glorify",
+          "url": "glorify-app.com"
+        },
+        {
+          "name": "Snappa",
+          "url": "snappa.com"
+        },
+        {
+          "name": "Desygner AI",
+          "url": "desygner.com"
+        },
+        {
+          "name": "Renderforest AI",
+          "url": "renderforest.com"
+        },
+        {
+          "name": "Uizard",
+          "url": "uizard.io"
+        },
+        {
+          "name": "Khroma (Color AI)",
+          "url": "khroma.co"
+        },
+        {
+          "name": "Fontjoy",
+          "url": "fontjoy.com"
+        },
+        {
+          "name": "Hatchful (Shopify)",
+          "url": "hatchful.shopify.com"
+        },
+        {
+          "name": "Tailor Brands",
+          "url": "tailorbrands.com"
+        },
+        {
+          "name": "Zyro AI Design",
+          "url": "zyro.com"
+        },
+        {
+          "name": "RelayThat",
+          "url": "relaythat.com"
+        },
+        {
+          "name": "Remove.bg",
+          "url": "remove.bg"
+        },
+        {
+          "name": "Clipdrop AI",
+          "url": "clipdrop.co"
+        },
+        {
+          "name": "Photosonic",
+          "url": "writesonic.com"
+        },
+        {
+          "name": "Kittl AI",
+          "url": "kittl.com"
+        },
+        {
+          "name": "Genius Design (Envato)",
+          "url": "elements.envato.com"
+        },
+        {
+          "name": "Ideogram",
+          "url": "ideogram.ai"
+        }
+      ]
+    },
+    "cat-44423": {
+      "id": "cat-44423",
+      "name": "توليد الصور",
+      "tools": [
+        {
+          "name": "Midjourney",
+          "url": "midjourney.com"
+        },
+        {
+          "name": "DALL-E 3 (OpenAI)",
+          "url": "openai.com"
+        },
+        {
+          "name": "Stable Diffusion",
+          "url": "stability.ai"
+        },
+        {
+          "name": "Adobe Firefly",
+          "url": "firefly.adobe.com"
+        },
+        {
+          "name": "Imagen (Google)",
+          "url": "deepmind.google"
+        },
+        {
+          "name": "Grok Aurora (xAI)",
+          "url": "grok.com"
+        },
+        {
+          "name": "Bing Image Creator",
+          "url": "bing.com"
+        },
+        {
+          "name": "Canva AI",
+          "url": "canva.com"
+        },
+        {
+          "name": "NightCafe",
+          "url": "nightcafe.studio"
+        },
+        {
+          "name": "Lexica",
+          "url": "lexica.art"
+        },
+        {
+          "name": "Playground AI",
+          "url": "playgroundai.com"
+        },
+        {
+          "name": "DreamStudio",
+          "url": "dreamstudio.ai"
+        },
+        {
+          "name": "Leonardo AI",
+          "url": "leonardo.ai"
+        },
+        {
+          "name": "Ideogram",
+          "url": "ideogram.ai"
+        },
+        {
+          "name": "Flux (Black Forest Labs)",
+          "url": "blackforestlabs.ai"
+        },
+        {
+          "name": "Recraft",
+          "url": "recraft.ai"
+        },
+        {
+          "name": "SeaArt",
+          "url": "seaart.ai"
+        },
+        {
+          "name": "Runway ML",
+          "url": "runwayml.com"
+        },
+        {
+          "name": "Freepik AI",
+          "url": "freepik.com"
+        },
+        {
+          "name": "Picsart AI",
+          "url": "picsart.com"
+        },
+        {
+          "name": "Fotor AI",
+          "url": "fotor.com"
+        },
+        {
+          "name": "PixAI",
+          "url": "pixai.art"
+        },
+        {
+          "name": "Scenario",
+          "url": "scenario.com"
+        },
+        {
+          "name": "Krea AI",
+          "url": "krea.ai"
+        },
+        {
+          "name": "Artbreeder",
+          "url": "artbreeder.com"
+        },
+        {
+          "name": "StarryAI",
+          "url": "starryai.com"
+        },
+        {
+          "name": "Dream by WOMBO",
+          "url": "dream.ai"
+        },
+        {
+          "name": "Craiyon",
+          "url": "craiyon.com"
+        },
+        {
+          "name": "Gencraft",
+          "url": "gencraft.com"
+        },
+        {
+          "name": "Civitai",
+          "url": "civitai.com"
+        },
+        {
+          "name": "Tensor.art",
+          "url": "tensor.art"
+        },
+        {
+          "name": "Copilot Designer",
+          "url": "copilot.microsoft.com"
+        },
+        {
+          "name": "Adobe Express AI",
+          "url": "express.adobe.com"
+        },
+        {
+          "name": "GetIMG.ai",
+          "url": "getimg.ai"
+        },
+        {
+          "name": "Stablecog",
+          "url": "stablecog.com"
+        },
+        {
+          "name": "BlueWillow",
+          "url": "bluewillow.ai"
+        },
+        {
+          "name": "Clipdrop AI",
+          "url": "clipdrop.co"
+        },
+        {
+          "name": "Remove.bg AI",
+          "url": "remove.bg"
+        },
+        {
+          "name": "Lensa AI",
+          "url": "lensa.app"
+        },
+        {
+          "name": "PhotoRoom AI",
+          "url": "photoroom.com"
+        }
+      ]
+    },
+    "cat-37115": {
+      "id": "cat-37115",
+      "name": "توليد وتحرير الفيديو",
+      "tools": [
+        {
+          "name": "Sora (OpenAI)",
+          "url": "openai.com/sora"
+        },
+        {
+          "name": "Runway ML Gen-3",
+          "url": "runwayml.com"
+        },
+        {
+          "name": "Kling AI",
+          "url": "klingai.com"
+        },
+        {
+          "name": "Luma Dream Machine",
+          "url": "lumalabs.ai"
+        },
+        {
+          "name": "Pika Labs",
+          "url": "pika.art"
+        },
+        {
+          "name": "Synthesia",
+          "url": "synthesia.io"
+        },
+        {
+          "name": "HeyGen",
+          "url": "heygen.com"
+        },
+        {
+          "name": "D-ID",
+          "url": "d-id.com"
+        },
+        {
+          "name": "Invideo AI",
+          "url": "invideo.io"
+        },
+        {
+          "name": "Descript",
+          "url": "descript.com"
+        },
+        {
+          "name": "CapCut AI",
+          "url": "capcut.com"
+        },
+        {
+          "name": "Adobe Premiere Pro AI",
+          "url": "adobe.com"
+        },
+        {
+          "name": "DaVinci Resolve AI",
+          "url": "blackmagicdesign.com"
+        },
+        {
+          "name": "Filmora AI",
+          "url": "wondershare.com/filmora"
+        },
+        {
+          "name": "Pictory",
+          "url": "pictory.ai"
+        },
+        {
+          "name": "Loom AI",
+          "url": "loom.com"
+        },
+        {
+          "name": "Elai.io",
+          "url": "elai.io"
+        },
+        {
+          "name": "Colossyan",
+          "url": "colossyan.com"
+        },
+        {
+          "name": "Rephrase.ai",
+          "url": "rephrase.ai"
+        },
+        {
+          "name": "Vidyo.ai",
+          "url": "vidyo.ai"
+        },
+        {
+          "name": "Topaz Video AI",
+          "url": "topazlabs.com"
+        },
+        {
+          "name": "Kaiber AI",
+          "url": "kaiber.ai"
+        },
+        {
+          "name": "Haiper",
+          "url": "haiper.ai"
+        },
+        {
+          "name": "Wan (Alibaba)",
+          "url": "wanx.aliyun.com"
+        },
+        {
+          "name": "Mochi (Genmo)",
+          "url": "genmo.ai"
+        },
+        {
+          "name": "Stable Video Diffusion",
+          "url": "stability.ai"
+        },
+        {
+          "name": "Viggle AI",
+          "url": "viggle.ai"
+        },
+        {
+          "name": "Minimax Video",
+          "url": "minimaxi.com"
+        },
+        {
+          "name": "Vidu AI",
+          "url": "vidu.studio"
+        },
+        {
+          "name": "Hailuo AI",
+          "url": "hailuoai.com"
+        },
+        {
+          "name": "Veed.io AI",
+          "url": "veed.io"
+        },
+        {
+          "name": "Fliki AI",
+          "url": "fliki.ai"
+        },
+        {
+          "name": "Wisecut",
+          "url": "wisecut.video"
+        },
+        {
+          "name": "Steve AI",
+          "url": "steve.ai"
+        },
+        {
+          "name": "Hour One",
+          "url": "hourone.ai"
+        },
+        {
+          "name": "Waymark AI",
+          "url": "waymark.com"
+        },
+        {
+          "name": "Animoto AI",
+          "url": "animoto.com"
+        },
+        {
+          "name": "Wideo AI",
+          "url": "wideo.co"
+        },
+        {
+          "name": "Powtoon AI",
+          "url": "powtoon.com"
+        },
+        {
+          "name": "Clipchamp AI",
+          "url": "clipchamp.com"
+        }
+      ]
+    },
+    "cat-3424": {
+      "id": "cat-3424",
+      "name": "الصوت والتعليق الصوتي",
+      "tools": [
+        {
+          "name": "ElevenLabs",
+          "url": "elevenlabs.io"
+        },
+        {
+          "name": "Murf AI",
+          "url": "murf.ai"
+        },
+        {
+          "name": "Descript",
+          "url": "descript.com"
+        },
+        {
+          "name": "Speechify",
+          "url": "speechify.com"
+        },
+        {
+          "name": "Play.ht",
+          "url": "play.ht"
+        },
+        {
+          "name": "Replica Studios",
+          "url": "replicastudios.com"
+        },
+        {
+          "name": "Wellsaid Labs",
+          "url": "wellsaidlabs.com"
+        },
+        {
+          "name": "Resemble AI",
+          "url": "resemble.ai"
+        },
+        {
+          "name": "Adobe Podcast AI",
+          "url": "podcast.adobe.com"
+        },
+        {
+          "name": "LOVO AI",
+          "url": "lovo.ai"
+        },
+        {
+          "name": "Listnr",
+          "url": "listnr.com"
+        },
+        {
+          "name": "Audyo",
+          "url": "audyo.ai"
+        },
+        {
+          "name": "Kits AI",
+          "url": "kits.ai"
+        },
+        {
+          "name": "Voicemod AI",
+          "url": "voicemod.net"
+        },
+        {
+          "name": "Respeecher",
+          "url": "respeecher.com"
+        },
+        {
+          "name": "Altered Studio",
+          "url": "altered.ai"
+        },
+        {
+          "name": "NaturalReader",
+          "url": "naturalreaders.com"
+        },
+        {
+          "name": "TTSMaker",
+          "url": "ttsmaker.com"
+        },
+        {
+          "name": "Fliki",
+          "url": "fliki.ai"
+        },
+        {
+          "name": "Podcastle AI",
+          "url": "podcastle.ai"
+        },
+        {
+          "name": "Ezdubs",
+          "url": "ezdubs.ai"
+        },
+        {
+          "name": "HeyGen Voice",
+          "url": "heygen.com"
+        },
+        {
+          "name": "Azure Neural Voices",
+          "url": "azure.microsoft.com"
+        },
+        {
+          "name": "Google Text-to-Speech",
+          "url": "cloud.google.com"
+        },
+        {
+          "name": "Amazon Polly",
+          "url": "aws.amazon.com"
+        },
+        {
+          "name": "IBM Watson TTS",
+          "url": "ibm.com/watson"
+        },
+        {
+          "name": "Papercup",
+          "url": "papercup.com"
+        },
+        {
+          "name": "DeepDub",
+          "url": "deepdub.ai"
+        },
+        {
+          "name": "Dubverse",
+          "url": "dubverse.ai"
+        },
+        {
+          "name": "iSpeech",
+          "url": "ispeech.org"
+        },
+        {
+          "name": "Balabolka",
+          "url": "cross-plus-a.com"
+        },
+        {
+          "name": "Wavel AI",
+          "url": "wavel.ai"
+        },
+        {
+          "name": "Typecast",
+          "url": "typecast.ai"
+        },
+        {
+          "name": "Voice.ai",
+          "url": "voice.ai"
+        },
+        {
+          "name": "Speechgen",
+          "url": "speechgen.io"
+        }
+      ]
+    },
+    "cat-2958": {
+      "id": "cat-2958",
+      "name": "توليد الموسيقى",
+      "tools": [
+        {
+          "name": "Suno AI",
+          "url": "suno.ai"
+        },
+        {
+          "name": "Udio",
+          "url": "udio.com"
+        },
+        {
+          "name": "Mubert",
+          "url": "mubert.com"
+        },
+        {
+          "name": "AIVA",
+          "url": "aiva.ai"
+        },
+        {
+          "name": "Soundraw",
+          "url": "soundraw.io"
+        },
+        {
+          "name": "Boomy",
+          "url": "boomy.com"
+        },
+        {
+          "name": "Beatbot",
+          "url": "beatbot.fm"
+        },
+        {
+          "name": "Loudly",
+          "url": "loudly.com"
+        },
+        {
+          "name": "Musicfy",
+          "url": "musicfy.lol"
+        },
+        {
+          "name": "Stable Audio (Stability AI)",
+          "url": "stability.ai"
+        },
+        {
+          "name": "Google MusicLM",
+          "url": "google.com"
+        },
+        {
+          "name": "Meta MusicGen",
+          "url": "audiocraft.metademolab.com"
+        },
+        {
+          "name": "Harmonai (Dance Diffusion)",
+          "url": "harmonai.org"
+        },
+        {
+          "name": "Moises AI",
+          "url": "moises.ai"
+        },
+        {
+          "name": "Landr AI",
+          "url": "landr.com"
+        },
+        {
+          "name": "Splashmusic",
+          "url": "splashmusic.com"
+        },
+        {
+          "name": "Ecrett Music",
+          "url": "ecrettmusic.com"
+        },
+        {
+          "name": "Beatoven.ai",
+          "url": "beatoven.ai"
+        },
+        {
+          "name": "Melobytes",
+          "url": "melobytes.com"
+        },
+        {
+          "name": "Melodrive",
+          "url": "melodrive.com"
+        },
+        {
+          "name": "Brain.fm",
+          "url": "brain.fm"
+        },
+        {
+          "name": "Endel",
+          "url": "endel.io"
+        },
+        {
+          "name": "WavTool",
+          "url": "wavtool.com"
+        },
+        {
+          "name": "BandLab AI",
+          "url": "bandlab.com"
+        },
+        {
+          "name": "Google Magenta",
+          "url": "magenta.tensorflow.org"
+        },
+        {
+          "name": "Riffusion",
+          "url": "riffusion.com"
+        },
+        {
+          "name": "Jamahook",
+          "url": "jamahook.com"
+        },
+        {
+          "name": "Amper Music (Shutterstock)",
+          "url": "shutterstock.com"
+        },
+        {
+          "name": "Soundful",
+          "url": "soundful.com"
+        },
+        {
+          "name": "Artlist AI",
+          "url": "artlist.io"
+        },
+        {
+          "name": "Epidemic Sound AI",
+          "url": "epidemicsound.com"
+        },
+        {
+          "name": "Pixabay AI Music",
+          "url": "pixabay.com"
+        },
+        {
+          "name": "Filmmusic.io AI",
+          "url": "filmmusic.io"
+        },
+        {
+          "name": "CASSETTE AI",
+          "url": "cassetteai.com"
+        },
+        {
+          "name": "Songtell AI",
+          "url": "songtell.com"
+        }
+      ]
+    },
+    "cat-42855": {
+      "id": "cat-42855",
+      "name": "الصحافة والإعلام الرقمي",
+      "tools": [
+        {
+          "name": "Automated Insights (AP)",
+          "url": "automatedinsights.com"
+        },
+        {
+          "name": "Reuters Connect AI",
+          "url": "reutersconnect.com"
+        },
+        {
+          "name": "Bloomberg Automation",
+          "url": "bloomberg.com"
+        },
+        {
+          "name": "ChatGPT",
+          "url": "chat.openai.com"
+        },
+        {
+          "name": "Claude",
+          "url": "claude.ai"
+        },
+        {
+          "name": "Gemini",
+          "url": "gemini.google.com"
+        },
+        {
+          "name": "Wordsmith",
+          "url": "automatedinsights.com"
+        },
+        {
+          "name": "Quill (Narrative Science)",
+          "url": "narrativescience.com"
+        },
+        {
+          "name": "Heliograf (Washington Post)",
+          "url": "washingtonpost.com"
+        },
+        {
+          "name": "RADAR UK AI",
+          "url": "radarnews.ai"
+        },
+        {
+          "name": "Wibbitz",
+          "url": "wibbitz.com"
+        },
+        {
+          "name": "Lede AI",
+          "url": "lede.ai"
+        },
+        {
+          "name": "Primer AI",
+          "url": "primer.ai"
+        },
+        {
+          "name": "Factmata AI",
+          "url": "factmata.com"
+        },
+        {
+          "name": "Full Fact AI",
+          "url": "fullfact.org"
+        },
+        {
+          "name": "ClaimBuster",
+          "url": "idir.uta.edu/claimbuster"
+        },
+        {
+          "name": "Logically AI",
+          "url": "logically.ai"
+        },
+        {
+          "name": "InVid WeVerify",
+          "url": "weverify.eu"
+        },
+        {
+          "name": "Dataminr",
+          "url": "dataminr.com"
+        },
+        {
+          "name": "Chartbeat AI",
+          "url": "chartbeat.com"
+        },
+        {
+          "name": "Parse.ly AI",
+          "url": "parse.ly"
+        },
+        {
+          "name": "Sailthru AI",
+          "url": "sailthru.com"
+        },
+        {
+          "name": "Arc Publishing AI",
+          "url": "arcpublishing.com"
+        },
+        {
+          "name": "Grammarly (Journalism)",
+          "url": "grammarly.com"
+        },
+        {
+          "name": "Aylien News AI",
+          "url": "aylien.com"
+        },
+        {
+          "name": "Event Registry AI",
+          "url": "eventregistry.org"
+        },
+        {
+          "name": "GDELT Project AI",
+          "url": "gdeltproject.org"
+        },
+        {
+          "name": "NewsGuard AI",
+          "url": "newsguardtech.com"
+        },
+        {
+          "name": "Muck Rack AI",
+          "url": "muckrack.com"
+        },
+        {
+          "name": "Cision AI",
+          "url": "cision.com"
+        }
+      ]
+    },
+    "cat-35370": {
+      "id": "cat-35370",
+      "name": "ترجمة ذكية",
+      "tools": [
+        {
+          "name": "DeepL",
+          "url": "deepl.com"
+        },
+        {
+          "name": "Google Translate",
+          "url": "translate.google.com"
+        },
+        {
+          "name": "Microsoft Translator",
+          "url": "translator.microsoft.com"
+        },
+        {
+          "name": "ChatGPT",
+          "url": "chat.openai.com"
+        },
+        {
+          "name": "Claude",
+          "url": "claude.ai"
+        },
+        {
+          "name": "Amazon Translate",
+          "url": "aws.amazon.com/translate"
+        },
+        {
+          "name": "Yandex Translate",
+          "url": "translate.yandex.com"
+        },
+        {
+          "name": "Reverso",
+          "url": "reverso.net"
+        },
+        {
+          "name": "Linguee",
+          "url": "linguee.com"
+        },
+        {
+          "name": "Systran",
+          "url": "systransoft.com"
+        },
+        {
+          "name": "ModernMT",
+          "url": "modernmt.com"
+        },
+        {
+          "name": "Lilt",
+          "url": "lilt.com"
+        },
+        {
+          "name": "Unbabel",
+          "url": "unbabel.com"
+        },
+        {
+          "name": "Smartling",
+          "url": "smartling.com"
+        },
+        {
+          "name": "Phrase (Memsource)",
+          "url": "phrase.com"
+        },
+        {
+          "name": "SDL Trados",
+          "url": "sdltrados.com"
+        },
+        {
+          "name": "memoQ",
+          "url": "memoq.com"
+        },
+        {
+          "name": "Lokalise AI",
+          "url": "lokalise.com"
+        },
+        {
+          "name": "Crowdin AI",
+          "url": "crowdin.com"
+        },
+        {
+          "name": "Wordly",
+          "url": "wordly.ai"
+        },
+        {
+          "name": "Weglot",
+          "url": "weglot.com"
+        },
+        {
+          "name": "PROMT",
+          "url": "promt.com"
+        },
+        {
+          "name": "Baidu Translate",
+          "url": "fanyi.baidu.com"
+        },
+        {
+          "name": "Alibaba Translate",
+          "url": "translate.alibaba.com"
+        },
+        {
+          "name": "Caiyun",
+          "url": "caiyunapp.com"
+        },
+        {
+          "name": "GlobalLink",
+          "url": "translationzone.com"
+        },
+        {
+          "name": "AppTek",
+          "url": "apptek.com"
+        },
+        {
+          "name": "KantanMT",
+          "url": "kantanmt.com"
+        },
+        {
+          "name": "Transifex",
+          "url": "transifex.com"
+        },
+        {
+          "name": "TextUnited",
+          "url": "textunited.com"
+        },
+        {
+          "name": "Gengo",
+          "url": "gengo.com"
+        },
+        {
+          "name": "Omniscien Technologies",
+          "url": "omniscien.com"
+        },
+        {
+          "name": "Pons Translator",
+          "url": "pons.com"
+        },
+        {
+          "name": "iTranslate",
+          "url": "itranslate.com"
+        },
+        {
+          "name": "Papago (Naver)",
+          "url": "papago.naver.com"
+        },
+        {
+          "name": "Tilde MT",
+          "url": "tilde.com"
+        },
+        {
+          "name": "Apertium",
+          "url": "apertium.org"
+        },
+        {
+          "name": "eTranslation (EU)",
+          "url": "ec.europa.eu"
+        },
+        {
+          "name": "TransPerfect GlobalLink",
+          "url": "transperfect.com"
+        },
+        {
+          "name": "LanguageWire AI",
+          "url": "languagewire.com"
+        }
+      ]
+    },
+    "cat-4337": {
+      "id": "cat-4337",
+      "name": "تعلم اللغات",
+      "tools": [
+        {
+          "name": "Duolingo AI",
+          "url": "duolingo.com"
+        },
+        {
+          "name": "Babbel AI",
+          "url": "babbel.com"
+        },
+        {
+          "name": "Rosetta Stone AI",
+          "url": "rosettastone.com"
+        },
+        {
+          "name": "Pimsleur AI",
+          "url": "pimsleur.com"
+        },
+        {
+          "name": "italki AI",
+          "url": "italki.com"
+        },
+        {
+          "name": "Preply AI",
+          "url": "preply.com"
+        },
+        {
+          "name": "Busuu AI",
+          "url": "busuu.com"
+        },
+        {
+          "name": "Lingoda AI",
+          "url": "lingoda.com"
+        },
+        {
+          "name": "Tandem AI",
+          "url": "tandem.net"
+        },
+        {
+          "name": "HelloTalk AI",
+          "url": "hellotalk.com"
+        },
+        {
+          "name": "ELSA Speak AI (English)",
+          "url": "elsaspeak.com"
+        },
+        {
+          "name": "Mondly AI",
+          "url": "mondly.com"
+        },
+        {
+          "name": "Drops AI",
+          "url": "languagedrops.com"
+        },
+        {
+          "name": "Lingvist AI",
+          "url": "lingvist.com"
+        },
+        {
+          "name": "Clozemaster AI",
+          "url": "clozemaster.com"
+        },
+        {
+          "name": "Yabla AI",
+          "url": "yabla.com"
+        },
+        {
+          "name": "FluentU AI",
+          "url": "fluentu.com"
+        },
+        {
+          "name": "Glossika AI",
+          "url": "ai.glossika.com"
+        },
+        {
+          "name": "Language Reactor AI",
+          "url": "languagereactor.com"
+        },
+        {
+          "name": "Lingopie AI",
+          "url": "lingopie.com"
+        },
+        {
+          "name": "Speechling AI",
+          "url": "speechling.com"
+        },
+        {
+          "name": "LingQ AI",
+          "url": "lingq.com"
+        },
+        {
+          "name": "Speakly AI",
+          "url": "speakly.me"
+        },
+        {
+          "name": "Dreaming Spanish AI",
+          "url": "dreamingspanish.com"
+        },
+        {
+          "name": "Ling App AI",
+          "url": "ling-app.com"
+        },
+        {
+          "name": "Speeko AI",
+          "url": "speeko.co"
+        },
+        {
+          "name": "Mango Languages AI",
+          "url": "mangolanguages.com"
+        },
+        {
+          "name": "Innovative Language AI",
+          "url": "innovativelanguage.com"
+        },
+        {
+          "name": "Toucan Language AI",
+          "url": "toucan.website"
+        },
+        {
+          "name": "Chatterbug AI",
+          "url": "chatterbug.com"
+        },
+        {
+          "name": "Pocketalk AI",
+          "url": "pocketalk.com"
+        },
+        {
+          "name": "Jumpspeak AI",
+          "url": "jumpspeak.com"
+        },
+        {
+          "name": "Speechify (Languages)",
+          "url": "speechify.com"
+        },
+        {
+          "name": "NaturalReader",
+          "url": "naturalreaders.com"
+        },
+        {
+          "name": "Cara AI (Language)",
+          "url": "cara.app"
+        }
+      ]
+    },
+    "cat-38479": {
+      "id": "cat-38479",
+      "name": "تحليل النصوص والخطاب",
+      "tools": [
+        {
+          "name": "NLTK (Python NLP)",
+          "url": "nltk.org"
+        },
+        {
+          "name": "spaCy",
+          "url": "spacy.io"
+        },
+        {
+          "name": "Hugging Face Transformers",
+          "url": "huggingface.co"
+        },
+        {
+          "name": "ChatGPT",
+          "url": "chat.openai.com"
+        },
+        {
+          "name": "Claude",
+          "url": "claude.ai"
+        },
+        {
+          "name": "IBM Watson NLU",
+          "url": "ibm.com/watson"
+        },
+        {
+          "name": "Google Cloud NLP",
+          "url": "cloud.google.com"
+        },
+        {
+          "name": "Amazon Comprehend",
+          "url": "aws.amazon.com"
+        },
+        {
+          "name": "Azure Text Analytics",
+          "url": "azure.microsoft.com"
+        },
+        {
+          "name": "MonkeyLearn",
+          "url": "monkeylearn.com"
+        },
+        {
+          "name": "Aylien AI",
+          "url": "aylien.com"
+        },
+        {
+          "name": "Lexalytics",
+          "url": "lexalytics.com"
+        },
+        {
+          "name": "Rosette (Basis Technology)",
+          "url": "rosette.com"
+        },
+        {
+          "name": "Expert.ai",
+          "url": "expert.ai"
+        },
+        {
+          "name": "Bitext AI",
+          "url": "bitext.com"
+        },
+        {
+          "name": "Repustate AI",
+          "url": "repustate.com"
+        },
+        {
+          "name": "Talkwalker AI",
+          "url": "talkwalker.com"
+        },
+        {
+          "name": "Brandwatch NLP",
+          "url": "brandwatch.com"
+        },
+        {
+          "name": "TextBlob",
+          "url": "textblob.readthedocs.io"
+        },
+        {
+          "name": "Gensim (Topic Modeling)",
+          "url": "radimrehurek.com/gensim"
+        },
+        {
+          "name": "BERT (Google)",
+          "url": "github.com/google-research"
+        },
+        {
+          "name": "RoBERTa (Meta)",
+          "url": "huggingface.co"
+        },
+        {
+          "name": "Linguamatics (IQVIA)",
+          "url": "linguamatics.com"
+        },
+        {
+          "name": "SAS Text Miner",
+          "url": "sas.com"
+        },
+        {
+          "name": "MAXQDA AI",
+          "url": "maxqda.com"
+        },
+        {
+          "name": "NVivo AI",
+          "url": "qsrinternational.com"
+        },
+        {
+          "name": "ATLAS.ti AI",
+          "url": "atlasti.com"
+        },
+        {
+          "name": "Yoshikoder",
+          "url": "yoshikoder.com"
+        },
+        {
+          "name": "VADER Sentiment",
+          "url": "github.com/cjhutto"
+        },
+        {
+          "name": "Cohere Classify",
+          "url": "cohere.com"
+        },
+        {
+          "name": "Prodigy AI (spaCy)",
+          "url": "prodi.gy"
+        },
+        {
+          "name": "Symanto AI",
+          "url": "symanto.com"
+        },
+        {
+          "name": "Awario AI",
+          "url": "awario.com"
+        },
+        {
+          "name": "Mention AI",
+          "url": "mention.com"
+        },
+        {
+          "name": "Receptiviti AI",
+          "url": "receptiviti.com"
+        }
+      ]
+    },
+    "cat-83938": {
+      "id": "cat-83938",
+      "name": "البحث القانوني",
+      "tools": [
+        {
+          "name": "Westlaw AI (Thomson Reuters)",
+          "url": "westlaw.com"
+        },
+        {
+          "name": "LexisNexis AI",
+          "url": "lexisnexis.com"
+        },
+        {
+          "name": "Casetext (CARA AI)",
+          "url": "casetext.com"
+        },
+        {
+          "name": "Harvey AI",
+          "url": "harvey.ai"
+        },
+        {
+          "name": "Spellbook",
+          "url": "spellbook.legal"
+        },
+        {
+          "name": "Lexion",
+          "url": "lexion.ai"
+        },
+        {
+          "name": "Ironclad AI",
+          "url": "ironcladapp.com"
+        },
+        {
+          "name": "Luminance AI",
+          "url": "luminance.com"
+        },
+        {
+          "name": "Kira Systems",
+          "url": "kirasystems.com"
+        },
+        {
+          "name": "eBrevia",
+          "url": "ebrevia.com"
+        },
+        {
+          "name": "Relativity AI",
+          "url": "relativity.com"
+        },
+        {
+          "name": "Everlaw AI",
+          "url": "everlaw.com"
+        },
+        {
+          "name": "Clio AI",
+          "url": "clio.com"
+        },
+        {
+          "name": "MyCase AI",
+          "url": "mycase.com"
+        },
+        {
+          "name": "Briefpoint",
+          "url": "briefpoint.ai"
+        },
+        {
+          "name": "Lexii.ai",
+          "url": "lexii.ai"
+        },
+        {
+          "name": "Lawgeex",
+          "url": "lawgeex.com"
+        },
+        {
+          "name": "ContractBook AI",
+          "url": "contractbook.com"
+        },
+        {
+          "name": "Seal Software",
+          "url": "deloitte.com"
+        },
+        {
+          "name": "Litera AI",
+          "url": "litera.com"
+        },
+        {
+          "name": "Loio AI",
+          "url": "loio.ai"
+        },
+        {
+          "name": "Juro AI",
+          "url": "juro.com"
+        },
+        {
+          "name": "SirionLabs AI",
+          "url": "sirionlabs.com"
+        },
+        {
+          "name": "DocuSign AI",
+          "url": "docusign.com"
+        },
+        {
+          "name": "LegalZoom AI",
+          "url": "legalzoom.com"
+        },
+        {
+          "name": "Rocket Lawyer AI",
+          "url": "rocketlawyer.com"
+        },
+        {
+          "name": "DoNotPay AI",
+          "url": "donotpay.com"
+        },
+        {
+          "name": "Alexi AI",
+          "url": "alexi.com"
+        },
+        {
+          "name": "Beagle AI",
+          "url": "beaglelegal.ca"
+        },
+        {
+          "name": "Diligen AI",
+          "url": "diligen.com"
+        },
+        {
+          "name": "Eigen Technologies",
+          "url": "eigentech.com"
+        },
+        {
+          "name": "Law School AI",
+          "url": "lawschool.ai"
+        },
+        {
+          "name": "Legalese Decoder",
+          "url": "legalesedecoder.com"
+        },
+        {
+          "name": "Claudette AI",
+          "url": "claudette.eui.eu"
+        },
+        {
+          "name": "Pensieve AI",
+          "url": "pensieve.legal"
+        }
+      ]
+    },
+    "cat-80139": {
+      "id": "cat-80139",
+      "name": "تحليل النصوص الدينية",
+      "tools": [
+        {
+          "name": "Sefaria AI (Jewish Texts)",
+          "url": "sefaria.org"
+        },
+        {
+          "name": "AlKindi AI (Islamic Texts)",
+          "url": "alkindi.cci.fsu.edu"
+        },
+        {
+          "name": "IslamBot AI",
+          "url": "islambot.co"
+        },
+        {
+          "name": "Muslim Pro AI",
+          "url": "muslimpro.com"
+        },
+        {
+          "name": "Islamweb AI",
+          "url": "islamweb.net"
+        },
+        {
+          "name": "Islamicly AI",
+          "url": "islamicly.com"
+        },
+        {
+          "name": "Quran.com AI",
+          "url": "quran.com"
+        },
+        {
+          "name": "ChatGPT (Religious Analysis)",
+          "url": "chat.openai.com"
+        },
+        {
+          "name": "Claude (Religious Analysis)",
+          "url": "claude.ai"
+        },
+        {
+          "name": "Gemini (Religious Analysis)",
+          "url": "gemini.google.com"
+        },
+        {
+          "name": "Bible AI",
+          "url": "bibleai.org"
+        },
+        {
+          "name": "YouVersion AI",
+          "url": "bible.com"
+        },
+        {
+          "name": "Logos Bible Software AI",
+          "url": "logos.com"
+        },
+        {
+          "name": "Verbum AI (Catholic)",
+          "url": "verbum.com"
+        },
+        {
+          "name": "Faithlife AI",
+          "url": "faithlife.com"
+        },
+        {
+          "name": "Accordance AI",
+          "url": "accordancebible.com"
+        },
+        {
+          "name": "Blue Letter Bible AI",
+          "url": "blueletterbible.org"
+        },
+        {
+          "name": "Bible Gateway AI",
+          "url": "biblegateway.com"
+        },
+        {
+          "name": "STEP Bible AI",
+          "url": "stepbible.org"
+        },
+        {
+          "name": "Olive Tree Bible AI",
+          "url": "olivetree.com"
+        },
+        {
+          "name": "BibleProject AI Tools",
+          "url": "bibleproject.com"
+        },
+        {
+          "name": "Digital Bible Library AI",
+          "url": "thedigitalbiblelibrary.org"
+        },
+        {
+          "name": "Paratext (UBS/SIL)",
+          "url": "paratext.org"
+        },
+        {
+          "name": "Theographic AI",
+          "url": "theographic.com"
+        },
+        {
+          "name": "Corpus Coranicum",
+          "url": "corpuscoranicum.de"
+        },
+        {
+          "name": "Altafsir.com AI",
+          "url": "altafsir.com"
+        },
+        {
+          "name": "Hadith Search AI",
+          "url": "sunnah.com"
+        },
+        {
+          "name": "Shamela Library AI",
+          "url": "shamela.ws"
+        },
+        {
+          "name": "Hindawi Foundation AI",
+          "url": "hindawi.org"
+        },
+        {
+          "name": "Noor Al-Islam AI",
+          "url": "islamlight.net"
+        }
+      ]
+    },
+    "cat-96639": {
+      "id": "cat-96639",
+      "name": "التعليم الرقمي والمناهج",
+      "tools": [
+        {
+          "name": "Khan Academy + Khanmigo",
+          "url": "khanacademy.org"
+        },
+        {
+          "name": "Coursera AI",
+          "url": "coursera.org"
+        },
+        {
+          "name": "edX AI",
+          "url": "edx.org"
+        },
+        {
+          "name": "Udemy AI",
+          "url": "udemy.com"
+        },
+        {
+          "name": "Chegg AI (CheggMate)",
+          "url": "chegg.com"
+        },
+        {
+          "name": "Photomath AI",
+          "url": "photomath.com"
+        },
+        {
+          "name": "Wolfram Alpha AI",
+          "url": "wolframalpha.com"
+        },
+        {
+          "name": "Socratic (Google)",
+          "url": "socratic.org"
+        },
+        {
+          "name": "MagicSchool AI",
+          "url": "magicschool.ai"
+        },
+        {
+          "name": "Diffit AI",
+          "url": "diffit.me"
+        },
+        {
+          "name": "Curipod AI",
+          "url": "curipod.com"
+        },
+        {
+          "name": "Brisk Teaching AI",
+          "url": "briskteaching.com"
+        },
+        {
+          "name": "SchoolAI",
+          "url": "schoolai.com"
+        },
+        {
+          "name": "Eduaide AI",
+          "url": "eduaide.ai"
+        },
+        {
+          "name": "TeachFX AI",
+          "url": "teachfx.com"
+        },
+        {
+          "name": "Formative AI",
+          "url": "goformative.com"
+        },
+        {
+          "name": "Nearpod AI",
+          "url": "nearpod.com"
+        },
+        {
+          "name": "Pear Deck AI",
+          "url": "peardeck.com"
+        },
+        {
+          "name": "Edulastic AI",
+          "url": "edulastic.com"
+        },
+        {
+          "name": "Carnegie Learning AI",
+          "url": "carnegielearning.com"
+        },
+        {
+          "name": "DreamBox AI (Math)",
+          "url": "dreambox.com"
+        },
+        {
+          "name": "IXL AI",
+          "url": "ixl.com"
+        },
+        {
+          "name": "Newsela AI",
+          "url": "newsela.com"
+        },
+        {
+          "name": "CommonLit AI",
+          "url": "commonlit.org"
+        },
+        {
+          "name": "Classcraft AI",
+          "url": "classcraft.com"
+        },
+        {
+          "name": "Kami AI",
+          "url": "kamiapp.com"
+        },
+        {
+          "name": "Gimkit AI",
+          "url": "gimkit.com"
+        },
+        {
+          "name": "Kahoot AI",
+          "url": "kahoot.com"
+        },
+        {
+          "name": "Quizizz AI",
+          "url": "quizizz.com"
+        },
+        {
+          "name": "Blooket AI",
+          "url": "blooket.com"
+        },
+        {
+          "name": "Canva for Education",
+          "url": "canva.com/education"
+        },
+        {
+          "name": "Turnitin for Education",
+          "url": "turnitin.com"
+        },
+        {
+          "name": "Grammarly EDU",
+          "url": "grammarly.com/edu"
+        },
+        {
+          "name": "Duolingo for Schools",
+          "url": "schools.duolingo.com"
+        },
+        {
+          "name": "Synthesis AI",
+          "url": "synthesis.com"
+        },
+        {
+          "name": "Numerade AI",
+          "url": "numerade.com"
+        },
+        {
+          "name": "Knowji AI",
+          "url": "knowji.com"
+        },
+        {
+          "name": "Elsa for Schools",
+          "url": "elsaspeak.com"
+        },
+        {
+          "name": "Gimkit Create AI",
+          "url": "gimkit.com"
+        },
+        {
+          "name": "Actively Learn AI",
+          "url": "activelylearn.com"
+        }
+      ]
+    },
+    "cat-28534": {
+      "id": "cat-28534",
+      "name": "بطاقات الاستذكار",
+      "tools": [
+        {
+          "name": "Anki + AI Plugins",
+          "url": "apps.ankiweb.net"
+        },
+        {
+          "name": "Quizlet AI",
+          "url": "quizlet.com"
+        },
+        {
+          "name": "RemNote",
+          "url": "remnote.com"
+        },
+        {
+          "name": "Mochi",
+          "url": "mochi.cards"
+        },
+        {
+          "name": "Brainscape",
+          "url": "brainscape.com"
+        },
+        {
+          "name": "SuperMemo",
+          "url": "supermemo.com"
+        },
+        {
+          "name": "Traverse",
+          "url": "traverse.link"
+        },
+        {
+          "name": "Readwise",
+          "url": "readwise.io"
+        },
+        {
+          "name": "Memrise",
+          "url": "memrise.com"
+        },
+        {
+          "name": "Knowt",
+          "url": "knowt.com"
+        },
+        {
+          "name": "StudySmarter",
+          "url": "studysmarter.de"
+        },
+        {
+          "name": "Khanmigo",
+          "url": "khanacademy.org"
+        },
+        {
+          "name": "Wisdolia",
+          "url": "wisdolia.com"
+        },
+        {
+          "name": "Caktus AI",
+          "url": "caktus.ai"
+        },
+        {
+          "name": "Gizmo AI",
+          "url": "gizmo.ai"
+        },
+        {
+          "name": "Revisely",
+          "url": "revisely.co.uk"
+        },
+        {
+          "name": "Magoosh",
+          "url": "magoosh.com"
+        },
+        {
+          "name": "Chegg AI",
+          "url": "chegg.com"
+        },
+        {
+          "name": "Unstuck AI",
+          "url": "unstuck.study"
+        },
+        {
+          "name": "CardCraft AI",
+          "url": "cardcraft.app"
+        },
+        {
+          "name": "ChatGPT (Flashcards)",
+          "url": "chat.openai.com"
+        },
+        {
+          "name": "Claude (Flashcards)",
+          "url": "claude.ai"
+        },
+        {
+          "name": "Notion AI + Templates",
+          "url": "notion.so"
+        },
+        {
+          "name": "Cram.com",
+          "url": "cram.com"
+        },
+        {
+          "name": "StudyBlue",
+          "url": "studyblue.com"
+        },
+        {
+          "name": "Kami AI",
+          "url": "kamiapp.com"
+        },
+        {
+          "name": "Gimkit AI",
+          "url": "gimkit.com"
+        },
+        {
+          "name": "Kahoot AI",
+          "url": "kahoot.com"
+        },
+        {
+          "name": "Quizizz AI",
+          "url": "quizizz.com"
+        },
+        {
+          "name": "Blooket AI",
+          "url": "blooket.com"
+        }
+      ]
+    },
+    "cat-83491": {
+      "id": "cat-83491",
+      "name": "تفريغ المحاضرات",
+      "tools": [
+        {
+          "name": "Otter.ai",
+          "url": "otter.ai"
+        },
+        {
+          "name": "Fireflies.ai",
+          "url": "fireflies.ai"
+        },
+        {
+          "name": "Whisper (OpenAI)",
+          "url": "openai.com/whisper"
+        },
+        {
+          "name": "Rev",
+          "url": "rev.com"
+        },
+        {
+          "name": "Descript",
+          "url": "descript.com"
+        },
+        {
+          "name": "Sonix",
+          "url": "sonix.ai"
+        },
+        {
+          "name": "Trint",
+          "url": "trint.com"
+        },
+        {
+          "name": "Happy Scribe",
+          "url": "happyscribe.com"
+        },
+        {
+          "name": "Verbit",
+          "url": "verbit.ai"
+        },
+        {
+          "name": "Notta",
+          "url": "notta.ai"
+        },
+        {
+          "name": "Tactiq",
+          "url": "tactiq.io"
+        },
+        {
+          "name": "Grain",
+          "url": "grain.com"
+        },
+        {
+          "name": "Fathom",
+          "url": "fathom.video"
+        },
+        {
+          "name": "AssemblyAI",
+          "url": "assemblyai.com"
+        },
+        {
+          "name": "Deepgram",
+          "url": "deepgram.com"
+        },
+        {
+          "name": "Speechmatics",
+          "url": "speechmatics.com"
+        },
+        {
+          "name": "Azure Speech (Microsoft)",
+          "url": "azure.microsoft.com"
+        },
+        {
+          "name": "Google Speech-to-Text",
+          "url": "cloud.google.com"
+        },
+        {
+          "name": "Amazon Transcribe",
+          "url": "aws.amazon.com"
+        },
+        {
+          "name": "IBM Watson Speech",
+          "url": "ibm.com/watson"
+        },
+        {
+          "name": "Speak AI",
+          "url": "speakai.co"
+        },
+        {
+          "name": "Riverside",
+          "url": "riverside.fm"
+        },
+        {
+          "name": "Airgram",
+          "url": "airgram.io"
+        },
+        {
+          "name": "MeetGeek",
+          "url": "meetgeek.ai"
+        },
+        {
+          "name": "tl;dv",
+          "url": "tldv.io"
+        },
+        {
+          "name": "Voicegain",
+          "url": "voicegain.ai"
+        },
+        {
+          "name": "TranscribeMe",
+          "url": "transcribeme.com"
+        },
+        {
+          "name": "Clova Note (Naver)",
+          "url": "clovanote.naver.com"
+        },
+        {
+          "name": "Noted",
+          "url": "noted.app"
+        },
+        {
+          "name": "ElevenLabs",
+          "url": "elevenlabs.io"
+        },
+        {
+          "name": "Kits AI",
+          "url": "kits.ai"
+        },
+        {
+          "name": "Cleanvoice",
+          "url": "cleanvoice.ai"
+        },
+        {
+          "name": "Podcastle AI",
+          "url": "podcastle.ai"
+        },
+        {
+          "name": "Scribie",
+          "url": "scribie.com"
+        },
+        {
+          "name": "GoTranscript",
+          "url": "gotranscript.com"
+        },
+        {
+          "name": "3Play Media",
+          "url": "3playmedia.com"
+        },
+        {
+          "name": "Amberscript",
+          "url": "amberscript.com"
+        },
+        {
+          "name": "Transkriptor",
+          "url": "transkriptor.com"
+        },
+        {
+          "name": "Beey",
+          "url": "beey.io"
+        },
+        {
+          "name": "Checksub AI",
+          "url": "checksub.com"
+        }
+      ]
+    },
+    "cat-42700": {
+      "id": "cat-42700",
+      "name": "بناء العروض",
+      "tools": [
+        {
+          "name": "Gamma",
+          "url": "gamma.app"
+        },
+        {
+          "name": "Beautiful.ai",
+          "url": "beautiful.ai"
+        },
+        {
+          "name": "Tome",
+          "url": "tome.app"
+        },
+        {
+          "name": "SlidesAI",
+          "url": "slidesai.io"
+        },
+        {
+          "name": "Presentations.AI",
+          "url": "presentations.ai"
+        },
+        {
+          "name": "Decktopus",
+          "url": "decktopus.com"
+        },
+        {
+          "name": "MagicSlides",
+          "url": "magicslides.app"
+        },
+        {
+          "name": "Canva AI",
+          "url": "canva.com"
+        },
+        {
+          "name": "Microsoft Copilot (PowerPoint)",
+          "url": "microsoft.com"
+        },
+        {
+          "name": "Google Slides + Duet AI",
+          "url": "slides.google.com"
+        },
+        {
+          "name": "Plus AI",
+          "url": "plusai.com"
+        },
+        {
+          "name": "Slidebean",
+          "url": "slidebean.com"
+        },
+        {
+          "name": "Pitch",
+          "url": "pitch.com"
+        },
+        {
+          "name": "Visme AI",
+          "url": "visme.co"
+        },
+        {
+          "name": "Prezi AI",
+          "url": "prezi.com"
+        },
+        {
+          "name": "PopAI",
+          "url": "popai.pro"
+        },
+        {
+          "name": "Curipod",
+          "url": "curipod.com"
+        },
+        {
+          "name": "Haiku Deck",
+          "url": "haikudeck.com"
+        },
+        {
+          "name": "Storydoc",
+          "url": "storydoc.com"
+        },
+        {
+          "name": "AiPPT",
+          "url": "aippt.com"
+        },
+        {
+          "name": "Slides Wizard",
+          "url": "slideswizard.com"
+        },
+        {
+          "name": "Prezent",
+          "url": "prezent.ai"
+        },
+        {
+          "name": "Elai.io",
+          "url": "elai.io"
+        },
+        {
+          "name": "Kroma",
+          "url": "kroma.ai"
+        },
+        {
+          "name": "Sendsteps",
+          "url": "sendsteps.com"
+        },
+        {
+          "name": "MindMeister AI",
+          "url": "mindmeister.com"
+        },
+        {
+          "name": "Zoho Show AI",
+          "url": "zoho.com/show"
+        },
+        {
+          "name": "Slideoo",
+          "url": "slideoo.ai"
+        },
+        {
+          "name": "Wepik AI",
+          "url": "wepik.com"
+        },
+        {
+          "name": "DesignAI",
+          "url": "designs.ai"
+        },
+        {
+          "name": "Slides.com",
+          "url": "slides.com"
+        },
+        {
+          "name": "VEED.io (Video Presentations)",
+          "url": "veed.io"
+        },
+        {
+          "name": "Notion AI (Slides)",
+          "url": "notion.so"
+        },
+        {
+          "name": "Ludus",
+          "url": "ludus.one"
+        },
+        {
+          "name": "Prezo AI",
+          "url": "prezo.ai"
+        },
+        {
+          "name": "Deckrobot",
+          "url": "deckrobot.com"
+        },
+        {
+          "name": "Shuffll",
+          "url": "shuffll.com"
+        },
+        {
+          "name": "Outgrow AI",
+          "url": "outgrow.co"
+        },
+        {
+          "name": "Mentimeter AI",
+          "url": "mentimeter.com"
+        },
+        {
+          "name": "Synthesia (Video PPT)",
+          "url": "synthesia.io"
+        }
+      ]
+    },
+    "cat-66418": {
+      "id": "cat-66418",
+      "name": "تحليل الأداء الرياضي",
+      "tools": [
+        {
+          "name": "Catapult Sports AI",
+          "url": "catapult.com"
+        },
+        {
+          "name": "STATSports AI",
+          "url": "statsports.com"
+        },
+        {
+          "name": "Polar Team Pro AI",
+          "url": "polar.com"
+        },
+        {
+          "name": "Zebra Technologies (NFL)",
+          "url": "zebra.com"
+        },
+        {
+          "name": "Second Spectrum (NBA/EPL)",
+          "url": "secondspectrum.com"
+        },
+        {
+          "name": "Stats Perform AI (Opta)",
+          "url": "statsperform.com"
+        },
+        {
+          "name": "Hudl AI",
+          "url": "hudl.com"
+        },
+        {
+          "name": "Sportscode AI",
+          "url": "hudl.com/sportscode"
+        },
+        {
+          "name": "SportsVU (NBA)",
+          "url": "stats.nba.com"
+        },
+        {
+          "name": "Kinexon AI",
+          "url": "kinexon.com"
+        },
+        {
+          "name": "InStat AI",
+          "url": "instatsport.com"
+        },
+        {
+          "name": "Wyscout AI",
+          "url": "wyscout.com"
+        },
+        {
+          "name": "ChyronHego AI",
+          "url": "chyronhego.com"
+        },
+        {
+          "name": "Hawk-Eye AI",
+          "url": "hawkeyeinnovations.com"
+        },
+        {
+          "name": "TrackMan AI",
+          "url": "trackman.com"
+        },
+        {
+          "name": "Rapsodo AI",
+          "url": "rapsodo.com"
+        },
+        {
+          "name": "Diamond Kinetics AI",
+          "url": "diamondkinetics.com"
+        },
+        {
+          "name": "K-Motion AI (Golf)",
+          "url": "kmotion.com"
+        },
+        {
+          "name": "Blast Motion AI",
+          "url": "blastmotion.com"
+        },
+        {
+          "name": "DartFish AI",
+          "url": "dartfish.com"
+        },
+        {
+          "name": "Siliconcoach AI",
+          "url": "siliconcoach.com"
+        },
+        {
+          "name": "Coach's Eye AI",
+          "url": "coachseye.com"
+        },
+        {
+          "name": "Hudl Technique",
+          "url": "hudl.com"
+        },
+        {
+          "name": "KINDUCT AI",
+          "url": "kinduct.com"
+        },
+        {
+          "name": "Smart Abase AI",
+          "url": "abase.it"
+        },
+        {
+          "name": "Kitman Labs AI",
+          "url": "kitmanlabs.com"
+        },
+        {
+          "name": "Retul AI (Cycling)",
+          "url": "retul.com"
+        },
+        {
+          "name": "GPSports AI",
+          "url": "gpsports.com"
+        },
+        {
+          "name": "APEX AI",
+          "url": "apexcoaching.io"
+        },
+        {
+          "name": "PlayerMaker AI",
+          "url": "playermaker.io"
+        },
+        {
+          "name": "Veo Technologies AI",
+          "url": "veo.co"
+        },
+        {
+          "name": "Pixellot AI",
+          "url": "pixellot.tv"
+        },
+        {
+          "name": "Nacsport AI",
+          "url": "nacsport.com"
+        },
+        {
+          "name": "Sportlight AI",
+          "url": "sportlight.ai"
+        },
+        {
+          "name": "Edge10 AI",
+          "url": "edge10.com"
+        }
+      ]
+    },
+    "cat-86927": {
+      "id": "cat-86927",
+      "name": "السياحة والضيافة الذكية",
+      "tools": [
+        {
+          "name": "Expedia AI",
+          "url": "expedia.com"
+        },
+        {
+          "name": "Booking.com AI",
+          "url": "booking.com"
+        },
+        {
+          "name": "Airbnb AI",
+          "url": "airbnb.com"
+        },
+        {
+          "name": "TripAdvisor AI",
+          "url": "tripadvisor.com"
+        },
+        {
+          "name": "Google Travel AI",
+          "url": "travel.google.com"
+        },
+        {
+          "name": "Amadeus AI",
+          "url": "amadeus.com"
+        },
+        {
+          "name": "Sabre AI",
+          "url": "sabre.com"
+        },
+        {
+          "name": "Travelport AI",
+          "url": "travelport.com"
+        },
+        {
+          "name": "Klook AI",
+          "url": "klook.com"
+        },
+        {
+          "name": "GetYourGuide AI",
+          "url": "getyourguide.com"
+        },
+        {
+          "name": "Viator AI",
+          "url": "viator.com"
+        },
+        {
+          "name": "KAYAK AI",
+          "url": "kayak.com"
+        },
+        {
+          "name": "Skyscanner AI",
+          "url": "skyscanner.com"
+        },
+        {
+          "name": "Hopper AI",
+          "url": "hopper.com"
+        },
+        {
+          "name": "Rome2rio AI",
+          "url": "rome2rio.com"
+        },
+        {
+          "name": "Marriott AI (ChatBotlr)",
+          "url": "marriott.com"
+        },
+        {
+          "name": "Hilton AI (Connie)",
+          "url": "hilton.com"
+        },
+        {
+          "name": "IHG AI",
+          "url": "ihg.com"
+        },
+        {
+          "name": "Hyatt AI",
+          "url": "hyatt.com"
+        },
+        {
+          "name": "AccorHotels AI",
+          "url": "accor.com"
+        },
+        {
+          "name": "Mews AI (PMS)",
+          "url": "mews.com"
+        },
+        {
+          "name": "Cloudbeds AI",
+          "url": "cloudbeds.com"
+        },
+        {
+          "name": "Revinate AI",
+          "url": "revinate.com"
+        },
+        {
+          "name": "Duetto AI",
+          "url": "duettocloud.com"
+        },
+        {
+          "name": "IDeaS AI",
+          "url": "ideas.com"
+        },
+        {
+          "name": "Beonprice AI",
+          "url": "beonprice.com"
+        },
+        {
+          "name": "Sojern AI",
+          "url": "sojern.com"
+        },
+        {
+          "name": "Lighthouse AI (OTA Insight)",
+          "url": "mylighthouse.com"
+        },
+        {
+          "name": "Despegar AI",
+          "url": "despegar.com"
+        },
+        {
+          "name": "Navan (TripActions) AI",
+          "url": "navan.com"
+        },
+        {
+          "name": "TravelAI",
+          "url": "travel-ai.com"
+        },
+        {
+          "name": "Layla (Travel AI)",
+          "url": "layla.ai"
+        },
+        {
+          "name": "Roam Around AI",
+          "url": "roamaround.io"
+        },
+        {
+          "name": "Wonderplan AI",
+          "url": "wonderplan.site"
+        },
+        {
+          "name": "Trip.com AI",
+          "url": "trip.com"
+        }
+      ]
+    },
+    "cat-43475": {
+      "id": "cat-43475",
+      "name": "كتابة ذكية",
+      "tools": [
+        {
+          "name": "ChatGPT",
+          "url": "chat.openai.com"
+        },
+        {
+          "name": "Claude",
+          "url": "claude.ai"
+        },
+        {
+          "name": "Gemini",
+          "url": "gemini.google.com"
+        },
+        {
+          "name": "Microsoft Copilot",
+          "url": "copilot.microsoft.com"
+        },
+        {
+          "name": "Jasper AI",
+          "url": "jasper.ai"
+        },
+        {
+          "name": "Copy.ai",
+          "url": "copy.ai"
+        },
+        {
+          "name": "Writesonic",
+          "url": "writesonic.com"
+        },
+        {
+          "name": "Rytr",
+          "url": "rytr.me"
+        },
+        {
+          "name": "Wordtune",
+          "url": "wordtune.com"
+        },
+        {
+          "name": "Grammarly",
+          "url": "grammarly.com"
+        },
+        {
+          "name": "QuillBot",
+          "url": "quillbot.com"
+        },
+        {
+          "name": "Sudowrite",
+          "url": "sudowrite.com"
+        },
+        {
+          "name": "Notion AI",
+          "url": "notion.so"
+        },
+        {
+          "name": "HyperWrite",
+          "url": "hyperwriteai.com"
+        },
+        {
+          "name": "Longshot AI",
+          "url": "longshot.ai"
+        },
+        {
+          "name": "Anyword",
+          "url": "anyword.com"
+        },
+        {
+          "name": "Writer",
+          "url": "writer.com"
+        },
+        {
+          "name": "Narrato",
+          "url": "narrato.io"
+        },
+        {
+          "name": "Typeface",
+          "url": "typeface.ai"
+        },
+        {
+          "name": "Frase",
+          "url": "frase.io"
+        },
+        {
+          "name": "Hypotenuse AI",
+          "url": "hypotenuse.ai"
+        },
+        {
+          "name": "Simplified",
+          "url": "simplified.com"
+        },
+        {
+          "name": "Cohesive AI",
+          "url": "cohesive.so"
+        },
+        {
+          "name": "Moonbeam",
+          "url": "gomoonbeam.com"
+        },
+        {
+          "name": "AI Writer",
+          "url": "ai-writer.com"
+        },
+        {
+          "name": "Text Cortex",
+          "url": "textcortex.com"
+        },
+        {
+          "name": "Peppertype",
+          "url": "peppertype.ai"
+        },
+        {
+          "name": "ContentBot",
+          "url": "contentbot.ai"
+        },
+        {
+          "name": "ProWritingAid",
+          "url": "prowritingaid.com"
+        },
+        {
+          "name": "Scalenut",
+          "url": "scalenut.com"
+        },
+        {
+          "name": "Article Forge",
+          "url": "articleforge.com"
+        },
+        {
+          "name": "Ink",
+          "url": "inkforall.com"
+        },
+        {
+          "name": "Shortly AI",
+          "url": "shortlyai.com"
+        },
+        {
+          "name": "Smart Copy (Unbounce)",
+          "url": "unbounce.com"
+        },
+        {
+          "name": "Kopy.ai",
+          "url": "kopy.ai"
+        },
+        {
+          "name": "Compose AI",
+          "url": "compose.ai"
+        },
+        {
+          "name": "Jenni AI",
+          "url": "jenni.ai"
+        },
+        {
+          "name": "Lex",
+          "url": "lex.page"
+        },
+        {
+          "name": "Cowriter",
+          "url": "cowriter.org"
+        },
+        {
+          "name": "NeuralText",
+          "url": "neuraltext.com"
+        }
+      ]
+    },
+    "cat-67290": {
+      "id": "cat-67290",
+      "name": "بحث ذكي",
+      "tools": [
+        {
+          "name": "Perplexity AI",
+          "url": "perplexity.ai"
+        },
+        {
+          "name": "Elicit",
+          "url": "elicit.org"
+        },
+        {
+          "name": "Consensus",
+          "url": "consensus.app"
+        },
+        {
+          "name": "Semantic Scholar",
+          "url": "semanticscholar.org"
+        },
+        {
+          "name": "ResearchRabbit",
+          "url": "researchrabbitapp.com"
+        },
+        {
+          "name": "Connected Papers",
+          "url": "connectedpapers.com"
+        },
+        {
+          "name": "Scite",
+          "url": "scite.ai"
+        },
+        {
+          "name": "Scholarcy",
+          "url": "scholarcy.com"
+        },
+        {
+          "name": "Undermind",
+          "url": "undermind.ai"
+        },
+        {
+          "name": "Explain Paper",
+          "url": "explainpaper.com"
+        },
+        {
+          "name": "ChatGPT",
+          "url": "chat.openai.com"
+        },
+        {
+          "name": "Claude",
+          "url": "claude.ai"
+        },
+        {
+          "name": "You.com",
+          "url": "you.com"
+        },
+        {
+          "name": "Phind",
+          "url": "phind.com"
+        },
+        {
+          "name": "Iris.ai",
+          "url": "iris.ai"
+        },
+        {
+          "name": "SciSpace",
+          "url": "scispace.com"
+        },
+        {
+          "name": "Humata",
+          "url": "humata.ai"
+        },
+        {
+          "name": "ReadCube Papers",
+          "url": "readcube.com"
+        },
+        {
+          "name": "Litmaps",
+          "url": "litmaps.com"
+        },
+        {
+          "name": "Open Knowledge Maps",
+          "url": "openknowledgemaps.org"
+        },
+        {
+          "name": "Paper Digest",
+          "url": "paper-digest.com"
+        },
+        {
+          "name": "R Discovery",
+          "url": "rdiscovery.com"
+        },
+        {
+          "name": "Jenni AI",
+          "url": "jenni.ai"
+        },
+        {
+          "name": "Sourcely",
+          "url": "sourcely.net"
+        },
+        {
+          "name": "Scinapse",
+          "url": "scinapse.io"
+        },
+        {
+          "name": "Wizdom.ai",
+          "url": "wizdom.ai"
+        },
+        {
+          "name": "Research Buddy",
+          "url": "researchbuddy.app"
+        },
+        {
+          "name": "Paper Brain",
+          "url": "paperbrain.study"
+        },
+        {
+          "name": "Galactica (Meta)",
+          "url": "galactica.org"
+        },
+        {
+          "name": "Inciteful",
+          "url": "inciteful.xyz"
+        },
+        {
+          "name": "Dimensions",
+          "url": "dimensions.ai"
+        },
+        {
+          "name": "Bing AI",
+          "url": "bing.com"
+        },
+        {
+          "name": "Kagi Search",
+          "url": "kagi.com"
+        },
+        {
+          "name": "Google Scholar",
+          "url": "scholar.google.com"
+        },
+        {
+          "name": "Typeset (Researcher)",
+          "url": "typeset.io"
+        },
+        {
+          "name": "Publish or Perish",
+          "url": "harzing.com"
+        },
+        {
+          "name": "Zendy",
+          "url": "zendy.io"
+        },
+        {
+          "name": "Keenious",
+          "url": "keenious.com"
+        },
+        {
+          "name": "Lateral AI",
+          "url": "lateral.io"
+        },
+        {
+          "name": "Rayyan AI",
+          "url": "rayyan.ai"
+        }
+      ]
+    },
+    "cat-24668": {
+      "id": "cat-24668",
+      "name": "تلخيص وقراءة الملفات",
+      "tools": [
+        {
+          "name": "ChatGPT (PDF)",
+          "url": "chat.openai.com"
+        },
+        {
+          "name": "Claude",
+          "url": "claude.ai"
+        },
+        {
+          "name": "Gemini",
+          "url": "gemini.google.com"
+        },
+        {
+          "name": "Humata",
+          "url": "humata.ai"
+        },
+        {
+          "name": "SciSpace",
+          "url": "scispace.com"
+        },
+        {
+          "name": "Scholarcy",
+          "url": "scholarcy.com"
+        },
+        {
+          "name": "PDF.ai",
+          "url": "pdf.ai"
+        },
+        {
+          "name": "ChatPDF",
+          "url": "chatpdf.com"
+        },
+        {
+          "name": "TLDR This",
+          "url": "tldrthis.com"
+        },
+        {
+          "name": "QuillBot Summarizer",
+          "url": "quillbot.com"
+        },
+        {
+          "name": "Resoomer",
+          "url": "resoomer.com"
+        },
+        {
+          "name": "Wordtune Read",
+          "url": "wordtune.com"
+        },
+        {
+          "name": "Genei",
+          "url": "genei.io"
+        },
+        {
+          "name": "Sharly AI",
+          "url": "sharly.ai"
+        },
+        {
+          "name": "Unriddle",
+          "url": "unriddle.ai"
+        },
+        {
+          "name": "Notta",
+          "url": "notta.ai"
+        },
+        {
+          "name": "Kagi Summarizer",
+          "url": "kagi.com"
+        },
+        {
+          "name": "Mindgrasp",
+          "url": "mindgrasp.ai"
+        },
+        {
+          "name": "Summari",
+          "url": "summari.com"
+        },
+        {
+          "name": "Notedly",
+          "url": "notedly.ai"
+        },
+        {
+          "name": "Poe",
+          "url": "poe.com"
+        },
+        {
+          "name": "Skim It",
+          "url": "skimai.com"
+        },
+        {
+          "name": "Summarize Tech",
+          "url": "summarize.tech"
+        },
+        {
+          "name": "NeuralText",
+          "url": "neuraltext.com"
+        },
+        {
+          "name": "Elicit",
+          "url": "elicit.org"
+        },
+        {
+          "name": "Copilot (PDF)",
+          "url": "copilot.microsoft.com"
+        },
+        {
+          "name": "Sumnotes",
+          "url": "sumnotes.net"
+        },
+        {
+          "name": "Intellippt",
+          "url": "intellippt.com"
+        },
+        {
+          "name": "Speak AI",
+          "url": "speakai.co"
+        },
+        {
+          "name": "DocAnalyzer",
+          "url": "docanalyzer.ai"
+        },
+        {
+          "name": "Filechat",
+          "url": "filechat.io"
+        },
+        {
+          "name": "AskYourPDF",
+          "url": "askyourpdf.com"
+        },
+        {
+          "name": "Docalysis",
+          "url": "docalysis.com"
+        },
+        {
+          "name": "Docsumo",
+          "url": "docsumo.com"
+        },
+        {
+          "name": "Wondershare PDFelement AI",
+          "url": "pdf.wondershare.com"
+        },
+        {
+          "name": "Adobe Acrobat AI",
+          "url": "adobe.com"
+        },
+        {
+          "name": "Foxit PDF AI",
+          "url": "foxit.com"
+        },
+        {
+          "name": "Cohere Summarize",
+          "url": "cohere.com"
+        },
+        {
+          "name": "Omnivore AI",
+          "url": "omnivore.app"
+        },
+        {
+          "name": "Readwise Reader AI",
+          "url": "readwise.io"
+        }
+      ]
+    },
+    "cat-47880": {
+      "id": "cat-47880",
+      "name": "أوفيس ذكي",
+      "tools": [
+        {
+          "name": "Microsoft Copilot (Office 365)",
+          "url": "microsoft.com/copilot"
+        },
+        {
+          "name": "Google Duet AI (Workspace)",
+          "url": "workspace.google.com"
+        },
+        {
+          "name": "Notion AI",
+          "url": "notion.so"
+        },
+        {
+          "name": "ClickUp AI",
+          "url": "clickup.com"
+        },
+        {
+          "name": "Monday AI",
+          "url": "monday.com"
+        },
+        {
+          "name": "Asana AI",
+          "url": "asana.com"
+        },
+        {
+          "name": "Zapier AI",
+          "url": "zapier.com"
+        },
+        {
+          "name": "Make (Integromat)",
+          "url": "make.com"
+        },
+        {
+          "name": "Bardeen",
+          "url": "bardeen.ai"
+        },
+        {
+          "name": "Taskade",
+          "url": "taskade.com"
+        },
+        {
+          "name": "Coda AI",
+          "url": "coda.io"
+        },
+        {
+          "name": "Airtable AI",
+          "url": "airtable.com"
+        },
+        {
+          "name": "Mem",
+          "url": "mem.ai"
+        },
+        {
+          "name": "Motion",
+          "url": "usemotion.com"
+        },
+        {
+          "name": "Reclaim AI",
+          "url": "reclaim.ai"
+        },
+        {
+          "name": "Zoom AI Companion",
+          "url": "zoom.us"
+        },
+        {
+          "name": "Otter.ai",
+          "url": "otter.ai"
+        },
+        {
+          "name": "Fireflies.ai",
+          "url": "fireflies.ai"
+        },
+        {
+          "name": "Grain",
+          "url": "grain.com"
+        },
+        {
+          "name": "Fathom",
+          "url": "fathom.video"
+        },
+        {
+          "name": "Krisp",
+          "url": "krisp.ai"
+        },
+        {
+          "name": "Loom AI",
+          "url": "loom.com"
+        },
+        {
+          "name": "Slite AI",
+          "url": "slite.com"
+        },
+        {
+          "name": "Guru AI",
+          "url": "getguru.com"
+        },
+        {
+          "name": "Confluence AI",
+          "url": "atlassian.com"
+        },
+        {
+          "name": "Jira AI",
+          "url": "atlassian.com"
+        },
+        {
+          "name": "Linear",
+          "url": "linear.app"
+        },
+        {
+          "name": "Height AI",
+          "url": "height.app"
+        },
+        {
+          "name": "Fibery AI",
+          "url": "fibery.io"
+        },
+        {
+          "name": "Tettra",
+          "url": "tettra.com"
+        },
+        {
+          "name": "Calendly AI",
+          "url": "calendly.com"
+        },
+        {
+          "name": "Superhuman AI (Email)",
+          "url": "superhuman.com"
+        },
+        {
+          "name": "Shortwave AI (Email)",
+          "url": "shortwave.com"
+        },
+        {
+          "name": "Sanebox AI",
+          "url": "sanebox.com"
+        },
+        {
+          "name": "Lavender AI (Email)",
+          "url": "lavender.ai"
+        },
+        {
+          "name": "Grammarly Business",
+          "url": "grammarly.com"
+        },
+        {
+          "name": "Miro AI",
+          "url": "miro.com"
+        },
+        {
+          "name": "MURAL AI",
+          "url": "mural.co"
+        },
+        {
+          "name": "Whimsical AI",
+          "url": "whimsical.com"
+        },
+        {
+          "name": "Workato AI",
+          "url": "workato.com"
+        }
+      ]
+    },
+    "cat-33551": {
+      "id": "cat-33551",
+      "name": "توثيق المراجع",
+      "tools": [
+        {
+          "name": "Zotero",
+          "url": "zotero.org"
+        },
+        {
+          "name": "Mendeley",
+          "url": "mendeley.com"
+        },
+        {
+          "name": "EndNote",
+          "url": "endnote.com"
+        },
+        {
+          "name": "RefWorks",
+          "url": "refworks.com"
+        },
+        {
+          "name": "Citavi",
+          "url": "citavi.com"
+        },
+        {
+          "name": "Papers",
+          "url": "papersapp.com"
+        },
+        {
+          "name": "ReadCube Papers",
+          "url": "readcube.com"
+        },
+        {
+          "name": "JabRef",
+          "url": "jabref.org"
+        },
+        {
+          "name": "Paperpile",
+          "url": "paperpile.com"
+        },
+        {
+          "name": "Sciwheel",
+          "url": "sciwheel.com"
+        },
+        {
+          "name": "SciSpace (Citation)",
+          "url": "scispace.com"
+        },
+        {
+          "name": "Cite This For Me",
+          "url": "citethisforme.com"
+        },
+        {
+          "name": "EasyBib",
+          "url": "easybib.com"
+        },
+        {
+          "name": "BibMe",
+          "url": "bibme.org"
+        },
+        {
+          "name": "Citation Machine",
+          "url": "citationmachine.net"
+        },
+        {
+          "name": "MyBib",
+          "url": "mybib.com"
+        },
+        {
+          "name": "Scribbr",
+          "url": "scribbr.com"
+        },
+        {
+          "name": "Citationsy",
+          "url": "citationsy.com"
+        },
+        {
+          "name": "Grafiati",
+          "url": "grafiati.com"
+        },
+        {
+          "name": "Reciteworks",
+          "url": "reciteworks.co.uk"
+        },
+        {
+          "name": "Trinka AI",
+          "url": "trinka.ai"
+        },
+        {
+          "name": "Paperpal",
+          "url": "paperpal.com"
+        },
+        {
+          "name": "Chegg Citation",
+          "url": "chegg.com"
+        },
+        {
+          "name": "NoodleTools",
+          "url": "noodletools.com"
+        },
+        {
+          "name": "Rayyan AI",
+          "url": "rayyan.ai"
+        },
+        {
+          "name": "Covidence",
+          "url": "covidence.org"
+        },
+        {
+          "name": "Biblatex (LaTeX)",
+          "url": "ctan.org"
+        },
+        {
+          "name": "Docear",
+          "url": "docear.org"
+        },
+        {
+          "name": "F1000Workspace",
+          "url": "f1000.com"
+        },
+        {
+          "name": "Colwiz",
+          "url": "colwiz.com"
+        }
+      ]
+    },
+    "cat-4819": {
+      "id": "cat-4819",
+      "name": "كشف الانتحال",
+      "tools": [
+        {
+          "name": "Turnitin",
+          "url": "turnitin.com"
+        },
+        {
+          "name": "iThenticate",
+          "url": "ithenticate.com"
+        },
+        {
+          "name": "Grammarly Plagiarism",
+          "url": "grammarly.com"
+        },
+        {
+          "name": "Copyscape",
+          "url": "copyscape.com"
+        },
+        {
+          "name": "PlagScan",
+          "url": "plagscan.com"
+        },
+        {
+          "name": "DupliChecker",
+          "url": "duplichecker.com"
+        },
+        {
+          "name": "Quetext",
+          "url": "quetext.com"
+        },
+        {
+          "name": "Copyleaks",
+          "url": "copyleaks.com"
+        },
+        {
+          "name": "Unicheck",
+          "url": "unicheck.com"
+        },
+        {
+          "name": "PlagiarismCheck",
+          "url": "plagiarismcheck.org"
+        },
+        {
+          "name": "Viper",
+          "url": "scanmyessay.com"
+        },
+        {
+          "name": "Plagium",
+          "url": "plagium.com"
+        },
+        {
+          "name": "Noplag",
+          "url": "noplag.com"
+        },
+        {
+          "name": "Scribbr Plagiarism",
+          "url": "scribbr.com"
+        },
+        {
+          "name": "Compilatio",
+          "url": "compilatio.net"
+        },
+        {
+          "name": "PlagAware",
+          "url": "plagaware.com"
+        },
+        {
+          "name": "Crossplag",
+          "url": "crossplag.com"
+        },
+        {
+          "name": "Prepostseo Plagiarism",
+          "url": "prepostseo.com"
+        },
+        {
+          "name": "Paperrater",
+          "url": "paperrater.com"
+        },
+        {
+          "name": "Plagramme",
+          "url": "plagramme.com"
+        },
+        {
+          "name": "GPTZero (كشف AI)",
+          "url": "gptzero.me"
+        },
+        {
+          "name": "Originality.ai (كشف AI)",
+          "url": "originality.ai"
+        },
+        {
+          "name": "Winston AI (كشف AI)",
+          "url": "gowinston.ai"
+        },
+        {
+          "name": "ZeroGPT (كشف AI)",
+          "url": "zerogpt.com"
+        },
+        {
+          "name": "Copyleaks AI Detector",
+          "url": "copyleaks.com"
+        },
+        {
+          "name": "Sapling AI Detector",
+          "url": "sapling.ai"
+        },
+        {
+          "name": "Content at Scale AI Detector",
+          "url": "contentatscale.ai"
+        },
+        {
+          "name": "Turnitin AI Detection",
+          "url": "turnitin.com"
+        },
+        {
+          "name": "Hive Moderation",
+          "url": "hivemoderation.com"
+        },
+        {
+          "name": "Writer AI Detector",
+          "url": "writer.com"
+        },
+        {
+          "name": "Passed.ai",
+          "url": "passed.ai"
+        },
+        {
+          "name": "Crossplag AI",
+          "url": "crossplag.com"
+        },
+        {
+          "name": "SmallSEOTools Plagiarism",
+          "url": "smallseotools.com"
+        },
+        {
+          "name": "Plagiocheck",
+          "url": "plagiocheck.com"
+        },
+        {
+          "name": "EduBirdie Checker",
+          "url": "edubirdie.com"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,166 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Daleel — premium dark + warm gold accent */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-cream: var(--cream);
+  --font-sans: "Tajawal", system-ui, sans-serif;
+}
+
+:root {
+  --radius: 1rem;
+  /* default = dark premium */
+  --ink: oklch(0.16 0.012 250);
+  --ink-2: oklch(0.21 0.013 250);
+  --gold: oklch(0.78 0.11 80);
+  --gold-soft: oklch(0.86 0.07 82);
+  --cream: oklch(0.96 0.012 80);
+  --background: var(--ink);
+  --foreground: var(--cream);
+  --card: var(--ink-2);
+  --card-foreground: var(--cream);
+  --popover: var(--ink-2);
+  --popover-foreground: var(--cream);
+  --primary: var(--gold);
+  --primary-foreground: oklch(0.18 0.01 250);
+  --secondary: oklch(0.27 0.013 250);
+  --secondary-foreground: var(--cream);
+  --muted: oklch(0.26 0.012 250);
+  --muted-foreground: oklch(0.7 0.015 250);
+  --accent: var(--gold);
+  --accent-foreground: oklch(0.18 0.01 250);
+  --destructive: oklch(0.6 0.18 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.3 0.012 250);
+  --input: oklch(0.28 0.012 250);
+  --ring: var(--gold);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: var(--ink);
+  --sidebar-foreground: var(--cream);
+  --sidebar-primary: var(--gold);
+  --sidebar-primary-foreground: oklch(0.18 0.01 250);
+  --sidebar-accent: var(--ink-2);
+  --sidebar-accent-foreground: var(--cream);
+  --sidebar-border: oklch(0.3 0.012 250);
+  --sidebar-ring: var(--gold);
+}
+
+.light {
+  /* light theme — re-map cream/ink tokens so existing classes stay readable */
+  --ink: oklch(1 0 0);
+  --ink-2: oklch(0.985 0.005 80);
+  --gold: oklch(0.68 0.14 65);
+  --gold-soft: oklch(0.92 0.05 80);
+  --cream: oklch(0.18 0.012 250);
+
+  --background: oklch(0.985 0.005 80);
+  --foreground: oklch(0.18 0.012 250);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.012 250);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.012 250);
+  --primary: var(--gold);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.95 0.008 80);
+  --secondary-foreground: oklch(0.2 0.012 250);
+  --muted: oklch(0.95 0.008 80);
+  --muted-foreground: oklch(0.5 0.012 250);
+  --accent: var(--gold);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.6 0.18 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.9 0.008 80);
+  --input: oklch(0.92 0.008 80);
+  --ring: var(--gold);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+}
+
+@layer utilities {
+  .text-gradient-gold {
+    background-image: linear-gradient(135deg, var(--gold-soft), var(--gold));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .surface-elevated {
+    background:
+      linear-gradient(180deg,
+        color-mix(in oklab, var(--card) 100%, transparent) 0%,
+        color-mix(in oklab, var(--card) 92%, var(--background)) 100%);
+    box-shadow:
+      0 1px 0 0 color-mix(in oklab, var(--foreground) 6%, transparent) inset,
+      0 20px 40px -28px color-mix(in oklab, var(--gold) 35%, transparent);
+  }
+  .ring-gold-soft {
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--gold) 25%, transparent);
+  }
+  .hero-glow {
+    background:
+      radial-gradient(120% 80% at 30% 20%, color-mix(in oklab, var(--gold) 30%, transparent), transparent 60%),
+      radial-gradient(80% 60% at 80% 90%, color-mix(in oklab, var(--gold) 18%, transparent), transparent 60%),
+      linear-gradient(135deg, var(--ink-2), var(--ink));
+  }
+}
