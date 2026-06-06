@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { setProfile, getProfile, getUserId } from "@/lib/storage";
+import { setProfile, getProfile, getUserId, setOnboarded } from "@/lib/storage";
 import { ChevronRight, X } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { syncProfile } from "@/lib/api/sync.functions";
@@ -41,6 +41,7 @@ function Onboarding() {
       university: uni.trim(),
     };
     setProfile(profile);
+    setOnboarded(true);
     const userId = getUserId();
     if (userId) {
       doSyncProfile({ data: { userId, ...profile } }).catch(() => {});

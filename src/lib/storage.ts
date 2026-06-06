@@ -13,6 +13,7 @@ const LIKE_KEY = "daleel:likes";
 const CHAT_KEY = "daleel:chat";
 const USER_ID_KEY = "daleel:userid";
 const USER_EMAIL_KEY = "daleel:useremail";
+const ONBOARDING_KEY = "daleel:onboarded";
 
 export type ChatMessage = { role: "user" | "assistant"; content: string; ts: number };
 
@@ -36,6 +37,17 @@ export function setUserEmail(email: string | null) {
   if (typeof window === "undefined") return;
   if (email) localStorage.setItem(USER_EMAIL_KEY, email);
   else localStorage.removeItem(USER_EMAIL_KEY);
+}
+
+export function isOnboarded(): boolean {
+  if (typeof window === "undefined") return false;
+  return localStorage.getItem(ONBOARDING_KEY) === "1";
+}
+
+export function setOnboarded(v: boolean) {
+  if (typeof window === "undefined") return;
+  if (v) localStorage.setItem(ONBOARDING_KEY, "1");
+  else localStorage.removeItem(ONBOARDING_KEY);
 }
 
 export function clearAll() {

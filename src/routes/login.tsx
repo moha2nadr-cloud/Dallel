@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Logo } from "@/components/Logo";
-import { getProfile, setProfile, setUserId, setUserEmail, type Profile } from "@/lib/storage";
+import { getProfile, setProfile, setUserId, setUserEmail, isOnboarded, type Profile } from "@/lib/storage";
 import { useEffect, useRef, useCallback, useState } from "react";
 
 const CLIENT_ID = "1036057874420-d2h6r8s755huud2336qqanvqj16soh4j.apps.googleusercontent.com";
@@ -36,7 +36,7 @@ function Login() {
         university: "",
       };
       setProfile(profile);
-      navigate({ to: "/onboarding" });
+      navigate({ to: isOnboarded() ? "/home" : "/onboarding" });
     },
     [navigate],
   );
