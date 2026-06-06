@@ -32,7 +32,9 @@ function Onboarding() {
 
   const onNext = async () => {
     if (step < total - 1) return setStep(step + 1);
+    const existing = getProfile();
     const profile = {
+      ...existing,
       name: name.trim(),
       age,
       specialization: spec.trim(),
