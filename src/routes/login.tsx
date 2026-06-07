@@ -66,7 +66,13 @@ function Login() {
 
   const handleGoogleSignIn = () => {
     setLoading(true);
-    google.accounts.id.prompt();
+    // Click the real Google button rendered by GSI to show the full account picker
+    const realBtn = googleBtnRef.current?.querySelector("button, div[role=button]") as HTMLElement | null;
+    if (realBtn) {
+      realBtn.click();
+    } else {
+      google.accounts.id.prompt();
+    }
   };
 
   return (
