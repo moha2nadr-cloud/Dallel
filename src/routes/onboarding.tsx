@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { setProfile, getProfile, getUserId, setOnboarded } from "@/lib/storage";
 import { ChevronRight, X, Check } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
@@ -29,6 +29,12 @@ function Onboarding() {
   const [uni,  setUni]   = useState(existing?.university ?? "");
   const doSyncProfile = useServerFn(syncProfile);
   const total = 4;
+
+  useEffect(() => {
+    const ex = getProfile();
+    const profile = { ...ex, name: name.trim(), age, specialization: spec.trim(), university: uni.trim() };
+    setProfile(profile);
+  }, [name, age, spec, uni]);
 
   const canNext = [
     name.trim().length >= 2,
@@ -106,7 +112,7 @@ function Onboarding() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 flex-1 px-5 pt-8" key={step}>
+      <div className="relative z-10 px-5 pt-8" key={step}>
         <div className="animate-reveal-up">
           <span className="mb-3 inline-block rounded-full px-3 py-1 text-[11px] font-semibold text-[#8B7D6F]"
             style={{ background: "rgba(181,168,152,0.12)", border: "1px solid rgba(181,168,152,0.25)" }}>
