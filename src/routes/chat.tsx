@@ -88,17 +88,17 @@ function Chat() {
             <Trash2 className="h-4 w-4 text-gray-400" />
           </button>
           {deleteOpen && (
-            <div onClick={() => setDeleteOpen(false)} className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-              <div onClick={e => e.stopPropagation()} className="mx-4 w-[280px] rounded-2xl bg-white px-5 py-5 text-center shadow-lg">
-                <p className="text-[14px] font-bold text-gray-900">مسح المحادثة؟</p>
-                <p className="mt-1 text-[11px] text-gray-500">سيتم حذف جميع الرسائل.</p>
-                <div className="mt-4 flex gap-2">
+            <div onClick={() => setDeleteOpen(false)} className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 animate-fade-in">
+              <div onClick={e => e.stopPropagation()} className="mx-4 w-[320px] rounded-2xl bg-white px-6 py-6 text-center shadow-lg animate-scale-in">
+                <p className="text-[15px] font-bold text-gray-900">مسح المحادثة؟</p>
+                <p className="mt-1.5 text-[12px] text-gray-500">سيتم حذف جميع الرسائل. لا يمكن التراجع.</p>
+                <div className="mt-5 flex gap-3">
                   <button type="button" onClick={() => setDeleteOpen(false)}
-                    className="flex-1 rounded-xl border border-[rgba(200,195,185,0.28)] bg-white py-2 text-[12px] font-semibold text-gray-600">
+                    className="flex-1 rounded-xl border border-[rgba(200,195,185,0.28)] bg-white py-2.5 text-[12px] font-semibold text-gray-600">
                     إلغاء
                   </button>
                   <button type="button" onClick={() => { clearChatHistory(); setMessages([]); setDeleteOpen(false); }}
-                    className="flex-1 rounded-xl bg-red-500 py-2 text-[12px] font-bold text-white"
+                    className="flex-1 rounded-xl bg-red-500 py-2.5 text-[12px] font-bold text-white"
                     style={{ boxShadow: "0 4px 14px rgba(239,68,68,0.35)" }}>
                     احذف
                   </button>

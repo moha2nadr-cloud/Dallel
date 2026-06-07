@@ -4,25 +4,18 @@ import { clearProfile, getProfile, clearChatHistory, getFavs, getLikes, getUserI
 import { useEffect, useState, useRef } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { syncProfile, syncFavorites, syncLikes, syncChat } from "@/lib/api/sync.functions";
-import { Globe, Moon, Bell, Shield, Info, LogOut, Trash2, User, Pencil, Lock, Upload, AlertTriangle, ChevronLeft } from "lucide-react";
+import { Globe, Info, LogOut, Trash2, User, Pencil, AlertTriangle, ChevronLeft } from "lucide-react";
 import { useLang, setLang, type Lang } from "@/lib/i18n";
-import { useTheme } from "@/lib/theme";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({ meta: [{ title: "الإعدادات — دليل" }] }),
   component: Settings,
 });
 
-const NOTIF_KEY = "daleel:notif";
-
 function Settings() {
   const navigate = useNavigate();
   const [lang, t] = useLang();
-  const [theme, setTheme] = useTheme();
   const [profile, setP] = useState<ReturnType<typeof getProfile>>(null);
-  const [syncing, setSyncing] = useState(false);
-  const [notif, setNotif] = useState<boolean>(() => typeof window === "undefined" ? true : localStorage.getItem(NOTIF_KEY) !== "0");
   const doSyncProfile = useServerFn(syncProfile);
   const doSyncFavs    = useServerFn(syncFavorites);
   const doSyncLikes   = useServerFn(syncLikes);
@@ -45,23 +38,18 @@ function Settings() {
 
   const pushAll = async () => {
     const userId = getUserId();
-    if (!userId) { toast.error("سجّل الدخول أولاً"); return; }
-    setSyncing(true);
+    if (!userId) return;
     try {
       const p = getProfile();
       if (p) await doSyncProfile({ data: { userId, ...p } });
       for (const kind of ["post", "ai", "tool", "chat"] as const) { const items = getFavs(kind); if (items.length) await doSyncFavs({ data: { userId, kind, itemIds: items } }); }
       const lm = getLikes(); const li = Object.keys(lm).filter((k) => lm[k]); if (li.length) await doSyncLikes({ data: { userId, itemIds: li } });
-      const { getChatHistory } = await import("@/lib/storage"); const ch = getChatHistory(); if (ch.length) await doSyncChat({ data: { userId, messages: ch } });
-      toast.success("تمت المزامنة");
-    } catch { toast.error("فشلت المزامنة"); }
-    finally { setSyncing(false); }
+      const { getChatHistory: gch } = await import("@/lib/storage"); const ch = gch(); if (ch.length) await doSyncChat({ data: { userId, messages: ch } });
+    } catch { /* silent */ }
   };
 
   const onLogout = async () => { closeModal(); await pushAll(); clearProfile(); clearChatHistory(); navigate({ to: "/login" }); };
   const onDelete = () => { closeModal(); clearAll(); sessionStorage.clear(); navigate({ to: "/login" }); };
-  const cycleTheme = () => { const o = ["dark", "light", "auto"] as const; setTheme(o[(o.indexOf(theme) + 1) % 3]); };
-  const themeLabel = { dark: t.dark, light: t.light, auto: t.auto }[theme];
 
   return (
     <WithBottomBar>
@@ -89,14 +77,9 @@ function Settings() {
 
       <Group delay={0.10}>
         <Row icon={Globe}  label={t.language}     value={lang === "ar" ? t.arabic : t.english} onClick={() => setLang(lang === "ar" ? "en" : "ar" as Lang)} />
-        <Row icon={Moon}   label={t.theme}         value={themeLabel} onClick={cycleTheme} />
-        <Row icon={Bell}   label={t.notifications} value={notif ? t.enabled : t.disabled} onClick={() => { const n = !notif; setNotif(n); localStorage.setItem(NOTIF_KEY, n ? "1" : "0"); }} />
       </Group>
 
       <Group delay={0.14}>
-        <Row icon={Upload} label="مزامنة البيانات" onClick={pushAll} value={syncing ? "جارٍ..." : undefined} />
-        <Row icon={Shield} label={t.privacy} />
-        <Row icon={Lock}   label={t.admin_panel}   onClick={() => navigate({ to: "/admin" })} />
         <Row icon={Trash2} label={t.delete_account} danger onClick={() => setModal("delete")} />
       </Group>
 

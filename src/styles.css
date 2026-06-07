@@ -398,6 +398,14 @@
     33%      { transform: translate(12px,-18px) scale(1.04); }
     66%      { transform: translate(-8px,-10px) scale(0.97); }
   }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
+  }
 
   .animate-reveal-up    { animation: reveal-up   0.55s cubic-bezier(0.22,1,0.36,1) both; }
   .animate-reveal-fade  { animation: reveal-fade  0.45s ease both; }
@@ -405,6 +413,8 @@
   .animate-float-gentle { animation: float-gentle 5s ease-in-out infinite; }
   .animate-spin-slow    { animation: spin-slow 16s linear infinite; }
   .animate-blob         { animation: blob-drift 12s ease-in-out infinite; }
+  .animate-fade-in      { animation: fade-in  0.2s ease both; }
+  .animate-scale-in     { animation: scale-in 0.25s cubic-bezier(0.22,1,0.36,1) both; }
 
   /* ── Skeleton ── */
   .skeleton-lg {

@@ -13,7 +13,7 @@ export const Route = createFileRoute("/favorites")({
 
 const TABS = [
   { key: "post", label: "منشورات" },
-  { key: "ai",   label: "AI" },
+  { key: "ai",   label: "مواقع AI" },
   { key: "tool", label: "أدوات" },
   { key: "chat", label: "محادثات" },
 ] as const;

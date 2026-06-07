@@ -6,7 +6,7 @@ const LANG_KEY = "daleel:lang";
 const dict = {
   ar: {
     home: "الرئيسية",
-    ai_tools: "أدوات AI",
+    ai_tools: "مواقع AI",
     utilities: "الأدوات",
     assistant: "المساعد",
     favorites: "المفضلة",
@@ -61,7 +61,7 @@ const dict = {
   },
   en: {
     home: "Home",
-    ai_tools: "AI Tools",
+    ai_tools: "AI Sites",
     utilities: "Utilities",
     assistant: "Assistant",
     favorites: "Favorites",
