@@ -80,14 +80,10 @@ function Settings() {
       </Group>
 
       <Group delay={0.14}>
-        <Row icon={Trash2} label={t.delete_account} danger onClick={() => setModal("delete")} />
-      </Group>
-
-      <Group delay={0.18}>
         <Row icon={Info} label={t.about} value={t.version} />
       </Group>
 
-      <div className="px-4 pt-4 pb-2 animate-reveal-up" style={{ animationDelay: "0.22s" }}>
+      <div className="px-4 pt-4 pb-2 animate-reveal-up" style={{ animationDelay: "0.18s" }}>
         <button type="button" onClick={() => setModal("logout")}
           className="flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-bold transition-lg active:scale-[0.98]"
           style={{ background: "rgba(254,242,242,0.80)", border: "1px solid rgba(239,68,68,0.20)", color: "#dc2626", backdropFilter: "blur(16px)" }}>
@@ -95,7 +91,22 @@ function Settings() {
         </button>
       </div>
 
-      <p className="mt-6 mb-4 text-center text-[10px] tracking-[0.3em] text-gray-300">{t.powered_by}</p>
+      <Group delay={0.22}>
+        <Row icon={Trash2} label={t.delete_account} danger onClick={() => setModal("delete")} />
+      </Group>
+
+      <div className="mt-8 mb-6 flex flex-col items-center gap-1 px-4 animate-reveal-up" style={{ animationDelay: "0.26s" }}>
+        <span className="text-[10px] uppercase tracking-[0.3em] text-gray-400 font-medium">POWERED BY</span>
+        <span className="text-[16px] font-black tracking-[0.25em] uppercase"
+          style={{
+            background: "linear-gradient(135deg, #B5A898, #8B7D6F)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}>
+          NOVA STUDIO
+        </span>
+      </div>
 
       {/* Modal */}
       {modal && (
