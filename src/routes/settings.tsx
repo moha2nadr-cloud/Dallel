@@ -118,7 +118,7 @@ function Settings() {
               style={lang === "ar"
                 ? { background: "linear-gradient(135deg,rgba(181,168,152,0.15),rgba(139,125,111,0.10))", border: "1px solid rgba(181,168,152,0.30)", color: "#72665A" }
                 : { background: "rgba(255,255,255,0.80)", border: "1px solid rgba(200,195,185,0.20)", color: "#9090A8" }}>
-              <span>🇸🇦 عربي</span>
+              <span>عربي</span>
               {lang === "ar" && <span className="text-[#8B7D6F]">✓</span>}
             </button>
             <button type="button" onClick={() => { setLang("en"); closeModal(); }}
@@ -126,7 +126,7 @@ function Settings() {
               style={lang === "en"
                 ? { background: "linear-gradient(135deg,rgba(181,168,152,0.15),rgba(139,125,111,0.10))", border: "1px solid rgba(181,168,152,0.30)", color: "#72665A" }
                 : { background: "rgba(255,255,255,0.80)", border: "1px solid rgba(200,195,185,0.20)", color: "#9090A8" }}>
-              <span>🇬🇧 English</span>
+              <span>English</span>
               {lang === "en" && <span className="text-[#8B7D6F]">✓</span>}
             </button>
           </div>
