@@ -129,7 +129,7 @@ function Onboarding() {
       </div>
 
       {/* CTA */}
-      <div className="relative z-10 px-5 pb-14 pt-4">
+      <div className="relative z-10 px-5 pb-8 pt-4">
         <button type="button" onClick={onNext} disabled={!canNext}
           className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-[15px] font-extrabold text-white transition-lg active:scale-[0.97] disabled:opacity-35"
           style={{
