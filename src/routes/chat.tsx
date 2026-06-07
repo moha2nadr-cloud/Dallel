@@ -9,6 +9,17 @@ import { syncChat } from "@/lib/api/sync.functions";
 import { toast } from "sonner";
 import { useCMS } from "@/lib/admin-store";
 import { useLang } from "@/lib/i18n";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/chat")({
   head: () => ({ meta: [{ title: "المساعد الذكي — دليل" }] }),
@@ -30,9 +41,21 @@ function Chat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { setMessages(getChatHistory()); }, []);
+  useEffect(() => {
+    const stored = getChatHistory();
+    if (stored.length > 0) {
+      const lastTs = stored[stored.length - 1].ts;
+      if (Date.now() - lastTs > 1800000) {
+        clearChatHistory();
+        setMessages([]);
+        return;
+      }
+    }
+    setMessages(stored);
+  }, []);
   useEffect(() => { scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" }); }, [messages, loading]);
 
   async function ask(text: string) {
@@ -70,10 +93,34 @@ function Chat() {
               <p className="text-[10px] text-gray-400">يجيب عن أسئلتك داخل التطبيق</p>
             </div>
           </div>
-          <button type="button" onClick={() => { if (!messages.length) return; if (confirm("مسح المحادثة؟")) { clearChatHistory(); setMessages([]); } }}
-            className="lg-card flex h-9 w-9 items-center justify-center rounded-full" aria-label="مسح">
-            <Trash2 className="h-4 w-4 text-gray-400" />
-          </button>
+          <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+            <AlertDialogTrigger asChild>
+              <button type="button" disabled={!messages.length}
+                className="lg-card flex h-9 w-9 items-center justify-center rounded-full disabled:opacity-30" aria-label="مسح">
+                <Trash2 className="h-4 w-4 text-gray-400" />
+              </button>
+            </AlertDialogTrigger>
+            <AlertDialogContent style={{ borderRadius: 20, background: "rgba(255,255,255,0.96)", backdropFilter: "blur(20px)", border: "1px solid rgba(200,195,185,0.3)", boxShadow: "0 20px 60px rgba(0,0,0,0.12)" }}>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-[15px] font-extrabold text-gray-900 text-center">مسح المحادثة؟</AlertDialogTitle>
+                <AlertDialogDescription className="text-[12px] text-gray-500 text-center">
+                  لا يمكنك التراجع عن هذا الإجراء. سيتم حذف جميع الرسائل.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter className="flex-row gap-2 sm:justify-center">
+                <AlertDialogCancel className="mt-0 flex-1 rounded-2xl border border-[rgba(200,195,185,0.28)] bg-white px-4 py-2.5 text-[12px] font-semibold text-gray-600">
+                  إلغاء
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => { clearChatHistory(); setMessages([]); }}
+                  className="flex-1 rounded-2xl bg-red-500 px-4 py-2.5 text-[12px] font-bold text-white"
+                  style={{ boxShadow: "0 4px 14px rgba(239,68,68,0.35)" }}
+                >
+                  نعم، احذف
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </header>
 
         {/* Messages */}
