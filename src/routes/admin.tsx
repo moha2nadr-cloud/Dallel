@@ -67,11 +67,11 @@ function Admin() {
 function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [cms, setCms] = useCMS();
   const TABS = [
-    { key: "slides", label: "السلايدر", icon: "🖼️" },
-    { key: "posts",  label: "منشورات",  icon: "📝" },
-    { key: "ai",     label: "أدوات AI", icon: "🤖" },
-    { key: "utils",  label: "أدوات عامة", icon: "🛠️" },
-    { key: "chat",   label: "المساعد",  icon: "💬" },
+    { key: "slides", label: "السلايدر" },
+    { key: "posts",  label: "المنشورات" },
+    { key: "ai",     label: "أدوات AI" },
+    { key: "utils",  label: "الأدوات العامة" },
+    { key: "chat",   label: "المساعد" },
   ] as const;
   const [tab, setTab] = useState<typeof TABS[number]["key"]>("slides");
 
@@ -86,24 +86,23 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         </button>
       </header>
 
-      <div className="flex gap-4 px-4 pt-4">
+      <div className="flex gap-5 px-4 pt-5">
         {/* Sidebar tabs */}
-        <div className="flex w-[140px] shrink-0 flex-col gap-1.5 rounded-2xl p-2 lg-card h-fit sticky top-20">
+        <div className="flex w-[150px] shrink-0 flex-col gap-1 rounded-2xl p-1.5 lg-card h-fit sticky top-20">
           {TABS.map((t) => (
             <button key={t.key} type="button" onClick={() => setTab(t.key)}
-              className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-[12px] font-semibold transition-all text-right"
+              className="w-full rounded-xl px-3 py-2.5 text-[12.5px] font-semibold transition-all text-right"
               style={tab === t.key
                 ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A", boxShadow: "0 2px 8px rgba(181,168,152,0.18)" }
                 : { color: "#9090A8" }
               }>
-              <span className="text-[14px]">{t.icon}</span>
-              <span>{t.label}</span>
+              {t.label}
             </button>
           ))}
         </div>
 
         {/* Content */}
-        <div className="flex-1 min-w-0 pb-16">
+        <div className="flex-1 min-w-0 pb-16 animate-reveal-fade" key={tab}>
           {tab === "slides" && <SlidesEditor slides={cms.slides} onChange={(s) => setCms({ ...cms, slides: s })} />}
           {tab === "posts"  && <PostsEditor  posts={cms.posts}   onChange={(p) => setCms({ ...cms, posts: p })} />}
           {tab === "ai"     && <AiEditor    items={cms.aiTools}  cats={cms.aiCategories}   onChange={(i, c) => setCms({ ...cms, aiTools: i, aiCategories: c })} />}
