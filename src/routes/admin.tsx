@@ -171,43 +171,28 @@ function SlidesEditor({ slides, onChange }: { slides: Slide[]; onChange: (s: Sli
     <div className="space-y-3">
       <AddBtn onClick={open} label="إضافة سلايد" />
 
-      {/* Modal */}
       {show && (
-        <>
-          <div className="fixed inset-0 z-40"
-            style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
-            onClick={() => setShow(false)} />
-          <div className="fixed bottom-0 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 animate-scale-in rounded-t-2xl p-6 pb-8 shadow-2xl"
-            style={{ background: "#fff", maxHeight: "85vh", overflowY: "auto" }}
-            onClick={(e) => e.stopPropagation()}>
-            <h2 className="mb-4 text-[15px] font-extrabold text-gray-900">إضافة سلايد</h2>
-
-            <FL>الصورة</FL>
-            <div onClick={() => fileRef.current?.click()}
-              className={`mb-3 flex cursor-pointer items-center justify-center rounded-xl border-2 border-dashed p-4 transition-lg ${imgErr ? "border-red-400 bg-red-50" : "border-[rgba(200,195,185,0.5)] bg-[rgba(200,195,185,0.08)]"}`}>
-              {imgData
-                ? <img src={imgData} alt="" className="max-h-32 rounded-lg object-contain" />
-                : <span className="text-[12px] font-semibold text-gray-400">اضغط لاختيار صورة</span>}
-            </div>
-            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
-
-            <FL>العنوان</FL>
-            <GI value={title} onChange={(e) => setTitle(e.target.value)} placeholder="عنوان السلايد (اختياري)" />
-
-            <div className="mt-5 flex gap-2">
-              <button type="button" onClick={() => setShow(false)}
-                className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-gray-500 transition-lg"
-                style={{ background: "rgba(200,195,185,0.2)" }}>
-                إلغاء
-              </button>
-              <button type="button" onClick={save}
-                className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-white transition-lg"
-                style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>
-                حفظ
-              </button>
-            </div>
+        <div className="rounded-2xl border border-[rgba(200,195,185,0.22)] bg-white/80 p-5 shadow-sm space-y-3">
+          <h2 className="text-[15px] font-extrabold text-gray-900">إضافة سلايد</h2>
+          <FL>الصورة</FL>
+          <div onClick={() => fileRef.current?.click()}
+            className={`flex cursor-pointer items-center justify-center rounded-xl border-2 border-dashed p-4 transition-lg ${imgErr ? "border-red-400 bg-red-50" : "border-[rgba(200,195,185,0.5)] bg-[rgba(200,195,185,0.08)]"}`}>
+            {imgData
+              ? <img src={imgData} alt="" className="max-h-32 rounded-lg object-contain" />
+              : <span className="text-[12px] font-semibold text-gray-400">اضغط لاختيار صورة</span>}
           </div>
-        </>
+          <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+          <FL>العنوان</FL>
+          <GI value={title} onChange={(e) => setTitle(e.target.value)} placeholder="عنوان السلايد (اختياري)" />
+          <div className="flex gap-2">
+            <button type="button" onClick={() => setShow(false)}
+              className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-gray-500 transition-lg"
+              style={{ background: "rgba(200,195,185,0.2)" }}>إلغاء</button>
+            <button type="button" onClick={save}
+              className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-white transition-lg"
+              style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>حفظ</button>
+          </div>
+        </div>
       )}
 
       {slides.map((s, i) => (
@@ -268,51 +253,40 @@ function PostsEditor({ posts, onChange }: { posts: Post[]; onChange: (p: Post[])
       <AddBtn onClick={openForAdd} label="إضافة منشور" />
 
       {show && (
-        <>
-          <div className="fixed inset-0 z-40"
-            style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
-            onClick={() => setShow(false)} />
-          <div className="fixed bottom-0 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 animate-scale-in rounded-t-2xl p-6 pb-8 shadow-2xl"
-            style={{ background: "#fff", maxHeight: "85vh", overflowY: "auto" }}
-            onClick={(e) => e.stopPropagation()}>
-            <h2 className="mb-4 text-[15px] font-extrabold text-gray-900">
-              {editIdx !== null ? "تعديل منشور" : "إضافة منشور"}
-            </h2>
+        <div className="rounded-2xl border border-[rgba(200,195,185,0.22)] bg-white/80 p-5 shadow-sm space-y-3">
+          <h2 className="text-[15px] font-extrabold text-gray-900">
+            {editIdx !== null ? "تعديل منشور" : "إضافة منشور"}
+          </h2>
 
-            <div onClick={() => fileRef.current?.click()}
-              className="mb-3 flex cursor-pointer items-center justify-center rounded-xl border-2 border-dashed p-4 transition-lg"
-              style={{ borderColor: "rgba(200,195,185,0.5)", background: "rgba(200,195,185,0.08)" }}>
-              {imgData
-                ? <img src={imgData} alt="" className="max-h-32 rounded-lg object-contain" />
-                : <span className="text-[12px] font-semibold text-gray-400">اضغط لاختيار صورة</span>}
-            </div>
-            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
-
-            <FL>العنوان</FL>
-            <GI value={title} onChange={(e) => setTitle(e.target.value)} placeholder="العنوان (اختياري)" />
-            <div className="mt-3"><FL>النص</FL>
-            <GT rows={3} value={desc} onChange={(e) => setDesc(e.target.value)} placeholder="النص (اختياري)" /></div>
-            <div className="mt-3"><FL>الرابط</FL>
-            <GI value={url} onChange={(e) => setUrl(e.target.value)} placeholder="رابط خارجي (اختياري)" /></div>
-            <div className="mt-3"><FL>النوع</FL>
-            <select value={type} onChange={(e) => setType(e.target.value as Post["type"])} style={inputSx}>
-              <option value="new">جديد</option><option value="tip">نصيحة</option><option value="update">تحديث</option><option value="ai">AI</option>
-            </select></div>
-
-            <div className="mt-5 flex gap-2">
-              <button type="button" onClick={() => setShow(false)}
-                className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-gray-500 transition-lg"
-                style={{ background: "rgba(200,195,185,0.2)" }}>
-                إلغاء
-              </button>
-              <button type="button" onClick={save}
-                className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-white transition-lg"
-                style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>
-                حفظ
-              </button>
-            </div>
+          <div onClick={() => fileRef.current?.click()}
+            className="flex cursor-pointer items-center justify-center rounded-xl border-2 border-dashed p-4 transition-lg"
+            style={{ borderColor: "rgba(200,195,185,0.5)", background: "rgba(200,195,185,0.08)" }}>
+            {imgData
+              ? <img src={imgData} alt="" className="max-h-32 rounded-lg object-contain" />
+              : <span className="text-[12px] font-semibold text-gray-400">اضغط لاختيار صورة</span>}
           </div>
-        </>
+          <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+
+          <FL>العنوان</FL>
+          <GI value={title} onChange={(e) => setTitle(e.target.value)} placeholder="العنوان (اختياري)" />
+          <FL>النص</FL>
+          <GT rows={3} value={desc} onChange={(e) => setDesc(e.target.value)} placeholder="النص (اختياري)" />
+          <FL>الرابط</FL>
+          <GI value={url} onChange={(e) => setUrl(e.target.value)} placeholder="رابط خارجي (اختياري)" />
+          <FL>النوع</FL>
+          <select value={type} onChange={(e) => setType(e.target.value as Post["type"])} style={inputSx}>
+            <option value="new">جديد</option><option value="tip">نصيحة</option><option value="update">تحديث</option><option value="ai">AI</option>
+          </select>
+
+          <div className="flex gap-2">
+            <button type="button" onClick={() => setShow(false)}
+              className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-gray-500 transition-lg"
+              style={{ background: "rgba(200,195,185,0.2)" }}>إلغاء</button>
+            <button type="button" onClick={save}
+              className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-white transition-lg"
+              style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>حفظ</button>
+          </div>
+        </div>
       )}
 
       {posts.map((p, i) => (
@@ -334,26 +308,20 @@ function CatModal({ show, onClose, onSave, edit }: { show: boolean; onClose: () 
   useEffect(() => { if (show) { setName(edit?.name ?? ""); setOrder(edit?.order ?? 0); } }, [show, edit]);
   if (!show) return null;
   return (
-    <>
-      <div className="fixed inset-0 z-40"
-        style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
-        onClick={onClose} />
-      <div className="fixed bottom-0 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 animate-scale-in rounded-t-2xl p-6 pb-8 shadow-2xl" style={{ background: "#fff" }}
-        onClick={(e) => e.stopPropagation()}>
-        <h2 className="mb-4 text-[15px] font-extrabold text-gray-900">{edit ? "تعديل صنف" : "إضافة صنف"}</h2>
-        <FL>اسم الصنف</FL>
-        <GI value={name} onChange={(e) => setName(e.target.value)} placeholder="اسم الصنف" />
-        <div className="mt-3"><FL>الترتيب</FL>
-        <input type="number" value={order} onChange={(e) => setOrder(Number(e.target.value))}
-          style={inputSx} placeholder="0" min={0} /></div>
-        <div className="mt-5 flex gap-2">
-          <button type="button" onClick={onClose} className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-gray-500 transition-lg"
-            style={{ background: "rgba(200,195,185,0.2)" }}>إلغاء</button>
-          <button type="button" onClick={() => onSave(name, order)} className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-white transition-lg"
-            style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>حفظ</button>
-        </div>
+    <div className="rounded-2xl border border-[rgba(200,195,185,0.22)] bg-white/80 p-5 shadow-sm space-y-3">
+      <h2 className="text-[15px] font-extrabold text-gray-900">{edit ? "تعديل صنف" : "إضافة صنف"}</h2>
+      <FL>اسم الصنف</FL>
+      <GI value={name} onChange={(e) => setName(e.target.value)} placeholder="اسم الصنف" />
+      <FL>الترتيب</FL>
+      <input type="number" value={order} onChange={(e) => setOrder(Number(e.target.value))}
+        style={inputSx} placeholder="0" min={0} />
+      <div className="flex gap-2">
+        <button type="button" onClick={onClose} className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-gray-500 transition-lg"
+          style={{ background: "rgba(200,195,185,0.2)" }}>إلغاء</button>
+        <button type="button" onClick={() => onSave(name, order)} className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-white transition-lg"
+          style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>حفظ</button>
       </div>
-    </>
+    </div>
   );
 }
 
@@ -384,61 +352,53 @@ function ToolModal({ show, onClose, onSave, onDelete, edit, cats }: {
 
   if (!show) return null;
   return (
-    <>
-      <div className="fixed inset-0 z-40"
-        style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
-        onClick={onClose} />
-      <div className="fixed bottom-0 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 animate-scale-in rounded-t-2xl p-6 pb-8 shadow-2xl" style={{ background: "#fff", maxHeight: "80vh", overflowY: "auto" }}
-        onClick={(e) => e.stopPropagation()}>
-        <h2 className="mb-4 text-[15px] font-extrabold text-gray-900">{edit ? "تعديل موقع" : "إضافة موقع"}</h2>
+    <div className="rounded-2xl border border-[rgba(200,195,185,0.22)] bg-white/80 p-5 shadow-sm space-y-3">
+      <h2 className="text-[15px] font-extrabold text-gray-900">{edit ? "تعديل موقع" : "إضافة موقع"}</h2>
 
-        <FL>رقم الموقع (الترتيب)</FL>
-        <input type="number" value={order} onChange={(e) => setOrder(Number(e.target.value))} style={inputSx} min={0} />
+      <FL>رقم الموقع (الترتيب)</FL>
+      <input type="number" value={order} onChange={(e) => setOrder(Number(e.target.value))} style={inputSx} min={0} />
 
-        <div className="mt-3"><FL>الاسم</FL>
-        <GI value={name} onChange={(e) => setName(e.target.value)} placeholder="اسم الموقع" /></div>
+      <FL>الاسم</FL>
+      <GI value={name} onChange={(e) => setName(e.target.value)} placeholder="اسم الموقع" />
 
-        <div className="mt-3"><FL>الوصف</FL>
-        <GT rows={2} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="وصف الموقع (اختياري)" /></div>
+      <FL>الوصف</FL>
+      <GT rows={2} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="وصف الموقع (اختياري)" />
 
-        <div className="mt-3"><FL>الصنف</FL>
-        <select value={category} onChange={(e) => setCategory(e.target.value)} style={inputSx}>
-          {cats.map((c) => <option key={c.id} value={c.name}>{c.name}</option>)}
-        </select></div>
+      <FL>الصنف</FL>
+      <select value={category} onChange={(e) => setCategory(e.target.value)} style={inputSx}>
+        {cats.map((c) => <option key={c.id} value={c.name}>{c.name}</option>)}
+      </select>
 
-        <div className="mt-3"><FL>الرابط</FL>
-        <GI value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://..." /></div>
+      <FL>الرابط</FL>
+      <GI value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://..." />
 
-        <div className="mt-3"><FL>رابط الصورة (اختياري)</FL>
-        <GI value={icon} onChange={(e) => setIcon(e.target.value)} placeholder="https://..." /></div>
+      <FL>رابط الصورة (اختياري)</FL>
+      <GI value={icon} onChange={(e) => setIcon(e.target.value)} placeholder="https://..." />
 
-        <div className="mt-3">
-          <FL>رفع صورة (اختياري)</FL>
-          <div onClick={() => fileRef.current?.click()}
-            className="flex cursor-pointer items-center justify-center rounded-xl border-2 border-dashed p-3 transition-lg"
-            style={{ borderColor: "rgba(200,195,185,0.5)", background: "rgba(200,195,185,0.08)" }}>
-            {imgData
-              ? <img src={imgData} alt="" className="max-h-24 rounded-lg object-contain" />
-              : <span className="text-[12px] font-semibold text-gray-400">اضغط لاختيار صورة</span>}
-          </div>
-          <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
-        </div>
-
-        <div className="mt-5 flex gap-2">
-          <button type="button" onClick={onClose} className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-gray-500 transition-lg"
-            style={{ background: "rgba(200,195,185,0.2)" }}>إلغاء</button>
-          <button type="button" onClick={() => onSave({ name, url, category, icon: icon || undefined, description: description || undefined, order, imgData: imgData || undefined })}
-            className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-white transition-lg"
-            style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>حفظ</button>
-          {edit && onDelete && (
-            <button type="button" onClick={onDelete} className="rounded-xl px-3 py-2.5 text-[13px] font-bold text-red-500 transition-lg"
-              style={{ background: "rgba(254,242,242,0.80)", border: "1px solid rgba(239,68,68,0.18)" }}>
-              <Trash2 className="inline h-3.5 w-3.5 ml-1" />حذف
-            </button>
-          )}
-        </div>
+      <FL>رفع صورة (اختياري)</FL>
+      <div onClick={() => fileRef.current?.click()}
+        className="flex cursor-pointer items-center justify-center rounded-xl border-2 border-dashed p-3 transition-lg"
+        style={{ borderColor: "rgba(200,195,185,0.5)", background: "rgba(200,195,185,0.08)" }}>
+        {imgData
+          ? <img src={imgData} alt="" className="max-h-24 rounded-lg object-contain" />
+          : <span className="text-[12px] font-semibold text-gray-400">اضغط لاختيار صورة</span>}
       </div>
-    </>
+      <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+
+      <div className="flex gap-2">
+        <button type="button" onClick={onClose} className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-gray-500 transition-lg"
+          style={{ background: "rgba(200,195,185,0.2)" }}>إلغاء</button>
+        <button type="button" onClick={() => onSave({ name, url, category, icon: icon || undefined, description: description || undefined, order, imgData: imgData || undefined })}
+          className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-white transition-lg"
+          style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>حفظ</button>
+        {edit && onDelete && (
+          <button type="button" onClick={onDelete} className="rounded-xl px-3 py-2.5 text-[13px] font-bold text-red-500 transition-lg"
+            style={{ background: "rgba(254,242,242,0.80)", border: "1px solid rgba(239,68,68,0.18)" }}>
+            <Trash2 className="inline h-3.5 w-3.5 ml-1" />حذف
+          </button>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -520,6 +480,7 @@ function AiEditor({ items, cats, onChange }: { items: AiToolItem[]; cats: CatIte
       {subTab === "cats" && (
         <div className="space-y-3">
           <AddBtn onClick={() => { setCatEdit(undefined); setCatShow(true); }} label="إضافة صنف" />
+          <CatModal show={catShow} onClose={() => { setCatShow(false); setCatEdit(undefined); }} onSave={saveCat} edit={catEdit} />
           <CatList cats={cats} onEdit={(c) => { setCatEdit(c); setCatShow(true); }} onDelete={deleteCat} />
         </div>
       )}
@@ -527,6 +488,9 @@ function AiEditor({ items, cats, onChange }: { items: AiToolItem[]; cats: CatIte
       {subTab === "tools" && (
         <div className="space-y-3">
           <AddBtn onClick={openToolAdd} label="إضافة موقع" />
+          <ToolModal show={toolShow} onClose={() => { setToolShow(false); setToolEditIdx(null); }}
+            onSave={saveTool} onDelete={toolEditIdx !== null ? deleteTool : undefined}
+            edit={toolEditIdx !== null ? items[toolEditIdx] : null} cats={cats} />
           {sortedItems.map((x) => {
             const realIdx = items.findIndex((t) => t.id === x.id);
             return (
@@ -545,10 +509,6 @@ function AiEditor({ items, cats, onChange }: { items: AiToolItem[]; cats: CatIte
         </div>
       )}
 
-      <CatModal show={catShow} onClose={() => { setCatShow(false); setCatEdit(undefined); }} onSave={saveCat} edit={catEdit} />
-      <ToolModal show={toolShow} onClose={() => { setToolShow(false); setToolEditIdx(null); }}
-        onSave={saveTool} onDelete={toolEditIdx !== null ? deleteTool : undefined}
-        edit={toolEditIdx !== null ? items[toolEditIdx] : null} cats={cats} />
     </div>
   );
 }
@@ -611,6 +571,7 @@ function UtilsEditor({ items, cats, onChange }: { items: UtilityItem[]; cats: Ca
       {subTab === "cats" && (
         <div className="space-y-3">
           <AddBtn onClick={() => { setCatEdit(undefined); setCatShow(true); }} label="إضافة صنف" />
+          <CatModal show={catShow} onClose={() => { setCatShow(false); setCatEdit(undefined); }} onSave={saveCat} edit={catEdit} />
           <CatList cats={cats} onEdit={(c) => { setCatEdit(c); setCatShow(true); }} onDelete={deleteCat} />
         </div>
       )}
@@ -618,6 +579,9 @@ function UtilsEditor({ items, cats, onChange }: { items: UtilityItem[]; cats: Ca
       {subTab === "tools" && (
         <div className="space-y-3">
           <AddBtn onClick={openToolAdd} label="إضافة أداة" />
+          <ToolModal show={toolShow} onClose={() => { setToolShow(false); setToolEditIdx(null); }}
+            onSave={saveTool} onDelete={toolEditIdx !== null ? deleteTool : undefined}
+            edit={toolEditIdx !== null ? items[toolEditIdx] : null} cats={cats} />
           {sortedItems.map((x) => {
             const realIdx = items.findIndex((t) => t.id === x.id);
             return (
@@ -636,10 +600,6 @@ function UtilsEditor({ items, cats, onChange }: { items: UtilityItem[]; cats: Ca
         </div>
       )}
 
-      <CatModal show={catShow} onClose={() => { setCatShow(false); setCatEdit(undefined); }} onSave={saveCat} edit={catEdit} />
-      <ToolModal show={toolShow} onClose={() => { setToolShow(false); setToolEditIdx(null); }}
-        onSave={saveTool} onDelete={toolEditIdx !== null ? deleteTool : undefined}
-        edit={toolEditIdx !== null ? items[toolEditIdx] : null} cats={cats} />
     </div>
   );
 }
