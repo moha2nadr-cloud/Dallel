@@ -123,12 +123,13 @@ function GI(p: React.InputHTMLAttributes<HTMLInputElement>) {
 function GT(p: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return <textarea {...p} style={{ ...inputSx, resize: "vertical", minHeight: 80 }} onFocus={(e) => { e.target.style.borderColor = "rgba(181,168,152,0.55)"; }} onBlur={(e) => { e.target.style.borderColor = "rgba(200,195,185,0.35)"; }} />;
 }
-function GCard({ children, onDelete }: { children: React.ReactNode; onDelete: () => void }) {
+function GCard({ children, onDelete, onEdit }: { children: React.ReactNode; onDelete: () => void; onEdit?: () => void }) {
   return (
-    <div className="lg-card rounded-2xl p-4 space-y-3">
+    <div className={`lg-card rounded-2xl p-4 space-y-3 ${onEdit ? "cursor-pointer" : ""}`}
+      onClick={(e) => { if (onEdit && (e.target as HTMLElement).tagName !== "BUTTON") onEdit(); }}>
       <div className="lg-shine-stripe mb-1" />
       {children}
-      <button type="button" onClick={onDelete}
+      <button type="button" onClick={(e) => { e.stopPropagation(); onDelete(); }}
         className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold text-red-500 transition-lg"
         style={{ background: "rgba(254,242,242,0.80)", border: "1px solid rgba(239,68,68,0.18)" }}>
         <Trash2 className="h-3 w-3" /> حذف
@@ -222,19 +223,103 @@ function SlidesEditor({ slides, onChange }: { slides: Slide[]; onChange: (s: Sli
 }
 
 function PostsEditor({ posts, onChange }: { posts: Post[]; onChange: (p: Post[]) => void }) {
+  const [show, setShow] = useState(false);
+  const [editIdx, setEditIdx] = useState<number | null>(null);
+  const [imgData, setImgData] = useState("");
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
+  const [url, setUrl] = useState("");
+  const [type, setType] = useState<Post["type"]>("new");
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  function openForAdd() {
+    setEditIdx(null); setImgData(""); setTitle(""); setDesc(""); setUrl(""); setType("new"); setShow(true);
+  }
+  function openForEdit(i: number) {
+    const p = posts[i];
+    setEditIdx(i); setImgData(p.image ?? ""); setTitle(p.title); setDesc(p.description); setUrl(p.url ?? ""); setType(p.type); setShow(true);
+  }
+  function save() {
+    const post: Post = {
+      id: editIdx !== null ? posts[editIdx].id : uid(),
+      title,
+      description: desc,
+      image: imgData || undefined,
+      url: url || undefined,
+      type,
+      date: editIdx !== null ? posts[editIdx].date : new Date().toISOString(),
+      likes: editIdx !== null ? posts[editIdx].likes : 0,
+      comments: editIdx !== null ? posts[editIdx].comments : 0,
+    };
+    const c = [...posts];
+    if (editIdx !== null) c[editIdx] = post; else c.unshift(post);
+    onChange(c);
+    setShow(false);
+  }
+  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = () => setImgData(r.result as string);
+    r.readAsDataURL(f);
+  }
+
   return (
     <div className="space-y-3">
-      <AddBtn onClick={() => onChange([{ id:uid(), title:"", description:"", type:"new", date:new Date().toISOString(), likes:0, comments:0 }, ...posts])} label="إضافة منشور" />
+      <AddBtn onClick={openForAdd} label="إضافة منشور" />
+
+      {show && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4"
+          style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
+          onClick={() => setShow(false)}>
+          <div className="w-full max-w-sm animate-scale-in rounded-2xl p-5 shadow-2xl"
+            style={{ background: "#fff" }}
+            onClick={(e) => e.stopPropagation()}>
+            <h2 className="mb-4 text-[15px] font-extrabold text-gray-900">
+              {editIdx !== null ? "تعديل منشور" : "إضافة منشور"}
+            </h2>
+
+            <div onClick={() => fileRef.current?.click()}
+              className="mb-3 flex cursor-pointer items-center justify-center rounded-xl border-2 border-dashed p-4 transition-lg"
+              style={{ borderColor: "rgba(200,195,185,0.5)", background: "rgba(200,195,185,0.08)" }}>
+              {imgData
+                ? <img src={imgData} alt="" className="max-h-32 rounded-lg object-contain" />
+                : <span className="text-[12px] font-semibold text-gray-400">اضغط لاختيار صورة</span>}
+            </div>
+            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+
+            <FL>العنوان</FL>
+            <GI value={title} onChange={(e) => setTitle(e.target.value)} placeholder="العنوان (اختياري)" />
+            <div className="mt-3"><FL>النص</FL>
+            <GT rows={3} value={desc} onChange={(e) => setDesc(e.target.value)} placeholder="النص (اختياري)" /></div>
+            <div className="mt-3"><FL>الرابط</FL>
+            <GI value={url} onChange={(e) => setUrl(e.target.value)} placeholder="رابط خارجي (اختياري)" /></div>
+            <div className="mt-3"><FL>النوع</FL>
+            <select value={type} onChange={(e) => setType(e.target.value as Post["type"])} style={inputSx}>
+              <option value="new">جديد</option><option value="tip">نصيحة</option><option value="update">تحديث</option><option value="ai">AI</option>
+            </select></div>
+
+            <div className="mt-5 flex gap-2">
+              <button type="button" onClick={() => setShow(false)}
+                className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-gray-500 transition-lg"
+                style={{ background: "rgba(200,195,185,0.2)" }}>
+                إلغاء
+              </button>
+              <button type="button" onClick={save}
+                className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-white transition-lg"
+                style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>
+                حفظ
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {posts.map((p, i) => (
-        <GCard key={p.id} onDelete={() => onChange(posts.filter((_,j)=>j!==i))}>
-          <FL>العنوان</FL><GI value={p.title} onChange={(e)=>{const c=[...posts];c[i]={...p,title:e.target.value};onChange(c);}} />
-          <FL>الوصف</FL><GT rows={3} value={p.description} onChange={(e)=>{const c=[...posts];c[i]={...p,description:e.target.value};onChange(c);}} />
-          <FL>رابط الصورة</FL><GI value={p.image??""} onChange={(e)=>{const c=[...posts];c[i]={...p,image:e.target.value};onChange(c);}} />
-          <FL>رابط خارجي</FL><GI value={p.url??""} onChange={(e)=>{const c=[...posts];c[i]={...p,url:e.target.value};onChange(c);}} />
-          <FL>النوع</FL>
-          <select value={p.type} onChange={(e)=>{const c=[...posts];c[i]={...p,type:e.target.value as Post["type"]};onChange(c);}} style={inputSx}>
-            <option value="new">جديد</option><option value="tip">نصيحة</option><option value="update">تحديث</option><option value="ai">AI</option>
-          </select>
+        <GCard key={p.id} onEdit={() => openForEdit(i)} onDelete={() => onChange(posts.filter((_,j)=>j!==i))}>
+          {(p.image ?? imgData) && <img src={p.image} alt="" className="w-full rounded-xl object-cover max-h-40" />}
+          {p.title && <h3 className="text-[14px] font-bold text-gray-800">{p.title}</h3>}
+          {p.description && <p className="text-[12px] text-gray-500 leading-relaxed">{p.description}</p>}
         </GCard>
       ))}
     </div>
