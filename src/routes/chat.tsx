@@ -9,17 +9,6 @@ import { syncChat } from "@/lib/api/sync.functions";
 import { toast } from "sonner";
 import { useCMS } from "@/lib/admin-store";
 import { useLang } from "@/lib/i18n";
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogCancel,
-  AlertDialogAction,
-} from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/chat")({
   head: () => ({ meta: [{ title: "المساعد الذكي — دليل" }] }),
@@ -93,34 +82,30 @@ function Chat() {
               <p className="text-[10px] text-gray-400">يجيب عن أسئلتك داخل التطبيق</p>
             </div>
           </div>
-          <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-            <AlertDialogTrigger asChild>
-              <button type="button" disabled={!messages.length}
-                className="lg-card flex h-9 w-9 items-center justify-center rounded-full disabled:opacity-30" aria-label="مسح">
-                <Trash2 className="h-4 w-4 text-gray-400" />
-              </button>
-            </AlertDialogTrigger>
-            <AlertDialogContent style={{ borderRadius: 20, background: "rgba(255,255,255,0.96)", backdropFilter: "blur(20px)", border: "1px solid rgba(200,195,185,0.3)", boxShadow: "0 20px 60px rgba(0,0,0,0.12)" }}>
-              <AlertDialogHeader>
-                <AlertDialogTitle className="text-[15px] font-extrabold text-gray-900 text-center">مسح المحادثة؟</AlertDialogTitle>
-                <AlertDialogDescription className="text-[12px] text-gray-500 text-center">
-                  لا يمكنك التراجع عن هذا الإجراء. سيتم حذف جميع الرسائل.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter className="flex-row gap-2 sm:justify-center">
-                <AlertDialogCancel className="mt-0 flex-1 rounded-2xl border border-[rgba(200,195,185,0.28)] bg-white px-4 py-2.5 text-[12px] font-semibold text-gray-600">
-                  إلغاء
-                </AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => { clearChatHistory(); setMessages([]); }}
-                  className="flex-1 rounded-2xl bg-red-500 px-4 py-2.5 text-[12px] font-bold text-white"
-                  style={{ boxShadow: "0 4px 14px rgba(239,68,68,0.35)" }}
-                >
-                  نعم، احذف
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <button type="button" disabled={!messages.length}
+            onClick={() => setDeleteOpen(true)}
+            className="lg-card flex h-9 w-9 items-center justify-center rounded-full disabled:opacity-30" aria-label="مسح">
+            <Trash2 className="h-4 w-4 text-gray-400" />
+          </button>
+          {deleteOpen && (
+            <div onClick={() => setDeleteOpen(false)} className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+              <div onClick={e => e.stopPropagation()} className="mx-4 w-[280px] rounded-2xl bg-white px-5 py-5 text-center shadow-lg">
+                <p className="text-[14px] font-bold text-gray-900">مسح المحادثة؟</p>
+                <p className="mt-1 text-[11px] text-gray-500">سيتم حذف جميع الرسائل.</p>
+                <div className="mt-4 flex gap-2">
+                  <button type="button" onClick={() => setDeleteOpen(false)}
+                    className="flex-1 rounded-xl border border-[rgba(200,195,185,0.28)] bg-white py-2 text-[12px] font-semibold text-gray-600">
+                    إلغاء
+                  </button>
+                  <button type="button" onClick={() => { clearChatHistory(); setMessages([]); setDeleteOpen(false); }}
+                    className="flex-1 rounded-xl bg-red-500 py-2 text-[12px] font-bold text-white"
+                    style={{ boxShadow: "0 4px 14px rgba(239,68,68,0.35)" }}>
+                    احذف
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </header>
 
         {/* Messages */}
