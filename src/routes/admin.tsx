@@ -107,7 +107,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           {tab === "posts"  && <PostsEditor  posts={cms.posts}   onChange={async (p) => { try { await setCms({ ...cms, posts: p }); toast.success("تم الحفظ"); } catch { toast.error("فشل الحفظ"); } }} />}
           {tab === "ai"     && <AiEditor    items={cms.aiTools}  cats={cms.aiCategories}   onChange={async (i, c) => { try { await setCms({ ...cms, aiTools: i, aiCategories: c }); toast.success("تم الحفظ"); } catch { toast.error("فشل الحفظ"); } }} />}
           {tab === "utils"  && <UtilsEditor items={cms.utilities} cats={cms.utilCategories} onChange={async (i, c) => { try { await setCms({ ...cms, utilities: i, utilCategories: c }); toast.success("تم الحفظ"); } catch { toast.error("فشل الحفظ"); } }} />}
-          {tab === "chat"   && <ChatEditor prompt={cms.chatSystemPrompt} model={cms.chatModel} onSave={(p, m) => { setCms({ ...cms, chatSystemPrompt: p, chatModel: m }); toast.success("تم الحفظ"); }} />}
+          {tab === "chat"   && <ChatEditor prompt={cms.chatSystemPrompt} model={cms.chatModel} onSave={async (p, m) => { try { await setCms({ ...cms, chatSystemPrompt: p, chatModel: m }); toast.success("تم الحفظ"); } catch { toast.error("فشل الحفظ"); } }} />}
         </div>
       </div>
     </div>
