@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { adminLogin, adminLogout, isAdminAuthed, uid, useCMS, type AiToolItem, type Post, type Slide, type UtilityItem } from "@/lib/admin-store";
 import { Lock, LogOut, Plus, Trash2, Save } from "lucide-react";
 import { toast } from "sonner";
@@ -147,14 +147,74 @@ function AddBtn({ onClick, label }: { onClick: () => void; label: string }) {
 }
 
 function SlidesEditor({ slides, onChange }: { slides: Slide[]; onChange: (s: Slide[]) => void }) {
+  const [show, setShow] = useState(false);
+  const [imgData, setImgData] = useState("");
+  const [imgErr, setImgErr] = useState(false);
+  const [title, setTitle] = useState("");
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  function open() { setImgData(""); setTitle(""); setImgErr(false); setShow(true); }
+  function save() {
+    if (!imgData) { setImgErr(true); return; }
+    onChange([...slides, { id: uid(), image: imgData, title: title.trim() || undefined }]);
+    setShow(false);
+  }
+
+  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = () => { setImgData(r.result as string); setImgErr(false); };
+    r.readAsDataURL(f);
+  }
+
   return (
     <div className="space-y-3">
-      <AddBtn onClick={() => onChange([...slides, { id: uid(), image: "", title: "" }])} label="إضافة سلايد" />
+      <AddBtn onClick={open} label="إضافة سلايد" />
+
+      {/* Modal */}
+      {show && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4"
+          style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
+          onClick={() => setShow(false)}>
+          <div className="w-full max-w-sm animate-scale-in rounded-2xl p-5 shadow-2xl lg-card"
+            style={{ background: "#fff" }}
+            onClick={(e) => e.stopPropagation()}>
+            <h2 className="mb-4 text-[15px] font-extrabold text-gray-900">إضافة سلايد</h2>
+
+            <FL>الصورة</FL>
+            <div onClick={() => fileRef.current?.click()}
+              className={`mb-3 flex cursor-pointer items-center justify-center rounded-xl border-2 border-dashed p-4 transition-lg ${imgErr ? "border-red-400 bg-red-50" : "border-[rgba(200,195,185,0.5)] bg-[rgba(200,195,185,0.08)]"}`}>
+              {imgData
+                ? <img src={imgData} alt="" className="max-h-32 rounded-lg object-contain" />
+                : <span className="text-[12px] font-semibold text-gray-400">اضغط لاختيار صورة</span>}
+            </div>
+            <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+
+            <FL>العنوان</FL>
+            <GI value={title} onChange={(e) => setTitle(e.target.value)} placeholder="عنوان السلايد (اختياري)" />
+
+            <div className="mt-5 flex gap-2">
+              <button type="button" onClick={() => setShow(false)}
+                className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-gray-500 transition-lg"
+                style={{ background: "rgba(200,195,185,0.2)" }}>
+                إلغاء
+              </button>
+              <button type="button" onClick={save}
+                className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-white transition-lg"
+                style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>
+                حفظ
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {slides.map((s, i) => (
         <GCard key={s.id} onDelete={() => onChange(slides.filter((_, j) => j !== i))}>
-          <FL>رابط الصورة</FL><GI value={s.image} onChange={(e) => { const c=[...slides]; c[i]={...s,image:e.target.value}; onChange(c); }} placeholder="https://..." />
-          <FL>عنوان (اختياري)</FL><GI value={s.title??""} onChange={(e) => { const c=[...slides]; c[i]={...s,title:e.target.value}; onChange(c); }} />
-          <FL>رابط (اختياري)</FL><GI value={s.link??""} onChange={(e) => { const c=[...slides]; c[i]={...s,link:e.target.value}; onChange(c); }} />
+          {s.image && <img src={s.image} alt="" className="w-full rounded-xl object-cover max-h-40" />}
+          <FL>العنوان</FL><GI value={s.title??""} onChange={(e) => { const c=[...slides]; c[i]={...s,title:e.target.value}; onChange(c); }} />
+          <FL>الرابط</FL><GI value={s.link??""} onChange={(e) => { const c=[...slides]; c[i]={...s,link:e.target.value}; onChange(c); }} placeholder="https://..." />
         </GCard>
       ))}
     </div>
