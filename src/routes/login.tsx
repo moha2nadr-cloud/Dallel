@@ -4,18 +4,25 @@ import { useEffect, useRef, useCallback, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { getProfile as getServerProfile } from "@/lib/api/sync.functions";
 import { LiquidOrbs } from "@/components/LiquidOrbs";
+import logoSrc from "@/assets/logo-daleel.png";
 
 const CLIENT_ID = "1036057874420-d2h6r8s755huud2336qqanvqj16soh4j.apps.googleusercontent.com";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
-      { title: "تسجيل الدخول — دليل" },
-      { name: "description", content: "سجّل الدخول بحساب Google." },
+      { title: "دليل — بوابتك الذكية للطلاب" },
+      { name: "description", content: "اكتشف أدوات الذكاء الاصطناعي حسب تخصصك الجامعي." },
     ],
   }),
   component: Login,
 });
+
+const STATS = [
+  { num: "+500", label: "أداة ذكاء اصطناعي" },
+  { num: "+60",  label: "تخصص جامعي" },
+  { num: "+10K", label: "طالب يستخدمه" },
+];
 
 function Login() {
   const navigate = useNavigate();
@@ -30,24 +37,12 @@ function Login() {
       const userId = data.sub as string;
       setUserId(userId);
       setUserEmail(data.email as string);
-      const googleProfile: Profile = {
-        name: data.name, email: data.email, picture: data.picture,
-        age: 0, specialization: "", university: "",
-      };
-      setProfile(googleProfile);
+      const gp: Profile = { name: data.name, email: data.email, picture: data.picture, age: 0, specialization: "", university: "" };
+      setProfile(gp);
       if (isOnboarded()) {
         try {
-          const server = await loadServerProfile({ data: { userId } });
-          if (server) {
-            setProfile({
-              name: server.name || googleProfile.name,
-              email: googleProfile.email || server.email,
-              picture: googleProfile.picture || server.picture,
-              age: server.age ?? 0,
-              specialization: server.specialization || "",
-              university: server.university || "",
-            });
-          }
+          const s = await loadServerProfile({ data: { userId } });
+          if (s) setProfile({ name: s.name || gp.name, email: gp.email || s.email, picture: gp.picture || s.picture, age: s.age ?? 0, specialization: s.specialization || "", university: s.university || "" });
         } catch {}
         navigate({ to: "/home" });
       } else {
@@ -63,146 +58,127 @@ function Login() {
     const init = () => {
       google.accounts.id.initialize({ client_id: CLIENT_ID, callback: handleCredential, cancel_on_tap_outside: false });
       if (googleBtnRef.current) {
-        google.accounts.id.renderButton(googleBtnRef.current, { type: "standard", shape: "rectangular", theme: "outline", size: "large", text: "signin_with" });
+        google.accounts.id.renderButton(googleBtnRef.current, { type: "standard", shape: "rectangular", theme: "outline", size: "large" });
       }
     };
-    if (typeof google !== "undefined" && google.accounts?.id) { init(); }
-    else {
-      const s = document.createElement("script");
-      s.src = "https://accounts.google.com/gsi/client";
-      s.async = true; s.defer = true; s.onload = init;
-      document.head.appendChild(s);
-    }
+    if (typeof google !== "undefined" && google.accounts?.id) init();
+    else { const s = document.createElement("script"); s.src = "https://accounts.google.com/gsi/client"; s.async = true; s.defer = true; s.onload = init; document.head.appendChild(s); }
   }, [handleCredential]);
 
   const handleGoogleSignIn = () => {
-    const btn = googleBtnRef.current?.querySelector("button[aria-labelledby]");
-    if (btn) { setLoading(true); (btn as HTMLButtonElement).click(); }
+    const btn = googleBtnRef.current?.querySelector("button[aria-labelledby]") as HTMLButtonElement | null;
+    if (btn) { setLoading(true); btn.click(); }
     else google.accounts.id.prompt();
   };
 
   return (
-    <div
-      className="relative flex min-h-screen flex-col items-center justify-between overflow-hidden px-6 py-16"
-      style={{ background: "linear-gradient(160deg, #0e1828 0%, #0a1422 100%)" }}
-    >
-      {/* Vivid liquid orbs */}
+    <div className="relative flex min-h-screen flex-col items-center overflow-hidden bg-white px-5 py-0">
       <LiquidOrbs />
 
-      {/* Logo + headline */}
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center text-center gap-6">
-        {/* Glass logo */}
-        <div
-          className="relative flex h-24 w-24 items-center justify-center rounded-[1.75rem] animate-logo-enter"
-          style={{
-            background: "linear-gradient(145deg, rgba(200,228,255,0.16) 0%, rgba(80,140,210,0.12) 100%)",
-            border: "1px solid rgba(255,255,255,0.28)",
-            boxShadow:
-              "0 20px 56px rgba(80,140,220,0.35), " +
-              "0 4px 16px rgba(0,0,0,0.30), " +
-              "inset 0 1px 0 rgba(255,255,255,0.24)",
-            backdropFilter: "blur(28px)",
-          }}
-        >
-          {/* Top-left shine */}
-          <div
-            className="absolute inset-0 rounded-[1.75rem]"
-            style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.16) 0%, transparent 50%)" }}
-          />
-          <svg viewBox="0 0 48 48" className="relative h-14 w-14" aria-hidden>
-            <defs>
-              <linearGradient id="lg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#e8f2fb" />
-                <stop offset="100%" stopColor="#96b8d6" />
-              </linearGradient>
-            </defs>
-            <text x="24" y="37" textAnchor="middle"
-              fontFamily="Tajawal, sans-serif" fontWeight="900" fontSize="34"
-              fill="url(#lg-grad)">
-              د
-            </text>
-          </svg>
-        </div>
+      <div className="relative z-10 flex w-full max-w-sm flex-1 flex-col items-center justify-between py-14">
 
-        <div className="animate-reveal-up" style={{ animationDelay: "0.28s" }}>
-          <h1
-            className="text-[32px] font-extrabold leading-tight"
-            style={{
-              background: "linear-gradient(135deg, #e8f2fb 0%, #c4d8ea 55%, #6b92ba 100%)",
-              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-            }}
-          >
-            مرحباً بك في دليل
-          </h1>
-          <p className="mt-2 max-w-[260px] text-[13px] leading-relaxed text-[#6b92ba]">
-            بوابتك الذكية لاكتشاف أدوات الذكاء الاصطناعي حسب تخصصك الجامعي
-          </p>
-        </div>
-
-        {/* Feature chips */}
-        <div className="flex flex-wrap justify-center gap-2 animate-reveal-up" style={{ animationDelay: "0.38s" }}>
-          {["أدوات AI", "دراسة ذكية", "مجتمع طلابي"].map((f) => (
-            <span
-              key={f}
-              className="rounded-full px-3 py-1 text-[11px] font-semibold text-[#c4d8ea]"
-              style={{
-                background: "rgba(200,228,255,0.12)",
-                border: "1px solid rgba(255,255,255,0.22)",
-                backdropFilter: "blur(12px)",
-              }}
-            >
-              {f}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Sign-in card */}
-      <div className="relative z-10 w-full max-w-sm animate-reveal-up" style={{ animationDelay: "0.48s" }}>
-        <div
-          className="rounded-3xl p-5"
-          style={{
-            background: "linear-gradient(148deg, rgba(200,228,252,0.14) 0%, rgba(120,175,235,0.09) 100%)",
-            border: "1px solid rgba(255,255,255,0.26)",
-            backdropFilter: "blur(32px) saturate(200%)",
-            boxShadow:
-              "0 20px 56px rgba(0,0,0,0.32), " +
-              "inset 0 1px 0 rgba(255,255,255,0.22)",
-          }}
-        >
-          {/* Inset shine stripe */}
-          <div
-            className="absolute top-0 left-6 right-6 h-px rounded-full"
-            style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)" }}
+        {/* ── TOP: Logo + headline ── */}
+        <div className="flex flex-col items-center text-center gap-5 w-full animate-reveal-up">
+          {/* Real دليل logo */}
+          <img
+            src={logoSrc}
+            alt="دليل"
+            className="animate-logo-enter"
+            style={{ width: 160, height: "auto", objectFit: "contain" }}
           />
 
-          <p className="mb-4 text-center text-[12px] text-[#6b92ba]">
-            تسجيل الدخول للوصول إلى كل المميزات
-          </p>
-          <div className="relative">
-            <button
-              type="button"
-              onClick={handleGoogleSignIn}
-              disabled={loading}
-              className="flex w-full items-center justify-center gap-3 rounded-2xl px-5 py-3.5 text-[13px] font-bold transition-glass active:scale-[0.98] disabled:opacity-60"
-              style={{
-                background: "linear-gradient(145deg, rgba(255,255,255,0.95), rgba(230,245,255,0.90))",
-                color: "#141E30",
-                boxShadow: "0 6px 20px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.70)",
-              }}
-            >
-              {loading
-                ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#35577D] border-t-transparent" />
-                : <GoogleIcon />
-              }
-              {loading ? "جاري تسجيل الدخول..." : "تسجيل الدخول بـ Google"}
-            </button>
-            <div ref={googleBtnRef} className="absolute inset-0 opacity-0" aria-hidden />
+          <div style={{ animationDelay: "0.3s" }} className="animate-reveal-up">
+            <h1 className="text-[28px] font-extrabold text-gray-900 leading-snug">
+              أهلاً بك في <span className="logo-gradient">دليل</span>
+            </h1>
+            <p className="mt-2 text-[13px] text-gray-500 leading-relaxed max-w-[260px]">
+              بوابتك الذكية لاكتشاف أفضل أدوات الذكاء الاصطناعي حسب تخصصك الجامعي
+            </p>
+          </div>
+
+          {/* Stats row */}
+          <div className="flex items-center justify-center gap-3 mt-1 animate-reveal-up" style={{ animationDelay: "0.4s" }}>
+            {STATS.map((s, i) => (
+              <div
+                key={i}
+                className="lg-card flex flex-col items-center rounded-2xl px-3 py-2.5"
+                style={{ minWidth: 82 }}
+              >
+                <span
+                  className="text-[17px] font-extrabold"
+                  style={{
+                    background: "linear-gradient(135deg, #A09282, #72665A)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  {s.num}
+                </span>
+                <span className="text-[10px] text-gray-500 mt-0.5 text-center leading-tight">{s.label}</span>
+              </div>
+            ))}
           </div>
         </div>
-        <p className="pt-5 text-center text-[10px] leading-relaxed text-[#2a4166]">
-          بدخولك فأنت توافق على شروط الاستخدام وسياسة الخصوصية
-        </p>
+
+        {/* ── MIDDLE SPACER ── */}
+        <div className="flex-1" />
+
+        {/* ── BOTTOM: Sign in + credit ── */}
+        <div className="w-full flex flex-col items-center gap-4 animate-reveal-up" style={{ animationDelay: "0.5s" }}>
+          {/* Glass sign-in card */}
+          <div
+            className="lg-panel w-full rounded-3xl p-5"
+          >
+            {/* Shine */}
+            <div className="lg-shine-stripe mb-4" />
+
+            <p className="text-center text-[12px] text-gray-500 mb-4">
+              سجّل الدخول للوصول إلى كل المميزات
+            </p>
+
+            <div className="relative">
+              <button
+                type="button"
+                onClick={handleGoogleSignIn}
+                disabled={loading}
+                className="flex w-full items-center justify-center gap-3 rounded-2xl border px-5 py-3.5 text-[13px] font-bold text-gray-800 transition-lg active:scale-[0.98] disabled:opacity-60"
+                style={{
+                  background: "linear-gradient(145deg,rgba(255,255,255,0.98),rgba(250,249,247,0.95))",
+                  border: "1px solid rgba(200,195,185,0.40)",
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,1)",
+                }}
+              >
+                {loading
+                  ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#B5A898] border-t-transparent" />
+                  : <GoogleIcon />
+                }
+                {loading ? "جاري تسجيل الدخول..." : "تسجيل الدخول بـ Google"}
+              </button>
+              <div ref={googleBtnRef} className="absolute inset-0 opacity-0" aria-hidden />
+            </div>
+          </div>
+
+          <p className="text-[10px] text-gray-400 text-center">
+            بدخولك فأنت توافق على شروط الاستخدام وسياسة الخصوصية
+          </p>
+
+          {/* Studio credit */}
+          <div className="flex flex-col items-center gap-0.5 pb-2">
+            <span className="text-[9px] uppercase tracking-[0.35em] text-gray-300">Developed by</span>
+            <span
+              className="text-[12px] font-black tracking-[0.25em] uppercase"
+              style={{
+                background: "linear-gradient(135deg, #B5A898, #8B7D6F)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              NOVA STUDIO
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );
