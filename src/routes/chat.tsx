@@ -176,7 +176,7 @@ function Chat() {
         </div>
 
         {/* Input */}
-        <div className="px-4 pb-5 pt-1">
+        <div className="px-4 pb-7 pt-1">
           <div className="flex items-center gap-2 rounded-2xl px-4 py-1.5"
             style={{ background: "rgba(255,255,255,0.90)", border: "1px solid rgba(200,195,185,0.30)", boxShadow: "0 2px 12px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.95)" }}>
             <input
