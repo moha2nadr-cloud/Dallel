@@ -438,7 +438,7 @@ function ToolModal({ show, onClose, onSave, onDelete, edit, cats }: {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
