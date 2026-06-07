@@ -15,11 +15,10 @@ const TABS = [
   { key: "post", label: "منشورات" },
   { key: "ai",   label: "مواقع AI" },
   { key: "tool", label: "أدوات" },
-  { key: "chat", label: "محادثات" },
 ] as const;
 
 function Favorites() {
-  const [active, setActive] = useState<"post" | "ai" | "tool" | "chat">("post");
+  const [active, setActive] = useState<"post" | "ai" | "tool">("post");
   const [savedPosts, setSavedPosts] = useState(() => feedPosts.filter((p) => getFavs("post").includes(p.id)));
   const [savedTools, setSavedTools] = useState(() => utilityTools.filter((t) => getFavs("tool").includes(t.id)));
   const [savedAi, setSavedAi] = useState(() =>
@@ -43,7 +42,7 @@ function Favorites() {
     }).filter(Boolean) as Array<{ name: string; url: string; catName: string; id: string }>);
   }, []);
 
-  const counts = { post: savedPosts.length, ai: savedAi.length, tool: savedTools.length, chat: 0 };
+  const counts = { post: savedPosts.length, ai: savedAi.length, tool: savedTools.length };
 
   return (
     <WithBottomBar>
@@ -109,7 +108,6 @@ function Favorites() {
             </ul>
         )}
 
-        {active === "chat" && <Empty msg="لا توجد محادثات محفوظة" />}
       </div>
     </WithBottomBar>
   );
