@@ -1,9 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { WithBottomBar } from "@/components/BottomBar";
-import { clearProfile, getProfile, clearChatHistory, getFavs, getLikes, getUserId, clearAll } from "@/lib/storage";
+import { clearProfile, getProfile, setProfile, clearChatHistory, getFavs, getLikes, getUserId, clearAll } from "@/lib/storage";
 import { useEffect, useState, useRef } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { syncProfile, syncFavorites, syncLikes, syncChat } from "@/lib/api/sync.functions";
+import { syncProfile, syncFavorites, syncLikes, syncChat, getProfile as getProfileFn } from "@/lib/api/sync.functions";
 import { Globe, Info, LogOut, Trash2, User, Pencil, AlertTriangle, ChevronLeft } from "lucide-react";
 import { useLang, setLang, type Lang } from "@/lib/i18n";
 
@@ -20,7 +20,21 @@ function Settings() {
   const doSyncFavs    = useServerFn(syncFavorites);
   const doSyncLikes   = useServerFn(syncLikes);
   const doSyncChat    = useServerFn(syncChat);
-  useEffect(() => setP(getProfile()), []);
+  const doGetProfile  = useServerFn(getProfileFn);
+
+  useEffect(() => {
+    setP(getProfile());
+    // sync latest profile from server on mount
+    const userId = getUserId();
+    if (userId) {
+      doGetProfile({ data: { userId } }).then((server) => {
+        if (server && server.name) {
+          setProfile(server);
+          setP(server);
+        }
+      }).catch(() => {});
+    }
+  }, [doGetProfile]);
 
   const [modal, setModal] = useState<"logout" | "delete" | "lang" | null>(null);
   const [countdown, setCountdown] = useState(7);

@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet, Link, createRootRouteWithContext, useRouter, useRouterState, HeadContent, Scripts } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { applyTheme, getTheme } from "../lib/theme";
@@ -78,6 +78,37 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const { location } = useRouterState();
   useEffect(() => { applyTheme(getTheme()); applyLang(getLang()); }, []);
+
+  // background sync: when app comes to foreground
+  useEffect(() => {
+    const sync = async () => {
+      if (typeof window === "undefined") return;
+      const { getUserId, getProfile: getLocalProfile, getFavs, getLikes, getChatHistory } = await import("@/lib/storage");
+      const { syncProfile, syncFavorites, syncLikes, syncChat } = await import("@/lib/api/sync.functions");
+      const userId = getUserId();
+      if (!userId) return;
+      try {
+        const p = getLocalProfile();
+        if (p) await syncProfile({ data: { userId, ...p } });
+        for (const kind of ["post", "ai", "tool", "chat"] as const) {
+          const ids = getFavs(kind);
+          if (ids.length) await syncFavorites({ data: { userId, kind, itemIds: ids } });
+        }
+        const lm = getLikes();
+        const li = Object.keys(lm).filter((k) => lm[k]);
+        if (li.length) await syncLikes({ data: { userId, itemIds: li } });
+        const ch = getChatHistory();
+        if (ch.length) await syncChat({ data: { userId, messages: ch } });
+      } catch { /* silent */ }
+    };
+    // sync on mount
+    sync();
+    // sync on visibility change (app foreground)
+    const h = () => { if (document.visibilityState === "visible") sync(); };
+    document.addEventListener("visibilitychange", h);
+    return () => document.removeEventListener("visibilitychange", h);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <div key={location.pathname} className="animate-page-enter">

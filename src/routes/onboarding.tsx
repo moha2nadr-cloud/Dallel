@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { setProfile, getProfile, getUserId, setOnboarded, setProfileBackup } from "@/lib/storage";
 import { ChevronRight, X, Check } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
@@ -30,11 +30,20 @@ function Onboarding() {
   const doSyncProfile = useServerFn(syncProfile);
   const total = 4;
 
+  const syncToServer = useCallback(() => {
+    const userId = getUserId();
+    if (!userId) return;
+    const ex = getProfile();
+    const profile = { ...ex, name: name.trim(), age, specialization: spec.trim(), university: uni.trim() };
+    doSyncProfile({ data: { userId, ...profile } }).catch(() => {});
+  }, [name, age, spec, uni, doSyncProfile]);
+
   useEffect(() => {
     const ex = getProfile();
     const profile = { ...ex, name: name.trim(), age, specialization: spec.trim(), university: uni.trim() };
     setProfile(profile);
-  }, [name, age, spec, uni]);
+    syncToServer();
+  }, [name, age, spec, uni, syncToServer]);
 
   const canNext = [
     name.trim().length >= 2,
