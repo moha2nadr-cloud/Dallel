@@ -12,6 +12,11 @@ export type Post = {
   likes?: number;
   comments?: number;
 };
+export type CatItem = {
+  id: string;
+  name: string;
+  order: number;
+};
 export type AiToolItem = {
   id: string;
   name: string;
@@ -19,6 +24,7 @@ export type AiToolItem = {
   category: string;
   icon?: string; // image URL
   description?: string;
+  order: number;
 };
 export type UtilityItem = {
   id: string;
@@ -27,6 +33,7 @@ export type UtilityItem = {
   category: string;
   icon?: string;
   description?: string;
+  order: number;
 };
 
 export type CMS = {
@@ -34,8 +41,8 @@ export type CMS = {
   posts: Post[];
   aiTools: AiToolItem[];
   utilities: UtilityItem[];
-  aiCategories: string[];
-  utilCategories: string[];
+  aiCategories: CatItem[];
+  utilCategories: CatItem[];
   chatSystemPrompt: string;
   chatModel: string;
   appName: { ar: string; en: string };
@@ -69,7 +76,18 @@ export function getCMS(): CMS {
   try {
     const raw = localStorage.getItem(KEY);
     if (!raw) return DEFAULT;
-    return { ...DEFAULT, ...(JSON.parse(raw) as Partial<CMS>) };
+    const parsed = JSON.parse(raw);
+    // migrate legacy string[] cats to CatItem[]
+    if (parsed.aiCategories && Array.isArray(parsed.aiCategories) && typeof parsed.aiCategories[0] === "string") {
+      parsed.aiCategories = (parsed.aiCategories as string[]).map((name, i) => ({ id: uid(), name, order: i + 1 }));
+    }
+    if (parsed.utilCategories && Array.isArray(parsed.utilCategories) && typeof parsed.utilCategories[0] === "string") {
+      parsed.utilCategories = (parsed.utilCategories as string[]).map((name, i) => ({ id: uid(), name, order: i + 1 }));
+    }
+    // migrate legacy items without order
+    if (parsed.aiTools) parsed.aiTools = parsed.aiTools.map((t: AiToolItem, i: number) => ({ ...t, order: t.order ?? i + 1 }));
+    if (parsed.utilities) parsed.utilities = parsed.utilities.map((t: UtilityItem, i: number) => ({ ...t, order: t.order ?? i + 1 }));
+    return { ...DEFAULT, ...(parsed as Partial<CMS>) };
   } catch {
     return DEFAULT;
   }

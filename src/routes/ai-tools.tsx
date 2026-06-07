@@ -24,7 +24,7 @@ function AiTools() {
 
   const cats = useMemo(() => {
     const from = Array.from(new Set(cms.aiTools.map((x) => x.category).filter(Boolean)));
-    return Array.from(new Set([...cms.aiCategories, ...from]));
+    return Array.from(new Set([...cms.aiCategories.map((c) => c.name), ...from]));
   }, [cms.aiTools, cms.aiCategories]);
 
   const filtered = useMemo(() => {

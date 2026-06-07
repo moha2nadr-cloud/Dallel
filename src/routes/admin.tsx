@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { adminLogin, adminLogout, isAdminAuthed, uid, useCMS, type AiToolItem, type Post, type Slide, type UtilityItem } from "@/lib/admin-store";
+import { adminLogin, adminLogout, isAdminAuthed, uid, useCMS, type AiToolItem, type CatItem, type Post, type Slide, type UtilityItem } from "@/lib/admin-store";
 import { Lock, LogOut, Plus, Trash2, Save } from "lucide-react";
 import { toast } from "sonner";
 
@@ -326,70 +326,318 @@ function PostsEditor({ posts, onChange }: { posts: Post[]; onChange: (p: Post[])
   );
 }
 
-function CatMgr({ cats, onChange }: { cats: string[]; onChange: (c: string[]) => void }) {
-  const [v, setV] = useState("");
+type CatOrTool<T> = { cats: CatItem[]; items: T[]; onCats: (c: CatItem[]) => void; onItems: (i: T[]) => void; catLabel: string; itemLabel: string };
+
+function CatModal({ show, onClose, onSave, edit }: { show: boolean; onClose: () => void; onSave: (name: string, order: number) => void; edit?: CatItem }) {
+  const [name, setName] = useState("");
+  const [order, setOrder] = useState(0);
+  useEffect(() => { if (show) { setName(edit?.name ?? ""); setOrder(edit?.order ?? 0); } }, [show, edit]);
+  if (!show) return null;
   return (
-    <div className="lg-card rounded-2xl p-4">
-      <FL>الأصناف</FL>
-      <div className="mt-2 flex flex-wrap gap-1.5">
-        {cats.map((c) => (
-          <span key={c} className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold text-[#8B7D6F]"
-            style={{ background: "rgba(181,168,152,0.12)", border: "1px solid rgba(181,168,152,0.25)" }}>
-            {c}
-            <button type="button" onClick={() => onChange(cats.filter(x=>x!==c))} className="text-red-400 ml-1">×</button>
-          </span>
-        ))}
-      </div>
-      <div className="mt-2 flex gap-1.5">
-        <GI value={v} onChange={(e)=>setV(e.target.value)} placeholder="اسم الصنف" />
-        <button type="button" onClick={()=>{if(v.trim()&&!cats.includes(v.trim())){onChange([...cats,v.trim()]);setV("");}}}
-          className="rounded-xl px-3 py-2 text-[12px] font-bold text-white transition-lg"
-          style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", whiteSpace:"nowrap" }}>
-          إضافة
-        </button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 pt-[15vh]"
+      style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
+      onClick={onClose}>
+      <div className="w-full max-w-sm animate-scale-in rounded-2xl p-5 shadow-2xl" style={{ background: "#fff" }}
+        onClick={(e) => e.stopPropagation()}>
+        <h2 className="mb-4 text-[15px] font-extrabold text-gray-900">{edit ? "تعديل صنف" : "إضافة صنف"}</h2>
+        <FL>اسم الصنف</FL>
+        <GI value={name} onChange={(e) => setName(e.target.value)} placeholder="اسم الصنف" />
+        <div className="mt-3"><FL>الترتيب</FL>
+        <input type="number" value={order} onChange={(e) => setOrder(Number(e.target.value))}
+          style={inputSx} placeholder="0" min={0} /></div>
+        <div className="mt-5 flex gap-2">
+          <button type="button" onClick={onClose} className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-gray-500 transition-lg"
+            style={{ background: "rgba(200,195,185,0.2)" }}>إلغاء</button>
+          <button type="button" onClick={() => onSave(name, order)} className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-white transition-lg"
+            style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>حفظ</button>
+        </div>
       </div>
     </div>
   );
 }
 
-function AiEditor({ items, cats, onChange }: { items: AiToolItem[]; cats: string[]; onChange: (i: AiToolItem[], c: string[]) => void }) {
+function ToolModal({ show, onClose, onSave, onDelete, edit, cats }: {
+  show: boolean; onClose: () => void;
+  onSave: (data: { name: string; url: string; category: string; icon?: string; description?: string; order: number; imgData?: string }) => void;
+  onDelete?: () => void; edit?: AiToolItem | UtilityItem | null; cats: CatItem[];
+}) {
+  const [name, setName] = useState("");
+  const [url, setUrl] = useState("");
+  const [category, setCategory] = useState("");
+  const [icon, setIcon] = useState("");
+  const [description, setDescription] = useState("");
+  const [order, setOrder] = useState(0);
+  const [imgData, setImgData] = useState("");
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!show) return;
+    setName(edit?.name ?? ""); setUrl(edit?.url ?? ""); setCategory(edit?.category ?? cats[0]?.name ?? "");
+    setIcon(edit?.icon ?? ""); setDescription(edit?.description ?? ""); setOrder(edit?.order ?? 0); setImgData("");
+  }, [show, edit, cats]);
+
+  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const f = e.target.files?.[0]; if (!f) return;
+    const r = new FileReader(); r.onload = () => setImgData(r.result as string); r.readAsDataURL(f);
+  }
+
+  if (!show) return null;
   return (
-    <div className="space-y-3">
-      <CatMgr cats={cats} onChange={(c)=>onChange(items,c)} />
-      <AddBtn onClick={()=>onChange([...items,{id:uid(),name:"",url:"",category:cats[0]??""}],cats)} label="إضافة أداة AI" />
-      {items.map((x,i)=>(
-        <GCard key={x.id} onDelete={()=>onChange(items.filter((_,j)=>j!==i),cats)}>
-          <FL>الاسم</FL><GI value={x.name} onChange={(e)=>{const c=[...items];c[i]={...x,name:e.target.value};onChange(c,cats);}} />
-          <FL>الرابط</FL><GI value={x.url}  onChange={(e)=>{const c=[...items];c[i]={...x,url:e.target.value};onChange(c,cats);}}  />
-          <FL>رابط الأيقونة</FL><GI value={x.icon??""} onChange={(e)=>{const c=[...items];c[i]={...x,icon:e.target.value};onChange(c,cats);}} placeholder="https://..." />
-          <FL>الصنف</FL>
-          <select value={x.category} onChange={(e)=>{const c=[...items];c[i]={...x,category:e.target.value};onChange(c,cats);}} style={inputSx}>
-            <option value="">—</option>{cats.map(c=><option key={c} value={c}>{c}</option>)}
-          </select>
-          <FL>الوصف</FL><GT rows={2} value={x.description??""} onChange={(e)=>{const c=[...items];c[i]={...x,description:e.target.value};onChange(c,cats);}} />
-        </GCard>
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 pt-[15vh]"
+      style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
+      onClick={onClose}>
+      <div className="w-full max-w-sm animate-scale-in rounded-2xl p-5 shadow-2xl" style={{ background: "#fff", maxHeight: "85vh", overflowY: "auto" }}
+        onClick={(e) => e.stopPropagation()}>
+        <h2 className="mb-4 text-[15px] font-extrabold text-gray-900">{edit ? "تعديل موقع" : "إضافة موقع"}</h2>
+
+        <FL>رقم الموقع (الترتيب)</FL>
+        <input type="number" value={order} onChange={(e) => setOrder(Number(e.target.value))} style={inputSx} min={0} />
+
+        <div className="mt-3"><FL>الاسم</FL>
+        <GI value={name} onChange={(e) => setName(e.target.value)} placeholder="اسم الموقع" /></div>
+
+        <div className="mt-3"><FL>الوصف</FL>
+        <GT rows={2} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="وصف الموقع (اختياري)" /></div>
+
+        <div className="mt-3"><FL>الصنف</FL>
+        <select value={category} onChange={(e) => setCategory(e.target.value)} style={inputSx}>
+          {cats.map((c) => <option key={c.id} value={c.name}>{c.name}</option>)}
+        </select></div>
+
+        <div className="mt-3"><FL>الرابط</FL>
+        <GI value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://..." /></div>
+
+        <div className="mt-3"><FL>رابط الصورة (اختياري)</FL>
+        <GI value={icon} onChange={(e) => setIcon(e.target.value)} placeholder="https://..." /></div>
+
+        <div className="mt-3">
+          <FL>رفع صورة (اختياري)</FL>
+          <div onClick={() => fileRef.current?.click()}
+            className="flex cursor-pointer items-center justify-center rounded-xl border-2 border-dashed p-3 transition-lg"
+            style={{ borderColor: "rgba(200,195,185,0.5)", background: "rgba(200,195,185,0.08)" }}>
+            {imgData
+              ? <img src={imgData} alt="" className="max-h-24 rounded-lg object-contain" />
+              : <span className="text-[12px] font-semibold text-gray-400">اضغط لاختيار صورة</span>}
+          </div>
+          <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+        </div>
+
+        <div className="mt-5 flex gap-2">
+          <button type="button" onClick={onClose} className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-gray-500 transition-lg"
+            style={{ background: "rgba(200,195,185,0.2)" }}>إلغاء</button>
+          <button type="button" onClick={() => onSave({ name, url, category, icon: icon || undefined, description: description || undefined, order, imgData: imgData || undefined })}
+            className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-white transition-lg"
+            style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>حفظ</button>
+          {edit && onDelete && (
+            <button type="button" onClick={onDelete} className="rounded-xl px-3 py-2.5 text-[13px] font-bold text-red-500 transition-lg"
+              style={{ background: "rgba(254,242,242,0.80)", border: "1px solid rgba(239,68,68,0.18)" }}>
+              <Trash2 className="inline h-3.5 w-3.5 ml-1" />حذف
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CatList({ cats, onEdit, onDelete }: { cats: CatItem[]; onEdit: (c: CatItem) => void; onDelete: (id: string) => void }) {
+  const sorted = [...cats].sort((a, b) => a.order - b.order);
+  return (
+    <div className="space-y-1.5">
+      {sorted.map((c) => (
+        <div key={c.id} onClick={() => onEdit(c)}
+          className="flex items-center justify-between rounded-xl px-3.5 py-2.5 cursor-pointer transition-lg lg-card">
+          <div className="flex items-center gap-3">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-bold text-white"
+              style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)" }}>{c.order}</span>
+            <span className="text-[13px] font-semibold text-gray-700">{c.name}</span>
+          </div>
+          <button type="button" onClick={(e) => { e.stopPropagation(); onDelete(c.id); }}
+            className="text-red-400 text-[18px] leading-none">×</button>
+        </div>
       ))}
     </div>
   );
 }
 
-function UtilsEditor({ items, cats, onChange }: { items: UtilityItem[]; cats: string[]; onChange: (i: UtilityItem[], c: string[]) => void }) {
+function AiEditor({ items, cats, onChange }: { items: AiToolItem[]; cats: CatItem[]; onChange: (i: AiToolItem[], c: CatItem[]) => void }) {
+  const [subTab, setSubTab] = useState<"cats" | "tools">("cats");
+  const [catShow, setCatShow] = useState(false); const [catEdit, setCatEdit] = useState<CatItem | undefined>();
+  const [toolShow, setToolShow] = useState(false); const [toolEditIdx, setToolEditIdx] = useState<number | null>(null);
+
+  function saveCat(name: string, order: number) {
+    if (!name.trim()) return;
+    if (catEdit) {
+      const c = cats.map((x) => x.id === catEdit.id ? { ...x, name: name.trim(), order } : x);
+      onChange(items, c);
+    } else {
+      onChange(items, [...cats, { id: uid(), name: name.trim(), order }]);
+    }
+    setCatShow(false); setCatEdit(undefined);
+  }
+  function deleteCat(id: string) {
+    onChange(items.filter((x) => x.category !== cats.find((c) => c.id === id)?.name), cats.filter((c) => c.id !== id));
+  }
+
+  function saveTool(data: { name: string; url: string; category: string; icon?: string; description?: string; order: number; imgData?: string }) {
+    if (!data.name.trim() || !data.url.trim()) return;
+    const tool: AiToolItem = {
+      id: toolEditIdx !== null ? items[toolEditIdx].id : uid(),
+      name: data.name.trim(), url: data.url.trim(), category: data.category,
+      icon: data.imgData || data.icon || undefined,
+      description: data.description?.trim() || undefined, order: data.order,
+    };
+    const c = [...items];
+    if (toolEditIdx !== null) c[toolEditIdx] = tool; else c.push(tool);
+    onChange(c, cats);
+    setToolShow(false); setToolEditIdx(null);
+  }
+  function deleteTool() {
+    if (toolEditIdx === null) return;
+    onChange(items.filter((_, j) => j !== toolEditIdx), cats);
+    setToolShow(false); setToolEditIdx(null);
+  }
+  function openToolAdd() { setToolEditIdx(null); setToolShow(true); }
+  function openToolEdit(i: number) { setToolEditIdx(i); setToolShow(true); }
+
+  const sortedItems = [...items].sort((a, b) => a.order - b.order);
+
   return (
-    <div className="space-y-3">
-      <CatMgr cats={cats} onChange={(c)=>onChange(items,c)} />
-      <AddBtn onClick={()=>onChange([...items,{id:uid(),name:"",url:"",category:cats[0]??""}],cats)} label="إضافة أداة" />
-      {items.map((x,i)=>(
-        <GCard key={x.id} onDelete={()=>onChange(items.filter((_,j)=>j!==i),cats)}>
-          <FL>الاسم</FL><GI value={x.name} onChange={(e)=>{const c=[...items];c[i]={...x,name:e.target.value};onChange(c,cats);}} />
-          <FL>الرابط</FL><GI value={x.url}  onChange={(e)=>{const c=[...items];c[i]={...x,url:e.target.value};onChange(c,cats);}}  />
-          <FL>رابط الأيقونة</FL><GI value={x.icon??""} onChange={(e)=>{const c=[...items];c[i]={...x,icon:e.target.value};onChange(c,cats);}} placeholder="https://..." />
-          <FL>الصنف</FL>
-          <select value={x.category} onChange={(e)=>{const c=[...items];c[i]={...x,category:e.target.value};onChange(c,cats);}} style={inputSx}>
-            <option value="">—</option>{cats.map(c=><option key={c} value={c}>{c}</option>)}
-          </select>
-          <FL>الوصف</FL><GT rows={2} value={x.description??""} onChange={(e)=>{const c=[...items];c[i]={...x,description:e.target.value};onChange(c,cats);}} />
-        </GCard>
-      ))}
+    <div>
+      <div className="mb-3 flex gap-2">
+        <button type="button" onClick={() => setSubTab("cats")} className="rounded-xl px-4 py-2 text-[12px] font-bold transition-lg"
+          style={subTab === "cats"
+            ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A" }
+            : { color: "#9090A8" }}>الأصناف</button>
+        <button type="button" onClick={() => setSubTab("tools")} className="rounded-xl px-4 py-2 text-[12px] font-bold transition-lg"
+          style={subTab === "tools"
+            ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A" }
+            : { color: "#9090A8" }}>المواقع</button>
+      </div>
+
+      {subTab === "cats" && (
+        <div className="space-y-3">
+          <AddBtn onClick={() => { setCatEdit(undefined); setCatShow(true); }} label="إضافة صنف" />
+          <CatList cats={cats} onEdit={(c) => { setCatEdit(c); setCatShow(true); }} onDelete={deleteCat} />
+        </div>
+      )}
+
+      {subTab === "tools" && (
+        <div className="space-y-3">
+          <AddBtn onClick={openToolAdd} label="إضافة موقع" />
+          {sortedItems.map((x) => {
+            const realIdx = items.findIndex((t) => t.id === x.id);
+            return (
+              <GCard key={x.id} onEdit={() => openToolEdit(realIdx)} onDelete={() => onChange(items.filter((_, j) => j !== realIdx), cats)}>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold text-white"
+                    style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)" }}>{x.order}</span>
+                  <h3 className="text-[14px] font-bold text-gray-800">{x.name}</h3>
+                </div>
+                {x.description && <p className="text-[12px] text-gray-500 leading-relaxed">{x.description}</p>}
+                <span className="inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold text-[#8B7D6F]"
+                  style={{ background: "rgba(181,168,152,0.12)", border: "1px solid rgba(181,168,152,0.25)" }}>{x.category}</span>
+              </GCard>
+            );
+          })}
+        </div>
+      )}
+
+      <CatModal show={catShow} onClose={() => { setCatShow(false); setCatEdit(undefined); }} onSave={saveCat} edit={catEdit} />
+      <ToolModal show={toolShow} onClose={() => { setToolShow(false); setToolEditIdx(null); }}
+        onSave={saveTool} onDelete={toolEditIdx !== null ? deleteTool : undefined}
+        edit={toolEditIdx !== null ? items[toolEditIdx] : null} cats={cats} />
+    </div>
+  );
+}
+
+function UtilsEditor({ items, cats, onChange }: { items: UtilityItem[]; cats: CatItem[]; onChange: (i: UtilityItem[], c: CatItem[]) => void }) {
+  const [subTab, setSubTab] = useState<"cats" | "tools">("cats");
+  const [catShow, setCatShow] = useState(false); const [catEdit, setCatEdit] = useState<CatItem | undefined>();
+  const [toolShow, setToolShow] = useState(false); const [toolEditIdx, setToolEditIdx] = useState<number | null>(null);
+
+  function saveCat(name: string, order: number) {
+    if (!name.trim()) return;
+    if (catEdit) {
+      const c = cats.map((x) => x.id === catEdit.id ? { ...x, name: name.trim(), order } : x);
+      onChange(items, c);
+    } else {
+      onChange(items, [...cats, { id: uid(), name: name.trim(), order }]);
+    }
+    setCatShow(false); setCatEdit(undefined);
+  }
+  function deleteCat(id: string) {
+    onChange(items.filter((x) => x.category !== cats.find((c) => c.id === id)?.name), cats.filter((c) => c.id !== id));
+  }
+
+  function saveTool(data: { name: string; url: string; category: string; icon?: string; description?: string; order: number; imgData?: string }) {
+    if (!data.name.trim() || !data.url.trim()) return;
+    const tool: UtilityItem = {
+      id: toolEditIdx !== null ? items[toolEditIdx].id : uid(),
+      name: data.name.trim(), url: data.url.trim(), category: data.category,
+      icon: data.imgData || data.icon || undefined,
+      description: data.description?.trim() || undefined, order: data.order,
+    };
+    const c = [...items];
+    if (toolEditIdx !== null) c[toolEditIdx] = tool; else c.push(tool);
+    onChange(c, cats);
+    setToolShow(false); setToolEditIdx(null);
+  }
+  function deleteTool() {
+    if (toolEditIdx === null) return;
+    onChange(items.filter((_, j) => j !== toolEditIdx), cats);
+    setToolShow(false); setToolEditIdx(null);
+  }
+  function openToolAdd() { setToolEditIdx(null); setToolShow(true); }
+  function openToolEdit(i: number) { setToolEditIdx(i); setToolShow(true); }
+
+  const sortedItems = [...items].sort((a, b) => a.order - b.order);
+
+  return (
+    <div>
+      <div className="mb-3 flex gap-2">
+        <button type="button" onClick={() => setSubTab("cats")} className="rounded-xl px-4 py-2 text-[12px] font-bold transition-lg"
+          style={subTab === "cats"
+            ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A" }
+            : { color: "#9090A8" }}>الأصناف</button>
+        <button type="button" onClick={() => setSubTab("tools")} className="rounded-xl px-4 py-2 text-[12px] font-bold transition-lg"
+          style={subTab === "tools"
+            ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A" }
+            : { color: "#9090A8" }}>الأدوات</button>
+      </div>
+
+      {subTab === "cats" && (
+        <div className="space-y-3">
+          <AddBtn onClick={() => { setCatEdit(undefined); setCatShow(true); }} label="إضافة صنف" />
+          <CatList cats={cats} onEdit={(c) => { setCatEdit(c); setCatShow(true); }} onDelete={deleteCat} />
+        </div>
+      )}
+
+      {subTab === "tools" && (
+        <div className="space-y-3">
+          <AddBtn onClick={openToolAdd} label="إضافة أداة" />
+          {sortedItems.map((x) => {
+            const realIdx = items.findIndex((t) => t.id === x.id);
+            return (
+              <GCard key={x.id} onEdit={() => openToolEdit(realIdx)} onDelete={() => onChange(items.filter((_, j) => j !== realIdx), cats)}>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold text-white"
+                    style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)" }}>{x.order}</span>
+                  <h3 className="text-[14px] font-bold text-gray-800">{x.name}</h3>
+                </div>
+                {x.description && <p className="text-[12px] text-gray-500 leading-relaxed">{x.description}</p>}
+                <span className="inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold text-[#8B7D6F]"
+                  style={{ background: "rgba(181,168,152,0.12)", border: "1px solid rgba(181,168,152,0.25)" }}>{x.category}</span>
+              </GCard>
+            );
+          })}
+        </div>
+      )}
+
+      <CatModal show={catShow} onClose={() => { setCatShow(false); setCatEdit(undefined); }} onSave={saveCat} edit={catEdit} />
+      <ToolModal show={toolShow} onClose={() => { setToolShow(false); setToolEditIdx(null); }}
+        onSave={saveTool} onDelete={toolEditIdx !== null ? deleteTool : undefined}
+        edit={toolEditIdx !== null ? items[toolEditIdx] : null} cats={cats} />
     </div>
   );
 }

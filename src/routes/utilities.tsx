@@ -18,7 +18,7 @@ function Utilities() {
 
   const cats = useMemo(() => {
     const from = Array.from(new Set(cms.utilities.map((x) => x.category).filter(Boolean)));
-    return Array.from(new Set([...cms.utilCategories, ...from]));
+    return Array.from(new Set([...cms.utilCategories.map((c) => c.name), ...from]));
   }, [cms.utilities, cms.utilCategories]);
 
   const filtered = useMemo(() => {
