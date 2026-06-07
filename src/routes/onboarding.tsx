@@ -37,11 +37,19 @@ function Onboarding() {
     uni.trim().length  >= 2,
   ][step];
 
-  const onNext = async () => {
-    if (step < total - 1) return setStep(step + 1);
+  const saveProfile = () => {
     const ex = getProfile();
     const profile = { ...ex, name: name.trim(), age, specialization: spec.trim(), university: uni.trim() };
     setProfile(profile);
+    return profile;
+  };
+
+  const onNext = async () => {
+    if (step < total - 1) {
+      saveProfile();
+      return setStep(step + 1);
+    }
+    const profile = saveProfile();
     setOnboarded(true);
     const userId = getUserId();
     if (userId) doSyncProfile({ data: { userId, ...profile } }).catch(() => {});
@@ -129,7 +137,7 @@ function Onboarding() {
       </div>
 
       {/* CTA */}
-      <div className="relative z-10 px-5 pb-8 pt-4">
+      <div className="relative z-10 px-5 pb-4 pt-4">
         <button type="button" onClick={onNext} disabled={!canNext}
           className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-[15px] font-extrabold text-white transition-lg active:scale-[0.97] disabled:opacity-35"
           style={{
