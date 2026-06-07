@@ -21,7 +21,6 @@ export const Route = createFileRoute("/login")({
 const STATS = [
   { num: "+500", label: "أداة ذكاء اصطناعي" },
   { num: "+60",  label: "تخصص جامعي" },
-  { num: "+10K", label: "طالب يستخدمه" },
 ];
 
 function Login() {
@@ -66,16 +65,15 @@ function Login() {
   }, [handleCredential]);
 
   const handleGoogleSignIn = () => {
-    const btn = googleBtnRef.current?.querySelector("button[aria-labelledby]") as HTMLButtonElement | null;
-    if (btn) { setLoading(true); btn.click(); }
-    else google.accounts.id.prompt();
+    setLoading(true);
+    google.accounts.id.prompt();
   };
 
   return (
     <div className="relative flex min-h-screen flex-col items-center overflow-hidden bg-white px-5 py-0">
       <LiquidOrbs />
 
-      <div className="relative z-10 flex w-full max-w-sm flex-1 flex-col items-center justify-between py-14">
+      <div className="relative z-10 flex w-full max-w-sm flex-1 flex-col items-center justify-between pt-14 pb-6">
 
         {/* ── TOP: Logo + headline ── */}
         <div className="flex flex-col items-center text-center gap-5 w-full animate-reveal-up">
@@ -121,11 +119,8 @@ function Login() {
           </div>
         </div>
 
-        {/* ── MIDDLE SPACER ── */}
-        <div className="flex-1" />
-
         {/* ── BOTTOM: Sign in + credit ── */}
-        <div className="w-full flex flex-col items-center gap-4 animate-reveal-up" style={{ animationDelay: "0.5s" }}>
+        <div className="w-full flex flex-col items-center gap-4 mt-6 animate-reveal-up" style={{ animationDelay: "0.5s" }}>
           {/* Glass sign-in card */}
           <div
             className="lg-panel w-full rounded-3xl p-5"
@@ -155,7 +150,7 @@ function Login() {
                 }
                 {loading ? "جاري تسجيل الدخول..." : "تسجيل الدخول بـ Google"}
               </button>
-              <div ref={googleBtnRef} className="absolute inset-0 opacity-0" aria-hidden />
+              <div ref={googleBtnRef} className="absolute inset-0 opacity-0 pointer-events-none" aria-hidden />
             </div>
           </div>
 
@@ -164,10 +159,10 @@ function Login() {
           </p>
 
           {/* Studio credit */}
-          <div className="flex flex-col items-center gap-0.5 pb-2">
-            <span className="text-[9px] uppercase tracking-[0.35em] text-gray-300">Developed by</span>
+          <div className="flex flex-col items-center gap-0.5 mt-1 mb-1">
+            <span className="text-[11px] uppercase tracking-[0.3em] text-gray-400 font-medium">Developed by</span>
             <span
-              className="text-[12px] font-black tracking-[0.25em] uppercase"
+              className="text-[15px] font-black tracking-[0.3em] uppercase"
               style={{
                 background: "linear-gradient(135deg, #B5A898, #8B7D6F)",
                 WebkitBackgroundClip: "text",
