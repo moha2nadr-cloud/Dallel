@@ -73,7 +73,7 @@ function Login() {
     <div className="relative flex min-h-screen flex-col items-center overflow-hidden bg-white px-5 py-0">
       <LiquidOrbs />
 
-      <div className="relative z-10 flex w-full max-w-sm flex-1 flex-col items-center justify-between pt-14 pb-6">
+      <div className="relative z-10 flex w-full max-w-sm flex-1 flex-col items-center justify-start pt-8">
 
         {/* ── TOP: Logo + headline ── */}
         <div className="flex flex-col items-center text-center gap-5 w-full animate-reveal-up">
@@ -120,7 +120,7 @@ function Login() {
         </div>
 
         {/* ── BOTTOM: Sign in + credit ── */}
-        <div className="w-full flex flex-col items-center gap-4 mt-6 animate-reveal-up" style={{ animationDelay: "0.5s" }}>
+        <div className="w-full flex flex-col items-center gap-3 mt-2 animate-reveal-up" style={{ animationDelay: "0.5s" }}>
           {/* Glass sign-in card */}
           <div
             className="lg-panel w-full rounded-3xl p-5"
