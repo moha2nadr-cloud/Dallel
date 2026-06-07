@@ -165,7 +165,7 @@ function Login() {
           </p>
 
           {/* Studio credit */}
-          <div className="flex flex-col items-center gap-0.5 mt-3 mb-1">
+          <div className="flex flex-col items-center gap-0.5 mt-5 mb-1">
             <span className="text-[11px] uppercase tracking-[0.3em] text-gray-400 font-medium">Developed by</span>
             <span
               className="text-[15px] font-black tracking-[0.3em] uppercase"
