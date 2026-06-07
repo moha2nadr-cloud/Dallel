@@ -175,7 +175,7 @@ function SlidesEditor({ slides, onChange }: { slides: Slide[]; onChange: (s: Sli
 
       {/* Modal */}
       {show && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 pt-[15vh]"
+        <div className="fixed inset-0 z-50 flex items-end justify-center px-4 pb-4"
           style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
           onClick={() => setShow(false)}>
           <div className="w-full max-w-sm animate-scale-in rounded-2xl p-5 shadow-2xl"
@@ -269,7 +269,7 @@ function PostsEditor({ posts, onChange }: { posts: Post[]; onChange: (p: Post[])
       <AddBtn onClick={openForAdd} label="إضافة منشور" />
 
       {show && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 pt-[15vh]"
+        <div className="fixed inset-0 z-50 flex items-end justify-center px-4 pb-4"
           style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
           onClick={() => setShow(false)}>
           <div className="w-full max-w-sm animate-scale-in rounded-2xl p-5 shadow-2xl"
@@ -334,7 +334,7 @@ function CatModal({ show, onClose, onSave, edit }: { show: boolean; onClose: () 
   useEffect(() => { if (show) { setName(edit?.name ?? ""); setOrder(edit?.order ?? 0); } }, [show, edit]);
   if (!show) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 pt-[15vh]"
+    <div className="fixed inset-0 z-50 flex items-end justify-center px-4 pb-4"
       style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
       onClick={onClose}>
       <div className="w-full max-w-sm animate-scale-in rounded-2xl p-5 shadow-2xl" style={{ background: "#fff" }}
@@ -383,7 +383,7 @@ function ToolModal({ show, onClose, onSave, onDelete, edit, cats }: {
 
   if (!show) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 pt-[15vh]"
+    <div className="fixed inset-0 z-50 flex items-end justify-center px-4 pb-4"
       style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
       onClick={onClose}>
       <div className="w-full max-w-sm animate-scale-in rounded-2xl p-5 shadow-2xl" style={{ background: "#fff", maxHeight: "85vh", overflowY: "auto" }}
