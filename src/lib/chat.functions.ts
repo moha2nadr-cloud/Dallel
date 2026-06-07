@@ -17,20 +17,19 @@ export const sendChat = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data }) => {
-    const apiKey = process.env.LOVABLE_API_KEY;
+    const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) {
-      throw new Error("LOVABLE_API_KEY غير متوفر");
+      throw new Error("GROQ_API_KEY غير متوفر");
     }
 
-    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Lovable-API-Key": apiKey,
-        "X-Lovable-AIG-SDK": "fetch",
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: data.model || "google/gemini-3-flash-preview",
+        model: data.model || "llama-3.3-70b-versatile",
         messages: [
           { role: "system", content: data.systemPrompt || FALLBACK_PROMPT },
           ...data.messages,

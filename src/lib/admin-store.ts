@@ -60,7 +60,7 @@ const DEFAULT: CMS = {
   aiCategories: [],
   utilCategories: [],
   chatSystemPrompt: DEFAULT_PROMPT,
-  chatModel: "google/gemini-3-flash-preview",
+  chatModel: "llama-3.3-70b-versatile",
   appName: { ar: "دليل", en: "Daleel" },
 };
 

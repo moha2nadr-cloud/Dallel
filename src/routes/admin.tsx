@@ -251,7 +251,7 @@ function ChatEditor({ prompt, model, onSave }: { prompt: string; model: string; 
     <div className="space-y-4 lg-card rounded-2xl p-4">
       <div className="lg-shine-stripe mb-1" />
       <div><FL>توجيه المساعد (System Prompt)</FL><GT rows={12} value={p} onChange={(e)=>setP(e.target.value)} /></div>
-      <div><FL>النموذج</FL><GI value={m} onChange={(e)=>setM(e.target.value)} placeholder="google/gemini-3-flash-preview" /></div>
+      <div><FL>النموذج</FL><GI value={m} onChange={(e)=>setM(e.target.value)} placeholder="llama-3.3-70b-versatile" /></div>
       <button type="button" onClick={()=>onSave(p,m)}
         className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[12px] font-bold text-white transition-lg"
         style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>
