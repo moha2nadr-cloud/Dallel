@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UtilitiesRouteImport } from './routes/utilities'
+import { Route as TestDbRouteImport } from './routes/test-db'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as LoginRouteImport } from './routes/login'
@@ -23,6 +24,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const UtilitiesRoute = UtilitiesRouteImport.update({
   id: '/utilities',
   path: '/utilities',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TestDbRoute = TestDbRouteImport.update({
+  id: '/test-db',
+  path: '/test-db',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsRoute = SettingsRouteImport.update({
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
   '/settings': typeof SettingsRoute
+  '/test-db': typeof TestDbRoute
   '/utilities': typeof UtilitiesRoute
 }
 export interface FileRoutesByTo {
@@ -93,6 +100,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
   '/settings': typeof SettingsRoute
+  '/test-db': typeof TestDbRoute
   '/utilities': typeof UtilitiesRoute
 }
 export interface FileRoutesById {
@@ -106,6 +114,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
   '/settings': typeof SettingsRoute
+  '/test-db': typeof TestDbRoute
   '/utilities': typeof UtilitiesRoute
 }
 export interface FileRouteTypes {
@@ -120,6 +129,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/onboarding'
     | '/settings'
+    | '/test-db'
     | '/utilities'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -132,6 +142,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/onboarding'
     | '/settings'
+    | '/test-db'
     | '/utilities'
   id:
     | '__root__'
@@ -144,6 +155,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/onboarding'
     | '/settings'
+    | '/test-db'
     | '/utilities'
   fileRoutesById: FileRoutesById
 }
@@ -157,6 +169,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   OnboardingRoute: typeof OnboardingRoute
   SettingsRoute: typeof SettingsRoute
+  TestDbRoute: typeof TestDbRoute
   UtilitiesRoute: typeof UtilitiesRoute
 }
 
@@ -167,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/utilities'
       fullPath: '/utilities'
       preLoaderRoute: typeof UtilitiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/test-db': {
+      id: '/test-db'
+      path: '/test-db'
+      fullPath: '/test-db'
+      preLoaderRoute: typeof TestDbRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings': {
@@ -245,6 +265,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   OnboardingRoute: OnboardingRoute,
   SettingsRoute: SettingsRoute,
+  TestDbRoute: TestDbRoute,
   UtilitiesRoute: UtilitiesRoute,
 }
 export const routeTree = rootRouteImport
