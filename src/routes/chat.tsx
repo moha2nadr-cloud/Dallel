@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { WithBottomBar } from "@/components/BottomBar";
-import { Bot, Send, Trash2, Loader2, Sparkles } from "lucide-react";
+import { Bot, Send, Trash2, Loader2, Sparkles, MessagesSquare } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { sendChat } from "@/lib/chat.functions";
@@ -16,10 +16,10 @@ export const Route = createFileRoute("/chat")({
 });
 
 const SUGGESTIONS = [
-  "اقترح لي أداة AI لتلخيص المحاضرات",
-  "ما هي أدوات الذكاء الاصطناعي لطلاب الطب؟",
-  "كيف أحوّل PDF إلى Word؟",
-  "اقترح خطة دراسة لأسبوع الامتحانات",
+  { icon: Sparkles, text: "اقترح لي أداة AI لتلخيص المحاضرات" },
+  { icon: MessagesSquare, text: "ما هي أدوات الذكاء الاصطناعي لطلاب الطب؟" },
+  { icon: Sparkles, text: "كيف أحوّل PDF إلى Word؟" },
+  { icon: MessagesSquare, text: "اقترح خطة دراسة لأسبوع الامتحانات" },
 ];
 
 function Chat() {
@@ -68,25 +68,30 @@ function Chat() {
 
   return (
     <WithBottomBar>
-      <div className="flex h-[calc(100dvh-140px)] flex-col">
+      <div className="flex h-[calc(100dvh-140px)] flex-col bg-white">
 
-        {/* Chat header — kept as user requested */}
-        <header className="flex items-center justify-between px-5 pt-4 pb-3">
-          <div className="flex items-center gap-3">
-            <div className="lg-card relative flex h-11 w-11 items-center justify-center rounded-2xl">
-              <Bot className="h-5 w-5 text-logo" />
-              <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-white" style={{ background: "#4ade80" }} />
+        {/* Header */}
+        <div className="px-5 pt-3 pb-2">
+          <div className="flex items-center justify-between rounded-2xl px-4 py-3"
+            style={{ background: "rgba(255,255,255,0.85)", border: "1px solid rgba(200,195,185,0.25)", boxShadow: "0 2px 12px rgba(0,0,0,0.04)", backdropFilter: "blur(16px)" }}>
+            <div className="flex items-center gap-3">
+              <div className="relative flex h-10 w-10 items-center justify-center rounded-xl"
+                style={{ background: "linear-gradient(135deg,rgba(181,168,152,0.15),rgba(139,125,111,0.10))" }}>
+                <Bot className="h-5 w-5 text-[#8B7D6F]" />
+                <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-white" style={{ background: "#4ade80" }} />
+              </div>
+              <div>
+                <h1 className="text-[14px] font-extrabold text-gray-900 leading-tight">مساعد دليل</h1>
+                <p className="text-[10px] text-gray-400 leading-tight">ذكاء اصطناعي — يجيب عن أسئلتك</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-[15px] font-extrabold text-gray-900">مساعد دليل</h1>
-              <p className="text-[10px] text-gray-400">يجيب عن أسئلتك داخل التطبيق</p>
-            </div>
+            <button type="button" disabled={!messages.length}
+              onClick={() => setDeleteOpen(true)}
+              className="flex h-8 w-8 items-center justify-center rounded-xl transition-all duration-200 hover:bg-red-50 disabled:opacity-20 disabled:hover:bg-transparent"
+              style={{ border: "1px solid rgba(200,195,185,0.20)" }}>
+              <Trash2 className="h-3.5 w-3.5 text-gray-400" />
+            </button>
           </div>
-          <button type="button" disabled={!messages.length}
-            onClick={() => setDeleteOpen(true)}
-            className="lg-card flex h-9 w-9 items-center justify-center rounded-full disabled:opacity-30" aria-label="مسح">
-            <Trash2 className="h-4 w-4 text-gray-400" />
-          </button>
           {deleteOpen && (
             <div onClick={() => setDeleteOpen(false)} className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 animate-fade-in">
               <div onClick={e => e.stopPropagation()} className="mx-4 w-[320px] rounded-2xl bg-white px-6 py-6 text-center shadow-lg animate-scale-in">
@@ -106,36 +111,49 @@ function Chat() {
               </div>
             </div>
           )}
-        </header>
+        </div>
 
         {/* Messages */}
-        <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 py-2 no-scrollbar">
+        <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto px-4 pb-2 no-scrollbar">
           {messages.length === 0 && (
-            <div className="pt-6 animate-reveal-up">
-              <div className="lg-card mb-5 rounded-3xl p-5 text-center">
-                <div className="lg-shine-stripe mb-3" />
-                <Sparkles className="mx-auto mb-2 h-8 w-8 text-logo" />
-                <p className="text-[13px] font-semibold text-gray-800">كيف يمكنني مساعدتك اليوم؟</p>
-                <p className="mt-1 text-[11px] text-gray-400">ابدأ بسؤال أو جرّب أحد الاقتراحات أدناه</p>
+            <div className="flex flex-col items-center justify-center pt-12 animate-reveal-up">
+              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full"
+                style={{ background: "linear-gradient(135deg,rgba(181,168,152,0.12),rgba(139,125,111,0.08))" }}>
+                <Bot className="h-8 w-8 text-[#B5A898]" />
               </div>
-              <div className="grid grid-cols-1 gap-2">
-                {SUGGESTIONS.map((s, idx) => (
-                  <button key={s} type="button" onClick={() => ask(s)}
-                    className="lg-card rounded-2xl px-4 py-3 text-right text-[12.5px] font-medium text-gray-700 transition-lg active:scale-[0.98] animate-reveal-up"
-                    style={{ animationDelay: `${idx * 0.07}s` }}>
-                    {s}
-                  </button>
-                ))}
+              <h2 className="text-[17px] font-extrabold text-gray-900">كيف يمكنني مساعدتك؟</h2>
+              <p className="mt-1 text-[12px] text-gray-400">اختر اقتراحاً أو اكتب سؤالك</p>
+              <div className="mt-6 grid w-full max-w-sm grid-cols-1 gap-2.5">
+                {SUGGESTIONS.map((s, idx) => {
+                  const Icon = s.icon;
+                  return (
+                    <button key={s.text} type="button" onClick={() => ask(s.text)}
+                      className="group flex items-center gap-3 rounded-2xl px-4 py-3.5 text-right transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] animate-reveal-up"
+                      style={{
+                        background: "rgba(255,255,255,0.85)",
+                        border: "1px solid rgba(200,195,185,0.25)",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                        animationDelay: `${idx * 0.08}s`,
+                      }}>
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl"
+                        style={{ background: "linear-gradient(135deg,rgba(181,168,152,0.12),rgba(139,125,111,0.08))" }}>
+                        <Icon className="h-4 w-4 text-[#8B7D6F]" />
+                      </span>
+                      <span className="text-[12.5px] font-medium text-gray-700 leading-snug">{s.text}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
 
           {messages.map((m, idx) => (
-            <div key={idx} className={"flex " + (m.role === "user" ? "justify-start" : "justify-end")}>
-              <div className="max-w-[82%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-[13px] leading-relaxed"
+            <div key={idx} className={"flex " + (m.role === "user" ? "justify-start" : "justify-end") + " animate-reveal-up"}
+              style={{ animationDelay: `${idx * 0.05}s` }}>
+              <div className="max-w-[82%] whitespace-pre-wrap rounded-2xl px-4 py-3 text-[13px] leading-relaxed"
                 style={m.role === "user"
                   ? { background: "linear-gradient(135deg,#B5A898,#8B7D6F)", color: "#fff", boxShadow: "0 4px 14px rgba(181,168,152,0.35)" }
-                  : { background: "rgba(255,255,255,0.82)", border: "1px solid rgba(200,195,185,0.28)", color: "#2E2E3A", backdropFilter: "blur(16px)", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }
+                  : { background: "rgba(255,255,255,0.85)", border: "1px solid rgba(200,195,185,0.25)", color: "#2E2E3A", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }
                 }>
                 {m.content}
               </div>
@@ -143,27 +161,33 @@ function Chat() {
           ))}
 
           {loading && (
-            <div className="flex justify-end">
-              <div className="flex items-center gap-2 rounded-2xl px-4 py-2.5 text-[12px] text-gray-500"
-                style={{ background: "rgba(255,255,255,0.82)", border: "1px solid rgba(200,195,185,0.28)", backdropFilter: "blur(16px)" }}>
-                <Loader2 className="h-3.5 w-3.5 animate-spin text-logo" /> يكتب…
+            <div className="flex justify-end animate-reveal-up">
+              <div className="flex items-center gap-2.5 rounded-2xl px-4 py-3 text-[12px] text-gray-500"
+                style={{ background: "rgba(255,255,255,0.85)", border: "1px solid rgba(200,195,185,0.25)", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
+                <span className="flex gap-0.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#B5A898] animate-bounce" style={{ animationDelay: "0s" }} />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#B5A898] animate-bounce" style={{ animationDelay: "0.15s" }} />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#B5A898] animate-bounce" style={{ animationDelay: "0.3s" }} />
+                </span>
+                <span>يكتب…</span>
               </div>
             </div>
           )}
         </div>
 
         {/* Input */}
-        <div className="px-3 py-3 lg-header">
-          <div className="flex items-center gap-2 rounded-full px-3 py-1.5 lg-input">
+        <div className="px-4 py-3">
+          <div className="flex items-center gap-2 rounded-2xl px-4 py-1.5"
+            style={{ background: "rgba(255,255,255,0.90)", border: "1px solid rgba(200,195,185,0.30)", boxShadow: "0 2px 12px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.95)" }}>
             <input
               value={input} onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); ask(input); } }}
               placeholder="اكتب رسالتك…"
-              className="flex-1 bg-transparent px-2 py-2 text-[13px] text-gray-800 outline-none placeholder:text-gray-400"
+              className="flex-1 bg-transparent px-1 py-2.5 text-[13px] text-gray-800 outline-none placeholder:text-gray-400"
               dir="rtl"
             />
             <button type="button" onClick={() => ask(input)} disabled={loading || !input.trim()}
-              className="flex h-9 w-9 items-center justify-center rounded-full text-white transition-lg active:scale-90 disabled:opacity-35"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-white transition-all duration-200 active:scale-90 disabled:opacity-30"
               style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.40)" }}
               aria-label="إرسال">
               <Send className="h-4 w-4" />
