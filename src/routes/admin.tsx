@@ -83,7 +83,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         </button>
       </header>
 
-      <div className="overflow-x-auto no-scrollbar px-4 pt-4">
+      <div className="flex justify-end overflow-x-auto no-scrollbar px-4 pt-4">
         <div className="inline-flex gap-1 rounded-2xl p-1 lg-card">
           {TABS.map((t) => (
             <button key={t.key} type="button" onClick={() => setTab(t.key)}
