@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { WithBottomBar } from "@/components/BottomBar";
-import { useCMS, type AiToolItem } from "@/lib/admin-store";
+import { useCMS, type AiToolItem, type CatItem } from "@/lib/admin-store";
 import { isFav, toggleFav, getFavs, getUserId } from "@/lib/storage";
 import { useLang } from "@/lib/i18n";
 import { Search, X, Bookmark, ExternalLink, Inbox } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { syncFavorites } from "@/lib/api/sync.functions";
+import { syncFavorites, getPublicAiTools, getPublicAiCategories } from "@/lib/api/sync.functions";
 
 export const Route = createFileRoute("/ai-tools")({
   head: () => ({ meta: [{ title: "أدوات AI — دليل" }] }),
@@ -19,21 +19,33 @@ function AiTools() {
   const [q, setQ]   = useState("");
   const [cat, setCat] = useState("all");
   const [focused, setFocused] = useState(false);
+  const [toolsDb, setToolsDb] = useState<AiToolItem[]>([]);
+  const [catsDb, setCatsDb] = useState<CatItem[]>([]);
+  const fetchTools = useServerFn(getPublicAiTools);
+  const fetchCats = useServerFn(getPublicAiCategories);
+
+  useEffect(() => {
+    fetchTools().then(setToolsDb).catch(() => {});
+    fetchCats().then(setCatsDb).catch(() => {});
+  }, []);
+
+  const aiTools = toolsDb.length > 0 ? toolsDb : cms.aiTools;
+  const aiCategories = catsDb.length > 0 ? catsDb : cms.aiCategories;
   const doSyncFavs = useServerFn(syncFavorites);
   const userId = typeof window !== "undefined" ? getUserId() : null;
 
   const cats = useMemo(() => {
-    const from = Array.from(new Set(cms.aiTools.map((x) => x.category).filter(Boolean)));
-    return Array.from(new Set([...cms.aiCategories.map((c) => c.name), ...from]));
-  }, [cms.aiTools, cms.aiCategories]);
+    const from = Array.from(new Set(aiTools.map((x) => x.category).filter(Boolean)));
+    return Array.from(new Set([...aiCategories.map((c) => c.name), ...from]));
+  }, [aiTools, aiCategories]);
 
   const filtered = useMemo(() => {
     const n = q.trim().toLowerCase();
-    return cms.aiTools.filter((x) => {
+    return aiTools.filter((x) => {
       if (cat !== "all" && x.category !== cat) return false;
       return !n || x.name.toLowerCase().includes(n) || (x.description ?? "").toLowerCase().includes(n);
     });
-  }, [cms.aiTools, q, cat]);
+  }, [aiTools, q, cat]);
 
   const handleFav = (id: string) => {
     const r = toggleFav("ai", id);

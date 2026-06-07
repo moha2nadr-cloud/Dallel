@@ -3,13 +3,13 @@ import { WithBottomBar } from "@/components/BottomBar";
 import { Header } from "@/components/Header";
 import { HeroSlider } from "@/components/HeroSlider";
 import { timeAgoAr } from "@/lib/mock-data";
-import { useCMS, type Post } from "@/lib/admin-store";
+import { useCMS, type Post, type AiToolItem, type Slide } from "@/lib/admin-store";
 import { toggleLike, getLikes, toggleFav, isFav, getFavs, getUserId } from "@/lib/storage";
 import { Heart, MessageCircle, Bookmark, ExternalLink, Inbox } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useLang } from "@/lib/i18n";
 import { useServerFn } from "@tanstack/react-start";
-import { syncFavorites, syncLikes } from "@/lib/api/sync.functions";
+import { syncFavorites, syncLikes, getPublicSlides, getPublicPosts, getPublicAiTools } from "@/lib/api/sync.functions";
 
 export const Route = createFileRoute("/home")({
   head: () => ({ meta: [{ title: "الرئيسية — دليل" }] }),
@@ -19,10 +19,27 @@ export const Route = createFileRoute("/home")({
 function Home() {
   const [, t] = useLang();
   const [cms] = useCMS();
-  const suggested = useMemo(() => cms.aiTools.slice(0, 8), [cms.aiTools]);
+  const [slidesDb, setSlidesDb] = useState<Slide[]>([]);
+  const [postsDb, setPostsDb] = useState<Post[]>([]);
+  const [aiDb, setAiDb] = useState<AiToolItem[]>([]);
+  const fetchSlides = useServerFn(getPublicSlides);
+  const fetchPosts = useServerFn(getPublicPosts);
+  const fetchAi = useServerFn(getPublicAiTools);
+
+  useEffect(() => {
+    fetchSlides().then(setSlidesDb).catch(() => {});
+    fetchPosts().then(setPostsDb).catch(() => {});
+    fetchAi().then(setAiDb).catch(() => {});
+  }, []);
+
+  // use server data if available, otherwise fall back to CMS hook
+  const slides = slidesDb.length > 0 ? slidesDb : cms.slides;
+  const posts = postsDb.length > 0 ? postsDb : cms.posts;
+  const aiTools = aiDb.length > 0 ? aiDb : cms.aiTools;
+  const suggested = useMemo(() => aiTools.slice(0, 8), [aiTools]);
   const sliderItems = useMemo(
-    () => cms.slides.map((s) => ({ id: s.id, title: s.title || "", image: s.image, url: s.link })),
-    [cms.slides],
+    () => slides.map((s) => ({ id: s.id, title: s.title || "", image: s.image, url: s.link })),
+    [slides],
   );
   const doSyncFavs  = useServerFn(syncFavorites);
   const doSyncLikes = useServerFn(syncLikes);
@@ -94,9 +111,9 @@ function Home() {
         {/* Feed — "آخر التحديثات" */}
         <section className="px-4 animate-reveal-up" style={{ animationDelay: "0.13s" }}>
           <SectionHeader title="آخر التحديثات" to="/home" viewAll="" isBlack />
-          {cms.posts.length === 0 ? <EmptyState text={t.no_data} /> : (
+          {posts.length === 0 ? <EmptyState text={t.no_data} /> : (
             <div className="space-y-4">
-              {cms.posts.map((p, idx) => (
+              {posts.map((p, idx) => (
                 <PostCard key={p.id} p={p} onToggleFav={handleToggleFav} onToggleLike={handleToggleLike} delay={idx * 0.05} />
               ))}
             </div>

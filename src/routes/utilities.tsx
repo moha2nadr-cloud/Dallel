@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { WithBottomBar } from "@/components/BottomBar";
-import { useCMS, type UtilityItem } from "@/lib/admin-store";
+import { useCMS, type UtilityItem, type CatItem } from "@/lib/admin-store";
 import { useLang } from "@/lib/i18n";
 import { Search, X, ChevronLeft, Wrench } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { getPublicUtilities, getPublicUtilCategories } from "@/lib/api/sync.functions";
 
 export const Route = createFileRoute("/utilities")({
   head: () => ({ meta: [{ title: "الأدوات — دليل" }] }),
@@ -15,19 +17,31 @@ function Utilities() {
   const [cms] = useCMS();
   const [q, setQ]   = useState("");
   const [cat, setCat] = useState("all");
+  const [toolsDb, setToolsDb] = useState<UtilityItem[]>([]);
+  const [catsDb, setCatsDb] = useState<CatItem[]>([]);
+  const fetchTools = useServerFn(getPublicUtilities);
+  const fetchCats = useServerFn(getPublicUtilCategories);
+
+  useEffect(() => {
+    fetchTools().then(setToolsDb).catch(() => {});
+    fetchCats().then(setCatsDb).catch(() => {});
+  }, []);
+
+  const utilities = toolsDb.length > 0 ? toolsDb : cms.utilities;
+  const utilCategories = catsDb.length > 0 ? catsDb : cms.utilCategories;
 
   const cats = useMemo(() => {
-    const from = Array.from(new Set(cms.utilities.map((x) => x.category).filter(Boolean)));
-    return Array.from(new Set([...cms.utilCategories.map((c) => c.name), ...from]));
-  }, [cms.utilities, cms.utilCategories]);
+    const from = Array.from(new Set(utilities.map((x) => x.category).filter(Boolean)));
+    return Array.from(new Set([...utilCategories.map((c) => c.name), ...from]));
+  }, [utilities, utilCategories]);
 
   const filtered = useMemo(() => {
     const n = q.trim().toLowerCase();
-    return cms.utilities.filter((x) => {
+    return utilities.filter((x) => {
       if (cat !== "all" && x.category !== cat) return false;
       return !n || x.name.toLowerCase().includes(n) || (x.description ?? "").toLowerCase().includes(n);
     });
-  }, [cms.utilities, q, cat]);
+  }, [utilities, q, cat]);
 
   return (
     <WithBottomBar>

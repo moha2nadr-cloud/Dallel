@@ -106,3 +106,46 @@ export const getCms = createServerFn({ method: "POST" })
     await ensureDb;
     return loadCmsDb();
   });
+
+// Public read-only server functions — each page calls its own
+export const getPublicSlides = createServerFn({ method: "POST" })
+  .handler(async () => {
+    await ensureDb;
+    const data = await loadCmsDb();
+    return (data?.slides ?? []) as import("../admin-store").Slide[];
+  });
+
+export const getPublicPosts = createServerFn({ method: "POST" })
+  .handler(async () => {
+    await ensureDb;
+    const data = await loadCmsDb();
+    return (data?.posts ?? []) as import("../admin-store").Post[];
+  });
+
+export const getPublicAiTools = createServerFn({ method: "POST" })
+  .handler(async () => {
+    await ensureDb;
+    const data = await loadCmsDb();
+    return (data?.aiTools ?? []) as import("../admin-store").AiToolItem[];
+  });
+
+export const getPublicUtilities = createServerFn({ method: "POST" })
+  .handler(async () => {
+    await ensureDb;
+    const data = await loadCmsDb();
+    return (data?.utilities ?? []) as import("../admin-store").UtilityItem[];
+  });
+
+export const getPublicAiCategories = createServerFn({ method: "POST" })
+  .handler(async () => {
+    await ensureDb;
+    const data = await loadCmsDb();
+    return (data?.aiCategories ?? []) as import("../admin-store").CatItem[];
+  });
+
+export const getPublicUtilCategories = createServerFn({ method: "POST" })
+  .handler(async () => {
+    await ensureDb;
+    const data = await loadCmsDb();
+    return (data?.utilCategories ?? []) as import("../admin-store").CatItem[];
+  });
