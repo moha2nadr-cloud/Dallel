@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { WithBottomBar } from "@/components/BottomBar";
-import { Header } from "@/components/Header";
 import { useCMS, type AiToolItem } from "@/lib/admin-store";
 import { isFav, toggleFav, getFavs, getUserId } from "@/lib/storage";
 import { useLang } from "@/lib/i18n";
@@ -44,8 +43,6 @@ function AiTools() {
 
   return (
     <WithBottomBar>
-      <Header />
-
       {/* ── Search at very top, no dark bg, crystal glass ── */}
       <div className="px-4 pt-2 pb-2 animate-reveal-up">
         <div className="relative">

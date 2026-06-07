@@ -230,7 +230,10 @@ function Login() {
 
           <div className="flex flex-col items-center gap-0.5 mt-5 mb-1">
             <span className="text-[11px] uppercase tracking-[0.3em] text-gray-400 font-medium">Developed by</span>
-            <span
+            <a
+              href="https://studionova-team.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-[15px] font-black tracking-[0.3em] uppercase"
               style={{
                 background: "linear-gradient(135deg, #B5A898, #8B7D6F)",
@@ -240,7 +243,7 @@ function Login() {
               }}
             >
               NOVA STUDIO
-            </span>
+            </a>
           </div>
         </div>
       </div>

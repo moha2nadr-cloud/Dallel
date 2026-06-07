@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { WithBottomBar } from "@/components/BottomBar";
-import { Header } from "@/components/Header";
 import { Bot, Send, Trash2, Loader2, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
@@ -57,7 +56,6 @@ function Chat() {
 
   return (
     <WithBottomBar>
-      <Header />
       <div className="flex h-[calc(100dvh-140px)] flex-col">
 
         {/* Chat header — kept as user requested */}

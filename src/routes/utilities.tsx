@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { WithBottomBar } from "@/components/BottomBar";
-import { Header } from "@/components/Header";
 import { useCMS, type UtilityItem } from "@/lib/admin-store";
 import { useLang } from "@/lib/i18n";
 import { Search, X, ChevronLeft, Wrench } from "lucide-react";
@@ -32,8 +31,6 @@ function Utilities() {
 
   return (
     <WithBottomBar>
-      <Header />
-
       {/* ── Search at very top ── */}
       <div className="px-4 pt-2 pb-2 animate-reveal-up">
         <div className="relative">

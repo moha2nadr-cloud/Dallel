@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { WithBottomBar } from "@/components/BottomBar";
-import { Header } from "@/components/Header";
 import { Star, ExternalLink } from "lucide-react";
 import { getFavs } from "@/lib/storage";
 import { useEffect, useState } from "react";
@@ -48,8 +47,6 @@ function Favorites() {
 
   return (
     <WithBottomBar>
-      <Header />
-
       {/* Tab bar — no section title above */}
       <div className="px-4 pt-3 mt-1 animate-reveal-up">
         <div className="lg-card flex rounded-2xl p-1 gap-1">

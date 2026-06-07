@@ -1,6 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { WithBottomBar } from "@/components/BottomBar";
-import { Header } from "@/components/Header";
 import { clearProfile, getProfile, clearChatHistory, getFavs, getLikes, getUserId, clearAll } from "@/lib/storage";
 import { useEffect, useState, useRef } from "react";
 import { useServerFn } from "@tanstack/react-start";
@@ -66,8 +65,6 @@ function Settings() {
 
   return (
     <WithBottomBar>
-      <Header />
-
       {/* Profile card — directly after header, no title above */}
       <div className="lg-panel mx-4 mt-3 rounded-3xl p-5 animate-reveal-up">
         <div className="lg-shine-stripe mb-4" />
