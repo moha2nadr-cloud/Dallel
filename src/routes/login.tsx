@@ -1,10 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { setProfile, setUserId, setUserEmail, isOnboarded, type Profile } from "@/lib/storage";
+import { setProfile, setUserId, setUserEmail, isOnboarded, setOnboarded, type Profile } from "@/lib/storage";
 import { useEffect, useRef, useCallback, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { getProfile as getServerProfile } from "@/lib/api/sync.functions";
 import { LiquidOrbs } from "@/components/LiquidOrbs";
 import logoSrc from "@/assets/logo-daleel.png";
+import { UserRound } from "lucide-react";
 
 const CLIENT_ID = "1036057874420-d2h6r8s755huud2336qqanvqj16soh4j.apps.googleusercontent.com";
 
@@ -66,13 +67,22 @@ function Login() {
 
   const handleGoogleSignIn = () => {
     setLoading(true);
-    // Click the real Google button rendered by GSI to show the full account picker
-    const realBtn = googleBtnRef.current?.querySelector("button, div[role=button]") as HTMLElement | null;
-    if (realBtn) {
-      realBtn.click();
-    } else {
+    const isMobile = typeof window !== "undefined" && "ontouchstart" in window;
+    if (isMobile) {
       google.accounts.id.prompt();
+      return;
     }
+    const realBtn = googleBtnRef.current?.querySelector("button, div[role=button]") as HTMLElement | null;
+    if (realBtn) realBtn.click();
+    else google.accounts.id.prompt();
+  };
+
+  const handleGuestLogin = () => {
+    const guestId = "guest_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
+    setUserId(guestId);
+    setProfile({ name: "", age: 0, specialization: "", university: "" });
+    setOnboarded(false);
+    navigate({ to: "/onboarding" });
   };
 
   return (
@@ -158,6 +168,22 @@ function Login() {
               </button>
               <div ref={googleBtnRef} className="absolute inset-0 opacity-0 pointer-events-none" aria-hidden />
             </div>
+
+            <div className="relative mt-3 flex items-center gap-3">
+              <span className="h-px flex-1" style={{ background: "linear-gradient(90deg,transparent,rgba(200,195,185,0.40),transparent)" }} />
+              <span className="text-[10px] text-gray-300">أو</span>
+              <span className="h-px flex-1" style={{ background: "linear-gradient(90deg,transparent,rgba(200,195,185,0.40),transparent)" }} />
+            </div>
+
+            <button type="button" onClick={handleGuestLogin}
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border px-5 py-3 text-[12px] font-bold text-gray-500 transition-lg active:scale-[0.98]"
+              style={{
+                background: "rgba(255,255,255,0.60)",
+                border: "1px solid rgba(200,195,185,0.25)",
+              }}>
+              <UserRound className="h-4 w-4" />
+              تسجيل الدخول بدون حساب
+            </button>
           </div>
 
           <p className="text-[10px] text-gray-400 text-center">
