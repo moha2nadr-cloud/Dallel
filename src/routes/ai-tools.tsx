@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { WithBottomBar } from "@/components/BottomBar";
-import { useCMS, type AiToolItem, type CatItem } from "@/lib/admin-store";
+import { Header } from "@/components/Header";
+import { useCMS, type AiToolItem } from "@/lib/admin-store";
 import { isFav, toggleFav, getFavs, getUserId } from "@/lib/storage";
 import { useLang } from "@/lib/i18n";
-import { Search, X, Bookmark, ExternalLink, Inbox } from "lucide-react";
-import { useMemo, useState, useEffect } from "react";
+import { Search, X, ExternalLink, Copy, Check, Inbox } from "lucide-react";
+import { useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { syncFavorites, getPublicAiTools, getPublicAiCategories } from "@/lib/api/sync.functions";
+import { syncFavorites } from "@/lib/api/sync.functions";
 
 export const Route = createFileRoute("/ai-tools")({
   head: () => ({ meta: [{ title: "أدوات AI — دليل" }] }),
@@ -16,36 +17,23 @@ export const Route = createFileRoute("/ai-tools")({
 function AiTools() {
   const [, t] = useLang();
   const [cms] = useCMS();
-  const [q, setQ]   = useState("");
+  const [q, setQ] = useState("");
   const [cat, setCat] = useState("all");
-  const [focused, setFocused] = useState(false);
-  const [toolsDb, setToolsDb] = useState<AiToolItem[]>([]);
-  const [catsDb, setCatsDb] = useState<CatItem[]>([]);
-  const fetchTools = useServerFn(getPublicAiTools);
-  const fetchCats = useServerFn(getPublicAiCategories);
-
-  useEffect(() => {
-    fetchTools().then(setToolsDb).catch(() => {});
-    fetchCats().then(setCatsDb).catch(() => {});
-  }, []);
-
-  const aiTools = toolsDb.length > 0 ? toolsDb : cms.aiTools;
-  const aiCategories = catsDb.length > 0 ? catsDb : cms.aiCategories;
   const doSyncFavs = useServerFn(syncFavorites);
   const userId = typeof window !== "undefined" ? getUserId() : null;
 
   const cats = useMemo(() => {
-    const from = Array.from(new Set(aiTools.map((x) => x.category).filter(Boolean)));
-    return Array.from(new Set([...aiCategories.map((c) => c.name), ...from]));
-  }, [aiTools, aiCategories]);
+    const from = Array.from(new Set(cms.aiTools.map((x) => x.category).filter(Boolean)));
+    return Array.from(new Set([...cms.aiCategories, ...from]));
+  }, [cms.aiTools, cms.aiCategories]);
 
   const filtered = useMemo(() => {
     const n = q.trim().toLowerCase();
-    return aiTools.filter((x) => {
+    return cms.aiTools.filter((x) => {
       if (cat !== "all" && x.category !== cat) return false;
       return !n || x.name.toLowerCase().includes(n) || (x.description ?? "").toLowerCase().includes(n);
     });
-  }, [aiTools, q, cat]);
+  }, [cms.aiTools, q, cat]);
 
   const handleFav = (id: string) => {
     const r = toggleFav("ai", id);
@@ -55,8 +43,9 @@ function AiTools() {
 
   return (
     <WithBottomBar>
-      {/* ── Search at very top, no dark bg, crystal glass ── */}
-      <div className="px-4 pt-2 pb-2 animate-reveal-up">
+      <Header />
+
+      <div className="px-4 pt-2 pb-1 animate-reveal-up">
         <div className="relative">
           <Search className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
           <input
@@ -64,8 +53,6 @@ function AiTools() {
             onChange={(e) => setQ(e.target.value)}
             placeholder={t.search_ai}
             className="w-full rounded-2xl py-3 pr-10 pl-10 text-[13px] text-gray-800 placeholder:text-gray-400 lg-input"
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
           />
           {q && (
             <button type="button" onClick={() => setQ("")} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
@@ -73,8 +60,6 @@ function AiTools() {
             </button>
           )}
         </div>
-
-        {/* Category chips */}
         {cats.length > 0 && (
           <div className="mt-2.5 flex gap-2 overflow-x-auto pb-1 no-scrollbar">
             <Chip active={cat === "all"} onClick={() => setCat("all")}>{t.all}</Chip>
@@ -83,14 +68,17 @@ function AiTools() {
         )}
       </div>
 
-      {/* Tools grid */}
       <main className="px-4 pb-4">
         {cms.aiTools.length === 0 ? <Empty text={t.no_data} /> :
-          filtered.length === 0 ? <p className="mt-12 text-center text-sm text-gray-400">{t.no_results}</p> : (
-            <div className="grid grid-cols-2 gap-3">
-              {filtered.map((x, idx) => <ToolCard key={x.id} t={x} onFav={handleFav} delay={idx * 0.035} />)}
-            </div>
-          )
+          filtered.length === 0
+            ? <p className="mt-12 text-center text-sm text-gray-400">{t.no_results}</p>
+            : (
+              <div className="grid grid-cols-2 gap-3">
+                {filtered.map((x, idx) => (
+                  <ToolCard key={x.id} t={x} onFav={handleFav} delay={idx * 0.04} index={idx} />
+                ))}
+              </div>
+            )
         }
       </main>
     </WithBottomBar>
@@ -111,28 +99,75 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
   );
 }
 
-function ToolCard({ t: x, onFav, delay = 0 }: { t: AiToolItem; onFav: (id: string) => boolean; delay?: number }) {
-  const [fav, setFav] = useState(() => isFav("ai", x.id));
+function ToolCard({ t: x, onFav, delay = 0, index = 0 }: { t: AiToolItem; onFav: (id: string) => boolean; delay?: number; index?: number }) {
+  const [copied, setCopied] = useState(false);
   const href = x.url.startsWith("http") ? x.url : `https://${x.url}`;
+
+  const handleCopy = async () => {
+    try { await navigator.clipboard.writeText(href); setCopied(true); setTimeout(() => setCopied(false), 2200); } catch {}
+  };
+
   return (
-    <div className="lg-card flex flex-col gap-2 rounded-3xl p-3 animate-reveal-up" style={{ animationDelay: `${delay}s` }}>
-      <div className="lg-shine-stripe" />
-      <div className="flex items-start justify-between">
-        <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl"
-          style={{ background: "rgba(255,255,255,0.90)", border: "1px solid rgba(200,195,185,0.28)", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }}>
-          {x.icon ? <img src={x.icon} alt="" className="h-full w-full object-cover" /> : <span className="text-sm font-extrabold text-logo">{x.name[0]}</span>}
+    <div
+      className="lg-card relative flex flex-col rounded-3xl animate-reveal-up"
+      style={{ aspectRatio: "1 / 1", padding: "12px 12px 10px", animationDelay: `${delay}s` }}
+    >
+      <div className="lg-shine-stripe mb-1.5" />
+
+      {/* NUMBER — top-right corner (start in RTL) */}
+      <span
+        className="absolute top-2.5 right-3 select-none leading-none"
+        style={{ fontSize: 26, fontWeight: 900, color: "#B5A898", opacity: 0.80, fontVariantNumeric: "tabular-nums", fontFamily: "Tajawal, sans-serif" }}
+      >
+        {index + 1}
+      </span>
+
+      {/* NAME + subtitle */}
+      <div style={{ paddingRight: "38px", minHeight: 34 }}>
+        <h3 className="text-[12.5px] font-extrabold text-gray-900 leading-tight line-clamp-1" title={x.name}>
+          {x.name}
+        </h3>
+        <p className="text-[10px] text-gray-500 line-clamp-1 mt-0.5 leading-tight">
+          {x.description || x.category}
+        </p>
+      </div>
+
+      {/* LARGE ICON — centered */}
+      <div className="flex flex-1 items-center justify-center py-1">
+        <div
+          className="flex items-center justify-center overflow-hidden rounded-[18px]"
+          style={{ width: 56, height: 56, background: "rgba(255,255,255,0.92)", border: "1px solid rgba(200,195,185,0.28)", boxShadow: "0 3px 12px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.98)" }}
+        >
+          {x.icon
+            ? <img src={x.icon} alt={x.name} className="object-contain" style={{ width: 36, height: 36 }} />
+            : <span style={{ fontSize: 22, fontWeight: 900, color: "#B5A898", fontFamily: "Tajawal,sans-serif" }}>{x.name[0]}</span>
+          }
         </div>
-        <button type="button" onClick={() => setFav(onFav(x.id))} className="p-1 transition-transform hover:scale-110" aria-label="تفضيل">
-          <Bookmark className={"h-4 w-4 " + (fav ? "fill-[#B5A898] text-[#B5A898]" : "text-gray-300")} />
+      </div>
+
+      {/* CATEGORY BADGE */}
+      <div className="flex justify-center mb-2">
+        <span className="rounded-full px-3 py-0.5 text-[10px] font-semibold"
+          style={{ background: "rgba(255,205,50,0.14)", color: "#7A6010", border: "1px solid rgba(255,200,50,0.28)" }}>
+          {x.category || "عام"}
+        </span>
+      </div>
+
+      {/* BUTTONS: فتح + نسخ */}
+      <div className="flex gap-1.5">
+        <a href={href} target="_blank" rel="noopener noreferrer"
+          className="flex flex-1 items-center justify-center gap-1 rounded-2xl text-[11px] font-bold text-white"
+          style={{ padding: "8px 4px", background: "#1A1A24", boxShadow: "0 2px 8px rgba(0,0,0,0.22)" }}>
+          <ExternalLink className="h-[13px] w-[13px]" />
+          فتح
+        </a>
+        <button type="button" onClick={handleCopy}
+          className="flex flex-1 items-center justify-center gap-1 rounded-2xl text-[11px] font-semibold transition-lg"
+          style={{ padding: "8px 4px", background: "rgba(255,255,255,0.85)", border: "1px solid rgba(200,195,185,0.35)", color: copied ? "#059669" : "#1A1A24", boxShadow: "0 1px 6px rgba(0,0,0,0.06)" }}>
+          {copied ? <Check className="h-[13px] w-[13px]" /> : <Copy className="h-[13px] w-[13px]" />}
+          {copied ? "تم!" : "نسخ"}
         </button>
       </div>
-      <p className="line-clamp-1 text-[12px] font-bold text-gray-800">{x.name}</p>
-      <p className="line-clamp-1 text-[10px] text-gray-400">{x.category}</p>
-      <a href={href} target="_blank" rel="noopener noreferrer"
-        className="mt-auto inline-flex items-center justify-center gap-1 rounded-full py-1.5 text-[11px] font-bold text-white transition-lg"
-        style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 8px rgba(181,168,152,0.35)" }}>
-        فتح <ExternalLink className="h-3 w-3" />
-      </a>
     </div>
   );
 }
