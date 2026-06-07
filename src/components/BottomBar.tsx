@@ -15,14 +15,18 @@ export function BottomBar() {
   ] as const;
 
   return (
-    /* Outer frame — fixed at bottom, full-width */
     <div
-      className="fixed bottom-0 inset-x-0 z-40 flex justify-center pb-[env(safe-area-inset-bottom)]"
-      style={{ paddingBottom: "max(env(safe-area-inset-bottom), 12px)", paddingTop: 8 }}
+      className="fixed bottom-0 inset-x-0 z-40 flex justify-center"
+      style={{
+        paddingBottom: "max(env(safe-area-inset-bottom), 10px)",
+        paddingTop: 8,
+        paddingLeft: 12,
+        paddingRight: 12,
+      }}
     >
-      {/* The pill nav bar — like the reference image */}
+      {/* Pill nav */}
       <nav
-        className="glass-nav mx-4 flex w-full max-w-md items-center justify-between rounded-[28px] px-3 py-2"
+        className="glass-nav flex w-full max-w-md items-center justify-between rounded-[28px] px-2 py-2"
         role="navigation"
         aria-label="التنقل الرئيسي"
       >
@@ -39,38 +43,35 @@ export function BottomBar() {
               className="relative flex flex-1 flex-col items-center justify-center gap-0.5 py-1 group"
               aria-current={active ? "page" : undefined}
             >
-              {/* Active background pill */}
+              {/* Active pill behind icon+label */}
               {active && (
                 <span
-                  className="absolute inset-x-0 mx-1 rounded-[18px] glass-nav-pill"
-                  style={{ insetBlock: "0" }}
+                  className="absolute glass-nav-pill rounded-[18px]"
+                  style={{ inset: 0, margin: "0 4px" }}
                   aria-hidden
                 />
               )}
 
               {/* Icon */}
-              <span
-                className={
-                  "relative flex h-8 w-8 items-center justify-center rounded-[14px] transition-all duration-200 " +
-                  (active ? "" : "group-hover:scale-110")
-                }
-              >
+              <span className="relative flex h-7 w-7 items-center justify-center">
                 <Icon
                   className={
-                    "h-[18px] w-[18px] transition-all duration-200 " +
+                    "h-[19px] w-[19px] transition-all duration-200 " +
                     (active
-                      ? "text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.5)]"
-                      : "text-[#96b8d6] group-hover:text-[#c4d8ea]")
+                      ? "text-white drop-shadow-[0_0_8px_rgba(200,230,255,0.70)]"
+                      : "text-[#6b92ba] group-hover:text-[#b0d0ea]")
                   }
-                  strokeWidth={active ? 2.4 : 1.8}
+                  strokeWidth={active ? 2.5 : 1.8}
                 />
               </span>
 
               {/* Label */}
               <span
                 className={
-                  "relative text-[10px] font-semibold transition-colors duration-200 " +
-                  (active ? "text-white" : "text-[#6b92ba] group-hover:text-[#96b8d6]")
+                  "relative text-[10px] font-semibold leading-none transition-colors duration-200 " +
+                  (active
+                    ? "text-white drop-shadow-[0_1px_4px_rgba(100,165,230,0.50)]"
+                    : "text-[#4a70a0] group-hover:text-[#6b92ba]")
                 }
               >
                 {tab.label}

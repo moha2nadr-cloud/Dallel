@@ -3,6 +3,7 @@ import { setProfile, setUserId, setUserEmail, isOnboarded, type Profile } from "
 import { useEffect, useRef, useCallback, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { getProfile as getServerProfile } from "@/lib/api/sync.functions";
+import { LiquidOrbs } from "@/components/LiquidOrbs";
 
 const CLIENT_ID = "1036057874420-d2h6r8s755huud2336qqanvqj16soh4j.apps.googleusercontent.com";
 
@@ -30,12 +31,8 @@ function Login() {
       setUserId(userId);
       setUserEmail(data.email as string);
       const googleProfile: Profile = {
-        name: data.name,
-        email: data.email,
-        picture: data.picture,
-        age: 0,
-        specialization: "",
-        university: "",
+        name: data.name, email: data.email, picture: data.picture,
+        age: 0, specialization: "", university: "",
       };
       setProfile(googleProfile);
       if (isOnboarded()) {
@@ -51,9 +48,7 @@ function Login() {
               university: server.university || "",
             });
           }
-        } catch {
-          // fallback
-        }
+        } catch {}
         navigate({ to: "/home" });
       } else {
         navigate({ to: "/onboarding" });
@@ -65,139 +60,76 @@ function Login() {
   useEffect(() => {
     if (loadedRef.current) return;
     loadedRef.current = true;
-
     const init = () => {
-      google.accounts.id.initialize({
-        client_id: CLIENT_ID,
-        callback: handleCredential,
-        cancel_on_tap_outside: false,
-      });
+      google.accounts.id.initialize({ client_id: CLIENT_ID, callback: handleCredential, cancel_on_tap_outside: false });
       if (googleBtnRef.current) {
-        google.accounts.id.renderButton(googleBtnRef.current, {
-          type: "standard",
-          shape: "rectangular",
-          theme: "outline",
-          size: "large",
-          text: "signin_with",
-        });
+        google.accounts.id.renderButton(googleBtnRef.current, { type: "standard", shape: "rectangular", theme: "outline", size: "large", text: "signin_with" });
       }
     };
-
-    if (typeof google !== "undefined" && google.accounts?.id) {
-      init();
-    } else {
+    if (typeof google !== "undefined" && google.accounts?.id) { init(); }
+    else {
       const s = document.createElement("script");
       s.src = "https://accounts.google.com/gsi/client";
-      s.async = true;
-      s.defer = true;
-      s.onload = init;
+      s.async = true; s.defer = true; s.onload = init;
       document.head.appendChild(s);
     }
   }, [handleCredential]);
 
   const handleGoogleSignIn = () => {
     const btn = googleBtnRef.current?.querySelector("button[aria-labelledby]");
-    if (btn) {
-      setLoading(true);
-      (btn as HTMLButtonElement).click();
-    } else {
-      google.accounts.id.prompt();
-    }
+    if (btn) { setLoading(true); (btn as HTMLButtonElement).click(); }
+    else google.accounts.id.prompt();
   };
 
   return (
     <div
       className="relative flex min-h-screen flex-col items-center justify-between overflow-hidden px-6 py-16"
-      style={{ background: "linear-gradient(160deg, #141E30 0%, #0a1220 100%)" }}
+      style={{ background: "linear-gradient(160deg, #0e1828 0%, #0a1422 100%)" }}
     >
-      {/* Background orbs */}
-      <div
-        className="pointer-events-none fixed inset-0"
-        aria-hidden
-        style={{
-          background: `
-            radial-gradient(ellipse 70% 55% at 20% 10%, rgba(53,87,125,0.32) 0%, transparent 60%),
-            radial-gradient(ellipse 50% 45% at 80% 15%, rgba(42,65,102,0.22) 0%, transparent 55%),
-            radial-gradient(ellipse 60% 50% at 50% 90%, rgba(35,50,82,0.28) 0%, transparent 60%)
-          `,
-        }}
-      />
+      {/* Vivid liquid orbs */}
+      <LiquidOrbs />
 
-      {/* Floating rings */}
-      <div
-        className="pointer-events-none fixed"
-        style={{
-          top: "-10vh",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "130vw",
-          height: "130vw",
-          borderRadius: "50%",
-          border: "1px solid rgba(53,87,125,0.12)",
-        }}
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none fixed"
-        style={{
-          top: "-5vh",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "90vw",
-          height: "90vw",
-          borderRadius: "50%",
-          border: "1px solid rgba(53,87,125,0.08)",
-        }}
-        aria-hidden
-      />
-
-      {/* Logo section */}
-      <div className="relative flex flex-1 flex-col items-center justify-center text-center gap-5">
-        {/* Logo mark */}
+      {/* Logo + headline */}
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center text-center gap-6">
+        {/* Glass logo */}
         <div
-          className="relative flex h-20 w-20 items-center justify-center rounded-3xl animate-logo-enter"
+          className="relative flex h-24 w-24 items-center justify-center rounded-[1.75rem] animate-logo-enter"
           style={{
-            background: "linear-gradient(145deg, rgba(53,87,125,0.35), rgba(20,30,48,0.50))",
-            border: "1px solid rgba(255,255,255,0.12)",
-            boxShadow: "0 16px 48px rgba(53,87,125,0.35), inset 0 1px 0 rgba(255,255,255,0.08)",
-            backdropFilter: "blur(20px)",
+            background: "linear-gradient(145deg, rgba(200,228,255,0.16) 0%, rgba(80,140,210,0.12) 100%)",
+            border: "1px solid rgba(255,255,255,0.28)",
+            boxShadow:
+              "0 20px 56px rgba(80,140,220,0.35), " +
+              "0 4px 16px rgba(0,0,0,0.30), " +
+              "inset 0 1px 0 rgba(255,255,255,0.24)",
+            backdropFilter: "blur(28px)",
           }}
         >
-          <svg viewBox="0 0 48 48" className="h-12 w-12" aria-hidden>
-            <text
-              x="24" y="37"
-              textAnchor="middle"
-              fontFamily="Tajawal, sans-serif"
-              fontWeight="900"
-              fontSize="34"
-              fill="url(#login-grad)"
-            >
-              د
-            </text>
+          {/* Top-left shine */}
+          <div
+            className="absolute inset-0 rounded-[1.75rem]"
+            style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.16) 0%, transparent 50%)" }}
+          />
+          <svg viewBox="0 0 48 48" className="relative h-14 w-14" aria-hidden>
             <defs>
-              <linearGradient id="login-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#c4d8ea" />
-                <stop offset="100%" stopColor="#6b92ba" />
+              <linearGradient id="lg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#e8f2fb" />
+                <stop offset="100%" stopColor="#96b8d6" />
               </linearGradient>
             </defs>
+            <text x="24" y="37" textAnchor="middle"
+              fontFamily="Tajawal, sans-serif" fontWeight="900" fontSize="34"
+              fill="url(#lg-grad)">
+              د
+            </text>
           </svg>
-          {/* Glow */}
-          <div
-            className="absolute inset-0 rounded-3xl"
-            style={{
-              background: "radial-gradient(circle at 50% 20%, rgba(255,255,255,0.06), transparent 60%)",
-            }}
-          />
         </div>
 
-        <div className="animate-reveal-up" style={{ animationDelay: "0.25s" }}>
+        <div className="animate-reveal-up" style={{ animationDelay: "0.28s" }}>
           <h1
             className="text-[32px] font-extrabold leading-tight"
             style={{
-              background: "linear-gradient(135deg, #e8f0f8 0%, #96b8d6 60%, #6b92ba 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
+              background: "linear-gradient(135deg, #e8f2fb 0%, #c4d8ea 55%, #6b92ba 100%)",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
             }}
           >
             مرحباً بك في دليل
@@ -207,18 +139,16 @@ function Login() {
           </p>
         </div>
 
-        {/* Feature badges */}
-        <div
-          className="mt-2 flex flex-wrap justify-center gap-2 animate-reveal-up"
-          style={{ animationDelay: "0.35s" }}
-        >
+        {/* Feature chips */}
+        <div className="flex flex-wrap justify-center gap-2 animate-reveal-up" style={{ animationDelay: "0.38s" }}>
           {["أدوات AI", "دراسة ذكية", "مجتمع طلابي"].map((f) => (
             <span
               key={f}
-              className="rounded-full px-3 py-1 text-[11px] font-semibold text-[#96b8d6]"
+              className="rounded-full px-3 py-1 text-[11px] font-semibold text-[#c4d8ea]"
               style={{
-                background: "rgba(53,87,125,0.15)",
-                border: "1px solid rgba(107,146,186,0.20)",
+                background: "rgba(200,228,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.22)",
+                backdropFilter: "blur(12px)",
               }}
             >
               {f}
@@ -227,25 +157,28 @@ function Login() {
         </div>
       </div>
 
-      {/* Sign-in area */}
-      <div
-        className="relative w-full max-w-sm animate-reveal-up"
-        style={{ animationDelay: "0.45s" }}
-      >
-        {/* Glass card */}
+      {/* Sign-in card */}
+      <div className="relative z-10 w-full max-w-sm animate-reveal-up" style={{ animationDelay: "0.48s" }}>
         <div
           className="rounded-3xl p-5"
           style={{
-            background: "rgba(53,87,125,0.12)",
-            border: "1px solid rgba(255,255,255,0.10)",
-            backdropFilter: "blur(24px)",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.06)",
+            background: "linear-gradient(148deg, rgba(200,228,252,0.14) 0%, rgba(120,175,235,0.09) 100%)",
+            border: "1px solid rgba(255,255,255,0.26)",
+            backdropFilter: "blur(32px) saturate(200%)",
+            boxShadow:
+              "0 20px 56px rgba(0,0,0,0.32), " +
+              "inset 0 1px 0 rgba(255,255,255,0.22)",
           }}
         >
+          {/* Inset shine stripe */}
+          <div
+            className="absolute top-0 left-6 right-6 h-px rounded-full"
+            style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)" }}
+          />
+
           <p className="mb-4 text-center text-[12px] text-[#6b92ba]">
             تسجيل الدخول للوصول إلى كل المميزات
           </p>
-
           <div className="relative">
             <button
               type="button"
@@ -253,23 +186,21 @@ function Login() {
               disabled={loading}
               className="flex w-full items-center justify-center gap-3 rounded-2xl px-5 py-3.5 text-[13px] font-bold transition-glass active:scale-[0.98] disabled:opacity-60"
               style={{
-                background: "linear-gradient(145deg, rgba(255,255,255,0.92), rgba(232,240,248,0.88))",
+                background: "linear-gradient(145deg, rgba(255,255,255,0.95), rgba(230,245,255,0.90))",
                 color: "#141E30",
-                boxShadow: "0 6px 20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.60)",
+                boxShadow: "0 6px 20px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.70)",
               }}
             >
-              {loading ? (
-                <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#35577D] border-t-transparent" />
-              ) : (
-                <GoogleIcon />
-              )}
+              {loading
+                ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#35577D] border-t-transparent" />
+                : <GoogleIcon />
+              }
               {loading ? "جاري تسجيل الدخول..." : "تسجيل الدخول بـ Google"}
             </button>
             <div ref={googleBtnRef} className="absolute inset-0 opacity-0" aria-hidden />
           </div>
         </div>
-
-        <p className="pt-5 text-center text-[10px] leading-relaxed text-[#35577D]">
+        <p className="pt-5 text-center text-[10px] leading-relaxed text-[#2a4166]">
           بدخولك فأنت توافق على شروط الاستخدام وسياسة الخصوصية
         </p>
       </div>
