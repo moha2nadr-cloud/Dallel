@@ -14,6 +14,8 @@ const CHAT_KEY = "daleel:chat";
 const USER_ID_KEY = "daleel:userid";
 const USER_EMAIL_KEY = "daleel:useremail";
 const ONBOARDING_KEY = "daleel:onboarded";
+// مفتاح البكاب مرتبط بـ userId — لا يُمسح عند clearProfile() أو logout
+const PROFILE_BACKUP_PREFIX = "daleel:pbk:";
 
 export type ChatMessage = { role: "user" | "assistant"; content: string; ts: number };
 
@@ -89,6 +91,24 @@ export function setProfile(p: Profile) {
 export function clearProfile() {
   localStorage.removeItem(PROFILE_KEY);
 }
+
+// ─── Backup مرتبط بـ userId يبقى بعد logout ────────────────────────────────
+// يُستخدم كـ fallback عندما يفشل تحميل البروفايل من السيرفر
+export function getProfileBackup(userId: string): Profile | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(PROFILE_BACKUP_PREFIX + userId);
+    return raw ? (JSON.parse(raw) as Profile) : null;
+  } catch {
+    return null;
+  }
+}
+
+export function setProfileBackup(userId: string, p: Profile) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(PROFILE_BACKUP_PREFIX + userId, JSON.stringify(p));
+}
+// ─────────────────────────────────────────────────────────────────────────────
 
 export type FavKind = "post" | "ai" | "tool" | "chat";
 
