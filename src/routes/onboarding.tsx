@@ -69,8 +69,8 @@ function Onboarding() {
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-white">
       <LiquidOrbs />
 
-      {/* Header */}
-      <div className="relative z-10 flex items-center justify-between px-5 pt-12 pb-4">
+      {/* Header — قلّلنا pt-12 → pt-7 */}
+      <div className="relative z-10 flex items-center justify-between px-5 pt-7 pb-3">
         <button type="button" onClick={onBack}
           className="flex h-9 w-9 items-center justify-center rounded-2xl transition-lg"
           style={{ background: "rgba(255,255,255,0.80)", border: "1px solid rgba(200,195,185,0.32)", boxShadow: "0 2px 10px rgba(0,0,0,0.06)", backdropFilter: "blur(16px)" }}
@@ -106,13 +106,13 @@ function Onboarding() {
         />
       </div>
 
-      {/* Logo small */}
-      <div className="relative z-10 flex justify-center pt-6">
-        <img src={logoSrc} alt="دليل" style={{ height: 36, width: "auto", objectFit: "contain", opacity: 0.55 }} />
+      {/* Logo small — قلّلنا pt-6 → pt-3 */}
+      <div className="relative z-10 flex justify-center pt-3">
+        <img src={logoSrc} alt="دليل" style={{ height: 32, width: "auto", objectFit: "contain", opacity: 0.55 }} />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 px-5 pt-8" key={step}>
+      {/* Content + زر التالي في نفس الكتلة — قلّلنا pt-8 → pt-5 */}
+      <div className="relative z-10 px-5 pt-5" key={step}>
         <div className="animate-reveal-up">
           <span className="mb-3 inline-block rounded-full px-3 py-1 text-[11px] font-semibold text-[#8B7D6F]"
             style={{ background: "rgba(181,168,152,0.12)", border: "1px solid rgba(181,168,152,0.25)" }}>
@@ -121,7 +121,8 @@ function Onboarding() {
           <h1 className="text-[28px] font-extrabold mb-2 text-gray-900">{STEPS[step].title}</h1>
           <p className="text-[13px] text-gray-500">{STEPS[step].sub}</p>
 
-          <div className="mt-8">
+          {/* Input */}
+          <div className="mt-6">
             <label className="mb-2 block text-[11px] font-semibold uppercase tracking-wider text-gray-400">
               {STEPS[step].label}
             </label>
@@ -139,21 +140,21 @@ function Onboarding() {
               />
             )}
           </div>
-        </div>
-      </div>
 
-      {/* CTA */}
-      <div className="relative z-10 px-5 pb-4 pt-4">
-        <button type="button" onClick={onNext} disabled={!canNext}
-          className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-[15px] font-extrabold text-white transition-lg active:scale-[0.97] disabled:opacity-35"
-          style={{
-            background: canNext ? "linear-gradient(135deg,#B5A898,#8B7D6F)" : "#E8E8ED",
-            color: canNext ? "#fff" : "#A3A3B4",
-            boxShadow: canNext ? "0 8px 24px rgba(181,168,152,0.40)" : "none",
-            border: "1px solid rgba(255,255,255,0.20)",
-          }}>
-          {step === total - 1 ? <><Check className="h-5 w-5" /> ابدأ الآن</> : "التالي"}
-        </button>
+          {/* زر التالي — مباشرةً تحت الـ input بدل الأسفل */}
+          <div className="mt-5 pb-6">
+            <button type="button" onClick={onNext} disabled={!canNext}
+              className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-[15px] font-extrabold text-white transition-lg active:scale-[0.97] disabled:opacity-35"
+              style={{
+                background: canNext ? "linear-gradient(135deg,#B5A898,#8B7D6F)" : "#E8E8ED",
+                color: canNext ? "#fff" : "#A3A3B4",
+                boxShadow: canNext ? "0 8px 24px rgba(181,168,152,0.40)" : "none",
+                border: "1px solid rgba(255,255,255,0.20)",
+              }}>
+              {step === total - 1 ? <><Check className="h-5 w-5" /> ابدأ الآن</> : "التالي"}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
