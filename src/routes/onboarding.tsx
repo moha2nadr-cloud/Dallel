@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { setProfile, getProfile, getUserId, setOnboarded } from "@/lib/storage";
+import { setProfile, getProfile, getUserId, setOnboarded, setProfileBackup } from "@/lib/storage";
 import { ChevronRight, X, Check } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { syncProfile } from "@/lib/api/sync.functions";
@@ -58,7 +58,13 @@ function Onboarding() {
     const profile = saveProfile();
     setOnboarded(true);
     const userId = getUserId();
-    if (userId) doSyncProfile({ data: { userId, ...profile } }).catch(() => {});
+    if (userId) {
+      // احفظ backup محلي مرتبط بـ userId — يبقى بعد logout
+      // ويُستخدم كـ fallback عند تعذّر تحميل البروفايل من السيرفر
+      setProfileBackup(userId, profile);
+      // زامن مع السيرفر (fire-and-forget)
+      doSyncProfile({ data: { userId, ...profile } }).catch(() => {});
+    }
     navigate({ to: "/home" });
   };
 
@@ -69,7 +75,7 @@ function Onboarding() {
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-white">
       <LiquidOrbs />
 
-      {/* Header — قلّلنا pt-12 → pt-7 */}
+      {/* Header */}
       <div className="relative z-10 flex items-center justify-between px-5 pt-7 pb-3">
         <button type="button" onClick={onBack}
           className="flex h-9 w-9 items-center justify-center rounded-2xl transition-lg"
@@ -78,7 +84,6 @@ function Onboarding() {
           <ChevronRight className="h-5 w-5 text-gray-500" />
         </button>
 
-        {/* Step dots */}
         <div className="flex items-center gap-1.5">
           {Array.from({ length: total }).map((_, idx) => (
             <div key={idx} className="rounded-full transition-all duration-500"
@@ -106,12 +111,12 @@ function Onboarding() {
         />
       </div>
 
-      {/* Logo small — قلّلنا pt-6 → pt-3 */}
+      {/* Logo small */}
       <div className="relative z-10 flex justify-center pt-3">
         <img src={logoSrc} alt="دليل" style={{ height: 32, width: "auto", objectFit: "contain", opacity: 0.55 }} />
       </div>
 
-      {/* Content + زر التالي في نفس الكتلة — قلّلنا pt-8 → pt-5 */}
+      {/* Content + زر التالي */}
       <div className="relative z-10 px-5 pt-5" key={step}>
         <div className="animate-reveal-up">
           <span className="mb-3 inline-block rounded-full px-3 py-1 text-[11px] font-semibold text-[#8B7D6F]"
@@ -121,7 +126,6 @@ function Onboarding() {
           <h1 className="text-[28px] font-extrabold mb-2 text-gray-900">{STEPS[step].title}</h1>
           <p className="text-[13px] text-gray-500">{STEPS[step].sub}</p>
 
-          {/* Input */}
           <div className="mt-6">
             <label className="mb-2 block text-[11px] font-semibold uppercase tracking-wider text-gray-400">
               {STEPS[step].label}
@@ -141,7 +145,6 @@ function Onboarding() {
             )}
           </div>
 
-          {/* زر التالي — مباشرةً تحت الـ input بدل الأسفل */}
           <div className="mt-5 pb-6">
             <button type="button" onClick={onNext} disabled={!canNext}
               className="flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-[15px] font-extrabold text-white transition-lg active:scale-[0.97] disabled:opacity-35"
