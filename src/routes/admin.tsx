@@ -67,13 +67,16 @@ function Admin() {
 function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [cms, setCms] = useCMS();
   const TABS = [
-    { key: "slides", label: "السلايدر" }, { key: "posts", label: "منشورات" },
-    { key: "ai", label: "أدوات AI" }, { key: "utils", label: "أدوات عامة" }, { key: "chat", label: "المساعد" },
+    { key: "slides", label: "السلايدر", icon: "🖼️" },
+    { key: "posts",  label: "منشورات",  icon: "📝" },
+    { key: "ai",     label: "أدوات AI", icon: "🤖" },
+    { key: "utils",  label: "أدوات عامة", icon: "🛠️" },
+    { key: "chat",   label: "المساعد",  icon: "💬" },
   ] as const;
   const [tab, setTab] = useState<typeof TABS[number]["key"]>("slides");
 
   return (
-    <div className="min-h-screen pb-16 bg-white">
+    <div className="min-h-screen bg-white">
       <header className="sticky top-0 z-30 flex items-center justify-between px-5 py-4 lg-header">
         <h1 className="text-[16px] font-extrabold logo-gradient">لوحة التحكم</h1>
         <button type="button" onClick={onLogout}
@@ -83,27 +86,30 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         </button>
       </header>
 
-      <div className="flex justify-end overflow-x-auto no-scrollbar px-4 pt-4">
-        <div className="inline-flex gap-1 rounded-2xl p-1 lg-card">
+      <div className="flex gap-4 px-4 pt-4">
+        {/* Sidebar tabs */}
+        <div className="flex w-[140px] shrink-0 flex-col gap-1.5 rounded-2xl p-2 lg-card h-fit sticky top-20">
           {TABS.map((t) => (
             <button key={t.key} type="button" onClick={() => setTab(t.key)}
-              className="whitespace-nowrap rounded-xl px-4 py-2 text-[12px] font-semibold transition-lg"
+              className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-[12px] font-semibold transition-all text-right"
               style={tab === t.key
                 ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A", boxShadow: "0 2px 8px rgba(181,168,152,0.18)" }
                 : { color: "#9090A8" }
               }>
-              {t.label}
+              <span className="text-[14px]">{t.icon}</span>
+              <span>{t.label}</span>
             </button>
           ))}
         </div>
-      </div>
 
-      <div className="px-4 pt-4">
-        {tab === "slides" && <SlidesEditor slides={cms.slides} onChange={(s) => setCms({ ...cms, slides: s })} />}
-        {tab === "posts"  && <PostsEditor  posts={cms.posts}   onChange={(p) => setCms({ ...cms, posts: p })} />}
-        {tab === "ai"     && <AiEditor    items={cms.aiTools}  cats={cms.aiCategories}   onChange={(i, c) => setCms({ ...cms, aiTools: i, aiCategories: c })} />}
-        {tab === "utils"  && <UtilsEditor items={cms.utilities} cats={cms.utilCategories} onChange={(i, c) => setCms({ ...cms, utilities: i, utilCategories: c })} />}
-        {tab === "chat"   && <ChatEditor prompt={cms.chatSystemPrompt} model={cms.chatModel} onSave={(p, m) => { setCms({ ...cms, chatSystemPrompt: p, chatModel: m }); toast.success("تم الحفظ"); }} />}
+        {/* Content */}
+        <div className="flex-1 min-w-0 pb-16">
+          {tab === "slides" && <SlidesEditor slides={cms.slides} onChange={(s) => setCms({ ...cms, slides: s })} />}
+          {tab === "posts"  && <PostsEditor  posts={cms.posts}   onChange={(p) => setCms({ ...cms, posts: p })} />}
+          {tab === "ai"     && <AiEditor    items={cms.aiTools}  cats={cms.aiCategories}   onChange={(i, c) => setCms({ ...cms, aiTools: i, aiCategories: c })} />}
+          {tab === "utils"  && <UtilsEditor items={cms.utilities} cats={cms.utilCategories} onChange={(i, c) => setCms({ ...cms, utilities: i, utilCategories: c })} />}
+          {tab === "chat"   && <ChatEditor prompt={cms.chatSystemPrompt} model={cms.chatModel} onSave={(p, m) => { setCms({ ...cms, chatSystemPrompt: p, chatModel: m }); toast.success("تم الحفظ"); }} />}
+        </div>
       </div>
     </div>
   );
