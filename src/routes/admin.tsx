@@ -175,10 +175,10 @@ function SlidesEditor({ slides, onChange }: { slides: Slide[]; onChange: (s: Sli
 
       {/* Modal */}
       {show && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center px-4 pb-8"
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 pt-[15vh]"
           style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
           onClick={() => setShow(false)}>
-          <div className="w-full max-w-sm animate-slide-up rounded-2xl p-5 shadow-2xl"
+          <div className="w-full max-w-sm animate-scale-in rounded-2xl p-5 shadow-2xl"
             style={{ background: "#fff" }}
             onClick={(e) => e.stopPropagation()}>
             <h2 className="mb-4 text-[15px] font-extrabold text-gray-900">إضافة سلايد</h2>
@@ -269,10 +269,10 @@ function PostsEditor({ posts, onChange }: { posts: Post[]; onChange: (p: Post[])
       <AddBtn onClick={openForAdd} label="إضافة منشور" />
 
       {show && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center px-4 pb-8"
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 pt-[15vh]"
           style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
           onClick={() => setShow(false)}>
-          <div className="w-full max-w-sm animate-slide-up rounded-2xl p-5 shadow-2xl"
+          <div className="w-full max-w-sm animate-scale-in rounded-2xl p-5 shadow-2xl"
             style={{ background: "#fff" }}
             onClick={(e) => e.stopPropagation()}>
             <h2 className="mb-4 text-[15px] font-extrabold text-gray-900">
