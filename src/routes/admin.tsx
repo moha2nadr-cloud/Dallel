@@ -175,7 +175,7 @@ function SlidesEditor({ slides, onChange }: { slides: Slide[]; onChange: (s: Sli
 
       {/* Modal */}
       {show && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center px-4 pb-4"
+        <div className="fixed inset-0 z-50 flex flex-col justify-end items-center px-4 pb-4"
           style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
           onClick={() => setShow(false)}>
           <div className="w-full max-w-sm animate-scale-in rounded-2xl p-5 shadow-2xl"
@@ -269,7 +269,7 @@ function PostsEditor({ posts, onChange }: { posts: Post[]; onChange: (p: Post[])
       <AddBtn onClick={openForAdd} label="إضافة منشور" />
 
       {show && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center px-4 pb-4"
+        <div className="fixed inset-0 z-50 flex flex-col justify-end items-center px-4 pb-4"
           style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
           onClick={() => setShow(false)}>
           <div className="w-full max-w-sm animate-scale-in rounded-2xl p-5 shadow-2xl"
