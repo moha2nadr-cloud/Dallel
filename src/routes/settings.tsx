@@ -22,7 +22,7 @@ function Settings() {
   const doSyncChat    = useServerFn(syncChat);
   useEffect(() => setP(getProfile()), []);
 
-  const [modal, setModal] = useState<"logout" | "delete" | null>(null);
+  const [modal, setModal] = useState<"logout" | "delete" | "lang" | null>(null);
   const [countdown, setCountdown] = useState(7);
   const timerRef = useRef<ReturnType<typeof setInterval>>();
 
@@ -76,7 +76,7 @@ function Settings() {
       </div>
 
       <Group delay={0.10}>
-        <Row icon={Globe}  label={t.language}     value={lang === "ar" ? t.arabic : t.english} onClick={() => setLang(lang === "ar" ? "en" : "ar" as Lang)} />
+        <Row icon={Globe}  label={t.language}     value={lang === "ar" ? t.arabic : t.english} onClick={() => setModal("lang")} />
       </Group>
 
       <Group delay={0.14}>
@@ -108,8 +108,33 @@ function Settings() {
         </span>
       </div>
 
-      {/* Modal */}
-      {modal && (
+      {/* Language modal */}
+      {modal === "lang" && (
+        <div onClick={closeModal} className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 animate-fade-in">
+          <div onClick={e => e.stopPropagation()} className="mx-4 w-[300px] rounded-2xl bg-white px-5 py-5 text-center shadow-lg animate-scale-in">
+            <p className="text-[15px] font-bold text-gray-900 mb-4">اختر اللغة</p>
+            <button type="button" onClick={() => { setLang("ar"); closeModal(); }}
+              className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-[13px] font-semibold transition-all mb-2"
+              style={lang === "ar"
+                ? { background: "linear-gradient(135deg,rgba(181,168,152,0.15),rgba(139,125,111,0.10))", border: "1px solid rgba(181,168,152,0.30)", color: "#72665A" }
+                : { background: "rgba(255,255,255,0.80)", border: "1px solid rgba(200,195,185,0.20)", color: "#9090A8" }}>
+              <span>🇸🇦 عربي</span>
+              {lang === "ar" && <span className="text-[#8B7D6F]">✓</span>}
+            </button>
+            <button type="button" onClick={() => { setLang("en"); closeModal(); }}
+              className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-[13px] font-semibold transition-all"
+              style={lang === "en"
+                ? { background: "linear-gradient(135deg,rgba(181,168,152,0.15),rgba(139,125,111,0.10))", border: "1px solid rgba(181,168,152,0.30)", color: "#72665A" }
+                : { background: "rgba(255,255,255,0.80)", border: "1px solid rgba(200,195,185,0.20)", color: "#9090A8" }}>
+              <span>🇬🇧 English</span>
+              {lang === "en" && <span className="text-[#8B7D6F]">✓</span>}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Logout / Delete modal */}
+      {(modal === "logout" || modal === "delete") && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-5"
           style={{ background: "rgba(0,0,0,0.18)", backdropFilter: "blur(8px)" }}>
           <div className="lg-panel w-full max-w-sm rounded-3xl p-6 text-center animate-reveal-up">
