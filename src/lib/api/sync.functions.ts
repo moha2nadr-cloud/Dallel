@@ -1,8 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { initDb, upsertProfileDb, getProfileDb, syncFavoritesDb, getFavoritesDb, syncLikesDb, getLikesDb, syncChatDb, getChatDb } from "../db.server";
+import { initDb, upsertProfileDb, getProfileDb, syncFavoritesDb, getFavoritesDb, syncLikesDb, getLikesDb, syncChatDb, getChatDb, initCmsDb, saveCmsDb, loadCmsDb } from "../db.server";
 
-const ensureDb = initDb();
+const ensureDb = Promise.all([initDb(), initCmsDb()]);
 
 export const syncProfile = createServerFn({ method: "POST" })
   .inputValidator(z.object({
@@ -91,4 +91,18 @@ export const getChat = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     await ensureDb;
     return getChatDb(data.userId);
+  });
+
+export const syncCms = createServerFn({ method: "POST" })
+  .inputValidator(z.object({ data: z.record(z.unknown()) }))
+  .handler(async ({ data }) => {
+    await ensureDb;
+    await saveCmsDb(data.data);
+    return { ok: true };
+  });
+
+export const getCms = createServerFn({ method: "POST" })
+  .handler(async () => {
+    await ensureDb;
+    return loadCmsDb();
   });

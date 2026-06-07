@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { syncCms, getCms } from "@/lib/api/sync.functions";
 
 export type Slide = { id: string; image: string; title?: string; link?: string };
 export type Post = {
@@ -96,6 +97,8 @@ export function getCMS(): CMS {
 export function setCMS(c: CMS) {
   localStorage.setItem(KEY, JSON.stringify(c));
   window.dispatchEvent(new CustomEvent("daleel:cms"));
+  // fire-and-forget sync to server
+  syncCms({ data: c }).catch(() => {});
 }
 
 export function updateCMS(patch: Partial<CMS>) {
@@ -107,6 +110,14 @@ export function useCMS(): [CMS, (c: CMS) => void] {
   useEffect(() => {
     const h = () => set(getCMS());
     window.addEventListener("daleel:cms", h);
+    // load fresh data from server on mount
+    getCms().then((server) => {
+      if (server && typeof server === "object" && Object.keys(server).length > 0) {
+        const merged = { ...DEFAULT, ...server } as CMS;
+        localStorage.setItem(KEY, JSON.stringify(merged));
+        set(merged);
+      }
+    }).catch(() => {});
     return () => window.removeEventListener("daleel:cms", h);
   }, []);
   return [c, setCMS];

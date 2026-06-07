@@ -119,3 +119,28 @@ export async function getChatDb(userId: string): Promise<{ role: string; content
   const sql = getSql();
   return sql`SELECT role, content, ts FROM chat_messages WHERE user_id = ${userId} ORDER BY ts ASC`;
 }
+
+/* ── CMS (slides, posts, tools, utilities, categories) ── */
+export async function initCmsDb() {
+  const sql = getSql();
+  await sql`
+    CREATE TABLE IF NOT EXISTS cms (
+      id TEXT PRIMARY KEY DEFAULT 'main',
+      data JSONB NOT NULL DEFAULT '{}'::jsonb,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  // ensure a row always exists
+  await sql`INSERT INTO cms (id, data) VALUES ('main', '{}'::jsonb) ON CONFLICT (id) DO NOTHING`;
+}
+
+export async function saveCmsDb(data: Record<string, unknown>) {
+  const sql = getSql();
+  await sql`UPDATE cms SET data = ${JSON.stringify(data)}::jsonb, updated_at = NOW() WHERE id = 'main'`;
+}
+
+export async function loadCmsDb(): Promise<Record<string, unknown> | null> {
+  const sql = getSql();
+  const rows = await sql`SELECT data FROM cms WHERE id = 'main'`;
+  return rows.length ? rows[0].data : null;
+}
