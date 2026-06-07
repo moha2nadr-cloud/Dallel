@@ -5,6 +5,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { applyTheme, getTheme } from "../lib/theme";
 import { applyLang, getLang } from "../lib/i18n";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -111,6 +112,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <Toaster />
       <div key={location.pathname} className="animate-page-enter">
         <Outlet />
       </div>
