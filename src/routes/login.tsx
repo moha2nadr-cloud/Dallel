@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { setProfile, setUserId, setUserEmail, isOnboarded, setOnboarded, type Profile } from "@/lib/storage";
+import { setProfile, setUserId, setUserEmail, isOnboarded, setOnboarded, type Profile, getProfileBackup } from "@/lib/storage";
 import { useEffect, useRef, useCallback, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { getProfile as getServerProfile } from "@/lib/api/sync.functions";
@@ -37,15 +37,58 @@ function Login() {
       const userId = data.sub as string;
       setUserId(userId);
       setUserEmail(data.email as string);
-      const gp: Profile = { name: data.name, email: data.email, picture: data.picture, age: 0, specialization: "", university: "" };
-      setProfile(gp);
+
+      // بروفايل أساسي من Google (بدون age/spec/uni)
+      const gp: Profile = {
+        name: data.name,
+        email: data.email,
+        picture: data.picture,
+        age: 0,
+        specialization: "",
+        university: "",
+      };
+
       if (isOnboarded()) {
+        setLoading(true);
+        let restoredProfile: Profile | null = null;
+
+        // 1) حاول تحميل البروفايل من السيرفر
         try {
           const s = await loadServerProfile({ data: { userId } });
-          if (s) setProfile({ name: s.name || gp.name, email: gp.email || s.email, picture: gp.picture || s.picture, age: s.age ?? 0, specialization: s.specialization || "", university: s.university || "" });
-        } catch {}
+          if (s && (s.specialization || s.university)) {
+            restoredProfile = {
+              name: s.name || gp.name,
+              email: gp.email || s.email,
+              picture: gp.picture || s.picture,
+              age: s.age ?? 0,
+              specialization: s.specialization || "",
+              university: s.university || "",
+            };
+          }
+        } catch {
+          // السيرفر غير متاح — سنستخدم الـ backup المحلي
+        }
+
+        // 2) إذا فشل السيرفر أو رجع فارغاً، استخدم الـ backup المحلي
+        if (!restoredProfile) {
+          const backup = getProfileBackup(userId);
+          if (backup && (backup.specialization || backup.university)) {
+            restoredProfile = {
+              ...backup,
+              // حدّث الصورة والاسم من Google (أحدث دائماً)
+              name: gp.name || backup.name,
+              email: gp.email || backup.email,
+              picture: gp.picture || backup.picture,
+            };
+          }
+        }
+
+        // 3) استخدم البروفايل المُستعاد أو ابدأ بالـ Google profile
+        setProfile(restoredProfile ?? gp);
+        setLoading(false);
         navigate({ to: "/home" });
       } else {
+        setProfile(gp);
         navigate({ to: "/onboarding" });
       }
     },
@@ -93,7 +136,6 @@ function Login() {
 
         {/* ── TOP: Logo + headline ── */}
         <div className="flex flex-col items-center text-center gap-5 w-full animate-reveal-up">
-          {/* Real دليل logo */}
           <img
             src={logoSrc}
             alt="دليل"
@@ -137,11 +179,7 @@ function Login() {
 
         {/* ── BOTTOM: Sign in + credit ── */}
         <div className="w-full flex flex-col items-center gap-3 mt-4 animate-reveal-up" style={{ animationDelay: "0.5s" }}>
-          {/* Glass sign-in card */}
-          <div
-            className="lg-panel w-full rounded-3xl p-5"
-          >
-            {/* Shine */}
+          <div className="lg-panel w-full rounded-3xl p-5">
             <div className="lg-shine-stripe mb-4" />
 
             <p className="text-center text-[12px] text-gray-500 mb-4">
@@ -190,7 +228,6 @@ function Login() {
             بدخولك فأنت توافق على شروط الاستخدام وسياسة الخصوصية
           </p>
 
-          {/* Studio credit */}
           <div className="flex flex-col items-center gap-0.5 mt-5 mb-1">
             <span className="text-[11px] uppercase tracking-[0.3em] text-gray-400 font-medium">Developed by</span>
             <span
