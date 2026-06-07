@@ -14,8 +14,8 @@ const inputSx: React.CSSProperties = {
   background: "rgba(255,255,255,0.80)",
   border: "1px solid rgba(200,195,185,0.35)",
   borderRadius: "0.75rem",
-  padding: "0.6rem 0.85rem",
-  fontSize: 13,
+  padding: "0.7rem 1rem",
+  fontSize: 14,
   color: "#1A1A24",
   outline: "none",
   fontFamily: "Tajawal, sans-serif",
@@ -76,22 +76,22 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [tab, setTab] = useState<typeof TABS[number]["key"]>("slides");
 
   return (
-    <div className="min-h-screen bg-white">
-      <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-2.5 lg-header">
-        <h1 className="text-[14px] font-extrabold logo-gradient">لوحة التحكم</h1>
+    <div className="min-h-screen bg-white" dir="rtl">
+      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-[rgba(200,195,185,0.22)] bg-white/90 px-6 py-4"
+        style={{ backdropFilter: "blur(12px)" }}>
+        <h1 className="text-lg font-extrabold logo-gradient">لوحة التحكم</h1>
         <button type="button" onClick={onLogout}
-          className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold text-gray-500 transition-lg"
-          style={{ background: "rgba(255,255,255,0.80)", border: "1px solid rgba(200,195,185,0.28)" }}>
-          <LogOut className="h-3.5 w-3.5" /> خروج
+          className="flex items-center gap-1.5 rounded-lg border border-[rgba(200,195,185,0.28)] bg-white/80 px-4 py-2 text-[13px] font-semibold text-gray-500 transition-lg">
+          <LogOut className="h-4 w-4" /> خروج
         </button>
       </header>
 
-      <div className="flex gap-3 px-3 pt-3">
+      <div className="mx-auto flex max-w-5xl gap-6 px-6 pt-6">
         {/* Sidebar tabs */}
-        <div className="flex w-fit shrink-0 flex-col gap-0.5 rounded-xl p-1 lg-card h-fit sticky top-16">
+        <div className="flex w-48 shrink-0 flex-col gap-1 rounded-xl border border-[rgba(200,195,185,0.22)] bg-[rgba(255,255,255,0.82)] p-2 h-fit sticky top-20 shadow-sm">
           {TABS.map((t) => (
             <button key={t.key} type="button" onClick={() => setTab(t.key)}
-              className="whitespace-nowrap rounded-lg px-2.5 py-1.5 text-[11px] font-semibold transition-all text-right"
+              className="w-full rounded-lg px-4 py-3 text-sm font-semibold transition-all text-right"
               style={tab === t.key
                 ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A", boxShadow: "0 2px 8px rgba(181,168,152,0.18)" }
                 : { color: "#9090A8" }
@@ -102,7 +102,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         </div>
 
         {/* Content */}
-        <div className="flex-1 min-w-0 pb-8 animate-reveal-fade" key={tab}>
+        <div className="flex-1 min-w-0 pb-12 animate-reveal-fade" key={tab}>
           {tab === "slides" && <SlidesEditor slides={cms.slides} onChange={(s) => setCms({ ...cms, slides: s })} />}
           {tab === "posts"  && <PostsEditor  posts={cms.posts}   onChange={(p) => setCms({ ...cms, posts: p })} />}
           {tab === "ai"     && <AiEditor    items={cms.aiTools}  cats={cms.aiCategories}   onChange={(i, c) => setCms({ ...cms, aiTools: i, aiCategories: c })} />}
@@ -115,24 +115,22 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 }
 
 function FL({ children }: { children: React.ReactNode }) {
-  return <label className="block text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-1">{children}</label>;
+  return <label className="block text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-1.5">{children}</label>;
 }
 function GI(p: React.InputHTMLAttributes<HTMLInputElement>) {
   return <input {...p} style={{ ...inputSx, ...(p.style ?? {}) }} onFocus={(e) => { e.target.style.borderColor = "rgba(181,168,152,0.55)"; }} onBlur={(e) => { e.target.style.borderColor = "rgba(200,195,185,0.35)"; }} />;
 }
 function GT(p: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return <textarea {...p} style={{ ...inputSx, resize: "vertical", minHeight: 80 }} onFocus={(e) => { e.target.style.borderColor = "rgba(181,168,152,0.55)"; }} onBlur={(e) => { e.target.style.borderColor = "rgba(200,195,185,0.35)"; }} />;
+  return <textarea {...p} style={{ ...inputSx, resize: "vertical", minHeight: 100 }} onFocus={(e) => { e.target.style.borderColor = "rgba(181,168,152,0.55)"; }} onBlur={(e) => { e.target.style.borderColor = "rgba(200,195,185,0.35)"; }} />;
 }
 function GCard({ children, onDelete, onEdit }: { children: React.ReactNode; onDelete: () => void; onEdit?: () => void }) {
   return (
-    <div className={`lg-card rounded-2xl p-4 space-y-3 ${onEdit ? "cursor-pointer" : ""}`}
+    <div className={`border border-[rgba(200,195,185,0.22)] rounded-2xl p-5 space-y-3 bg-white/80 shadow-sm ${onEdit ? "cursor-pointer" : ""}`}
       onClick={(e) => { if (onEdit && (e.target as HTMLElement).tagName !== "BUTTON") onEdit(); }}>
-      <div className="lg-shine-stripe mb-1" />
       {children}
       <button type="button" onClick={(e) => { e.stopPropagation(); onDelete(); }}
-        className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold text-red-500 transition-lg"
-        style={{ background: "rgba(254,242,242,0.80)", border: "1px solid rgba(239,68,68,0.18)" }}>
-        <Trash2 className="h-3 w-3" /> حذف
+        className="inline-flex items-center gap-1.5 rounded-lg border border-[rgba(239,68,68,0.18)] bg-red-50/80 px-3.5 py-1.5 text-[12px] font-semibold text-red-500 transition-lg">
+        <Trash2 className="h-3.5 w-3.5" /> حذف
       </button>
     </div>
   );
@@ -140,9 +138,9 @@ function GCard({ children, onDelete, onEdit }: { children: React.ReactNode; onDe
 function AddBtn({ onClick, label }: { onClick: () => void; label: string }) {
   return (
     <button type="button" onClick={onClick}
-      className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[11px] font-bold text-white transition-lg"
+      className="inline-flex items-center gap-1.5 rounded-lg border border-[rgba(255,255,255,0.15)] px-4 py-2 text-[13px] font-bold text-white transition-lg"
       style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>
-      <Plus className="h-3 w-3" /> {label}
+      <Plus className="h-4 w-4" /> {label}
     </button>
   );
 }
@@ -178,7 +176,7 @@ function SlidesEditor({ slides, onChange }: { slides: Slide[]; onChange: (s: Sli
         <div className="fixed inset-0 z-50"
           style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
           onClick={() => setShow(false)}>
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-sm animate-scale-in rounded-2xl p-5 shadow-2xl"
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-md animate-scale-in rounded-2xl p-6 shadow-2xl"
             style={{ background: "#fff" }}
             onClick={(e) => e.stopPropagation()}>
             <h2 className="mb-4 text-[15px] font-extrabold text-gray-900">إضافة سلايد</h2>
@@ -272,7 +270,7 @@ function PostsEditor({ posts, onChange }: { posts: Post[]; onChange: (p: Post[])
         <div className="fixed inset-0 z-50"
           style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
           onClick={() => setShow(false)}>
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-sm animate-scale-in rounded-2xl p-5 shadow-2xl"
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-md animate-scale-in rounded-2xl p-6 shadow-2xl"
             style={{ background: "#fff" }}
             onClick={(e) => e.stopPropagation()}>
             <h2 className="mb-4 text-[15px] font-extrabold text-gray-900">
@@ -337,7 +335,7 @@ function CatModal({ show, onClose, onSave, edit }: { show: boolean; onClose: () 
     <div className="fixed inset-0 z-50"
       style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
       onClick={onClose}>
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-sm animate-scale-in rounded-2xl p-5 shadow-2xl" style={{ background: "#fff" }}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-md animate-scale-in rounded-2xl p-6 shadow-2xl" style={{ background: "#fff" }}
         onClick={(e) => e.stopPropagation()}>
         <h2 className="mb-4 text-[15px] font-extrabold text-gray-900">{edit ? "تعديل صنف" : "إضافة صنف"}</h2>
         <FL>اسم الصنف</FL>
@@ -386,7 +384,7 @@ function ToolModal({ show, onClose, onSave, onDelete, edit, cats }: {
     <div className="fixed inset-0 z-50"
       style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
       onClick={onClose}>
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-sm animate-scale-in rounded-2xl p-5 shadow-2xl" style={{ background: "#fff", maxHeight: "75vh", overflowY: "auto" }}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-md animate-scale-in rounded-2xl p-6 shadow-2xl" style={{ background: "#fff", maxHeight: "75vh", overflowY: "auto" }}
         onClick={(e) => e.stopPropagation()}>
         <h2 className="mb-4 text-[15px] font-extrabold text-gray-900">{edit ? "تعديل موقع" : "إضافة موقع"}</h2>
 
@@ -443,17 +441,17 @@ function ToolModal({ show, onClose, onSave, onDelete, edit, cats }: {
 function CatList({ cats, onEdit, onDelete }: { cats: CatItem[]; onEdit: (c: CatItem) => void; onDelete: (id: string) => void }) {
   const sorted = [...cats].sort((a, b) => a.order - b.order);
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-2">
       {sorted.map((c) => (
         <div key={c.id} onClick={() => onEdit(c)}
-          className="flex items-center justify-between rounded-xl px-3.5 py-2.5 cursor-pointer transition-lg lg-card">
+          className="flex items-center justify-between rounded-xl border border-[rgba(200,195,185,0.22)] bg-white/80 px-4 py-3 cursor-pointer transition-lg shadow-sm">
           <div className="flex items-center gap-3">
-            <span className="flex h-6 w-6 items-center justify-center rounded-full text-[11px] font-bold text-white"
+            <span className="flex h-7 w-7 items-center justify-center rounded-full text-[12px] font-bold text-white"
               style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)" }}>{c.order}</span>
-            <span className="text-[13px] font-semibold text-gray-700">{c.name}</span>
+            <span className="text-[14px] font-semibold text-gray-700">{c.name}</span>
           </div>
           <button type="button" onClick={(e) => { e.stopPropagation(); onDelete(c.id); }}
-            className="text-red-400 text-[18px] leading-none">×</button>
+            className="rounded-lg border border-[rgba(239,68,68,0.18)] bg-red-50/80 px-3 py-1 text-[11px] font-semibold text-red-500">× حذف</button>
         </div>
       ))}
     </div>
@@ -504,15 +502,15 @@ function AiEditor({ items, cats, onChange }: { items: AiToolItem[]; cats: CatIte
 
   return (
     <div>
-      <div className="mb-2 flex gap-1.5">
-        <button type="button" onClick={() => setSubTab("cats")} className="rounded-lg px-3 py-1.5 text-[11px] font-bold transition-lg"
+      <div className="mb-3 flex gap-2">
+        <button type="button" onClick={() => setSubTab("cats")} className="rounded-lg border border-[rgba(200,195,185,0.22)] px-4 py-2 text-[13px] font-bold transition-all"
           style={subTab === "cats"
-            ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A" }
-            : { color: "#9090A8" }}>الأصناف</button>
-        <button type="button" onClick={() => setSubTab("tools")} className="rounded-lg px-3 py-1.5 text-[11px] font-bold transition-lg"
+            ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A", boxShadow: "0 2px 8px rgba(181,168,152,0.18)" }
+            : { background: "rgba(255,255,255,0.80)", color: "#9090A8" }}>الأصناف</button>
+        <button type="button" onClick={() => setSubTab("tools")} className="rounded-lg border border-[rgba(200,195,185,0.22)] px-4 py-2 text-[13px] font-bold transition-all"
           style={subTab === "tools"
-            ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A" }
-            : { color: "#9090A8" }}>المواقع</button>
+            ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A", boxShadow: "0 2px 8px rgba(181,168,152,0.18)" }
+            : { background: "rgba(255,255,255,0.80)", color: "#9090A8" }}>المواقع</button>
       </div>
 
       {subTab === "cats" && (
@@ -595,15 +593,15 @@ function UtilsEditor({ items, cats, onChange }: { items: UtilityItem[]; cats: Ca
 
   return (
     <div>
-      <div className="mb-2 flex gap-1.5">
-        <button type="button" onClick={() => setSubTab("cats")} className="rounded-lg px-3 py-1.5 text-[11px] font-bold transition-lg"
+      <div className="mb-3 flex gap-2">
+        <button type="button" onClick={() => setSubTab("cats")} className="rounded-lg border border-[rgba(200,195,185,0.22)] px-4 py-2 text-[13px] font-bold transition-all"
           style={subTab === "cats"
-            ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A" }
-            : { color: "#9090A8" }}>الأصناف</button>
-        <button type="button" onClick={() => setSubTab("tools")} className="rounded-lg px-3 py-1.5 text-[11px] font-bold transition-lg"
+            ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A", boxShadow: "0 2px 8px rgba(181,168,152,0.18)" }
+            : { background: "rgba(255,255,255,0.80)", color: "#9090A8" }}>الأصناف</button>
+        <button type="button" onClick={() => setSubTab("tools")} className="rounded-lg border border-[rgba(200,195,185,0.22)] px-4 py-2 text-[13px] font-bold transition-all"
           style={subTab === "tools"
-            ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A" }
-            : { color: "#9090A8" }}>الأدوات</button>
+            ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A", boxShadow: "0 2px 8px rgba(181,168,152,0.18)" }
+            : { background: "rgba(255,255,255,0.80)", color: "#9090A8" }}>الأدوات</button>
       </div>
 
       {subTab === "cats" && (
@@ -646,14 +644,13 @@ function ChatEditor({ prompt, model, onSave }: { prompt: string; model: string; 
   const [p, setP] = useState(prompt);
   const [m, setM] = useState(model);
   return (
-    <div className="space-y-4 lg-card rounded-2xl p-4">
-      <div className="lg-shine-stripe mb-1" />
-      <div><FL>توجيه المساعد (System Prompt)</FL><GT rows={12} value={p} onChange={(e)=>setP(e.target.value)} /></div>
+    <div className="space-y-4 rounded-2xl border border-[rgba(200,195,185,0.22)] bg-white/80 p-5 shadow-sm">
+      <div><FL>توجيه المساعد (System Prompt)</FL><GT rows={15} value={p} onChange={(e)=>setP(e.target.value)} /></div>
       <div><FL>النموذج</FL><GI value={m} onChange={(e)=>setM(e.target.value)} placeholder="llama-3.3-70b-versatile" /></div>
       <button type="button" onClick={()=>onSave(p,m)}
-        className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[12px] font-bold text-white transition-lg"
+        className="inline-flex items-center gap-1.5 rounded-lg border border-[rgba(255,255,255,0.15)] px-5 py-2.5 text-[13px] font-bold text-white transition-lg"
         style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>
-        <Save className="h-3.5 w-3.5" /> حفظ
+        <Save className="h-4 w-4" /> حفظ
       </button>
     </div>
   );
