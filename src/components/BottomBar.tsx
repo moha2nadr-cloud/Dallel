@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, Sparkles, Wrench, MessageCircle, Heart } from "lucide-react";
+import { Home, Sparkles, Wrench, MessageCircle, Bookmark } from "lucide-react";
 import { useLang } from "@/lib/i18n";
 
 export function BottomBar() {
@@ -11,7 +11,7 @@ export function BottomBar() {
     { to: "/ai-tools",  label: t.ai_tools,  icon: Sparkles      },
     { to: "/utilities", label: t.utilities, icon: Wrench        },
     { to: "/chat",      label: t.assistant, icon: MessageCircle },
-    { to: "/favorites", label: t.favorites, icon: Heart         },
+    { to: "/favorites", label: t.favorites, icon: Bookmark      },
   ] as const;
 
   return (

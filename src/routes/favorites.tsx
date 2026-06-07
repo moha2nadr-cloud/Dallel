@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { WithBottomBar } from "@/components/BottomBar";
-import { Star, ExternalLink } from "lucide-react";
+import { Bookmark, ExternalLink } from "lucide-react";
 import { getFavs } from "@/lib/storage";
 import { useEffect, useState } from "react";
 import { feedPosts, utilityTools } from "@/lib/mock-data";
@@ -118,7 +118,7 @@ function Favorites() {
 function Empty({ msg }: { msg: string }) {
   return (
     <div className="lg-card flex flex-col items-center justify-center rounded-3xl py-16 text-center animate-reveal-up mt-4">
-      <Star className="h-8 w-8 text-logo" />
+      <Bookmark className="h-8 w-8 text-logo" />
       <p className="mt-3 text-sm text-gray-400">{msg}</p>
     </div>
   );

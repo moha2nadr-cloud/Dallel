@@ -3,7 +3,7 @@ import { WithBottomBar } from "@/components/BottomBar";
 import { useCMS, type AiToolItem } from "@/lib/admin-store";
 import { isFav, toggleFav, getFavs, getUserId } from "@/lib/storage";
 import { useLang } from "@/lib/i18n";
-import { Search, X, Star, ExternalLink, Inbox } from "lucide-react";
+import { Search, X, Bookmark, ExternalLink, Inbox } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { syncFavorites } from "@/lib/api/sync.functions";
@@ -111,7 +111,7 @@ function ToolCard({ t: x, onFav, delay = 0 }: { t: AiToolItem; onFav: (id: strin
           {x.icon ? <img src={x.icon} alt="" className="h-full w-full object-cover" /> : <span className="text-sm font-extrabold text-logo">{x.name[0]}</span>}
         </div>
         <button type="button" onClick={() => setFav(onFav(x.id))} className="p-1 transition-transform hover:scale-110" aria-label="تفضيل">
-          <Star className={"h-4 w-4 " + (fav ? "fill-[#B5A898] text-[#B5A898]" : "text-gray-300")} />
+          <Bookmark className={"h-4 w-4 " + (fav ? "fill-[#B5A898] text-[#B5A898]" : "text-gray-300")} />
         </button>
       </div>
       <p className="line-clamp-1 text-[12px] font-bold text-gray-800">{x.name}</p>
