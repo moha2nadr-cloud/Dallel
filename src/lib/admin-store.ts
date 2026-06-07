@@ -94,18 +94,23 @@ export function getCMS(): CMS {
   }
 }
 
-export function setCMS(c: CMS) {
+export async function setCMS(c: CMS) {
   localStorage.setItem(KEY, JSON.stringify(c));
   window.dispatchEvent(new CustomEvent("daleel:cms"));
-  // fire-and-forget sync to server
-  syncCms({ data: c }).catch(() => {});
+  // sync to server — caller can await for feedback
+  try {
+    await syncCms({ data: c });
+  } catch (e) {
+    console.error("syncCms failed", e);
+    throw e;
+  }
 }
 
 export function updateCMS(patch: Partial<CMS>) {
   setCMS({ ...getCMS(), ...patch });
 }
 
-export function useCMS(): [CMS, (c: CMS) => void] {
+export function useCMS(): [CMS, (c: CMS) => Promise<void>] {
   const [c, set] = useState<CMS>(() => getCMS());
   useEffect(() => {
     const h = () => set(getCMS());

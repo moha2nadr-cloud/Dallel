@@ -103,10 +103,10 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 
         {/* Content */}
         <div className="flex-1 min-w-0 pb-12 animate-reveal-fade" key={tab}>
-          {tab === "slides" && <SlidesEditor slides={cms.slides} onChange={(s) => setCms({ ...cms, slides: s })} />}
-          {tab === "posts"  && <PostsEditor  posts={cms.posts}   onChange={(p) => setCms({ ...cms, posts: p })} />}
-          {tab === "ai"     && <AiEditor    items={cms.aiTools}  cats={cms.aiCategories}   onChange={(i, c) => setCms({ ...cms, aiTools: i, aiCategories: c })} />}
-          {tab === "utils"  && <UtilsEditor items={cms.utilities} cats={cms.utilCategories} onChange={(i, c) => setCms({ ...cms, utilities: i, utilCategories: c })} />}
+          {tab === "slides" && <SlidesEditor slides={cms.slides} onChange={async (s) => { try { await setCms({ ...cms, slides: s }); toast.success("تم الحفظ"); } catch { toast.error("فشل الحفظ"); } }} />}
+          {tab === "posts"  && <PostsEditor  posts={cms.posts}   onChange={async (p) => { try { await setCms({ ...cms, posts: p }); toast.success("تم الحفظ"); } catch { toast.error("فشل الحفظ"); } }} />}
+          {tab === "ai"     && <AiEditor    items={cms.aiTools}  cats={cms.aiCategories}   onChange={async (i, c) => { try { await setCms({ ...cms, aiTools: i, aiCategories: c }); toast.success("تم الحفظ"); } catch { toast.error("فشل الحفظ"); } }} />}
+          {tab === "utils"  && <UtilsEditor items={cms.utilities} cats={cms.utilCategories} onChange={async (i, c) => { try { await setCms({ ...cms, utilities: i, utilCategories: c }); toast.success("تم الحفظ"); } catch { toast.error("فشل الحفظ"); } }} />}
           {tab === "chat"   && <ChatEditor prompt={cms.chatSystemPrompt} model={cms.chatModel} onSave={(p, m) => { setCms({ ...cms, chatSystemPrompt: p, chatModel: m }); toast.success("تم الحفظ"); }} />}
         </div>
       </div>
