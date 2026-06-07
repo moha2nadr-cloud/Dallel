@@ -83,17 +83,17 @@ function Settings() {
         <Row icon={Info} label={t.about} value={t.version} />
       </Group>
 
-      <div className="px-4 pt-4 pb-2 animate-reveal-up" style={{ animationDelay: "0.18s" }}>
+      <Group delay={0.18}>
+        <Row icon={Trash2} label={t.delete_account} danger onClick={() => setModal("delete")} />
+      </Group>
+
+      <div className="px-4 pt-4 pb-2 animate-reveal-up" style={{ animationDelay: "0.22s" }}>
         <button type="button" onClick={() => setModal("logout")}
           className="flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-bold transition-lg active:scale-[0.98]"
           style={{ background: "rgba(254,242,242,0.80)", border: "1px solid rgba(239,68,68,0.20)", color: "#dc2626", backdropFilter: "blur(16px)" }}>
           <LogOut className="h-4 w-4" /> {t.logout}
         </button>
       </div>
-
-      <Group delay={0.22}>
-        <Row icon={Trash2} label={t.delete_account} danger onClick={() => setModal("delete")} />
-      </Group>
 
       <div className="mt-8 mb-6 flex flex-col items-center gap-1 px-4 animate-reveal-up" style={{ animationDelay: "0.26s" }}>
         <span className="text-[10px] uppercase tracking-[0.3em] text-gray-400 font-medium">POWERED BY</span>
