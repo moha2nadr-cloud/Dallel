@@ -173,11 +173,12 @@ function SlidesEditor({ slides, onChange }: { slides: Slide[]; onChange: (s: Sli
 
       {/* Modal */}
       {show && (
-        <div className="fixed inset-0 z-50"
-          style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
-          onClick={() => setShow(false)}>
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-md animate-scale-in rounded-2xl p-6 shadow-2xl"
-            style={{ background: "#fff" }}
+        <>
+          <div className="fixed inset-0 z-40"
+            style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
+            onClick={() => setShow(false)} />
+          <div className="fixed bottom-0 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 animate-scale-in rounded-t-2xl p-6 pb-8 shadow-2xl"
+            style={{ background: "#fff", maxHeight: "85vh", overflowY: "auto" }}
             onClick={(e) => e.stopPropagation()}>
             <h2 className="mb-4 text-[15px] font-extrabold text-gray-900">إضافة سلايد</h2>
 
@@ -206,7 +207,7 @@ function SlidesEditor({ slides, onChange }: { slides: Slide[]; onChange: (s: Sli
               </button>
             </div>
           </div>
-        </div>
+        </>
       )}
 
       {slides.map((s, i) => (
@@ -267,11 +268,12 @@ function PostsEditor({ posts, onChange }: { posts: Post[]; onChange: (p: Post[])
       <AddBtn onClick={openForAdd} label="إضافة منشور" />
 
       {show && (
-        <div className="fixed inset-0 z-50"
-          style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
-          onClick={() => setShow(false)}>
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-md animate-scale-in rounded-2xl p-6 shadow-2xl"
-            style={{ background: "#fff" }}
+        <>
+          <div className="fixed inset-0 z-40"
+            style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
+            onClick={() => setShow(false)} />
+          <div className="fixed bottom-0 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 animate-scale-in rounded-t-2xl p-6 pb-8 shadow-2xl"
+            style={{ background: "#fff", maxHeight: "85vh", overflowY: "auto" }}
             onClick={(e) => e.stopPropagation()}>
             <h2 className="mb-4 text-[15px] font-extrabold text-gray-900">
               {editIdx !== null ? "تعديل منشور" : "إضافة منشور"}
@@ -310,7 +312,7 @@ function PostsEditor({ posts, onChange }: { posts: Post[]; onChange: (p: Post[])
               </button>
             </div>
           </div>
-        </div>
+        </>
       )}
 
       {posts.map((p, i) => (
@@ -332,10 +334,11 @@ function CatModal({ show, onClose, onSave, edit }: { show: boolean; onClose: () 
   useEffect(() => { if (show) { setName(edit?.name ?? ""); setOrder(edit?.order ?? 0); } }, [show, edit]);
   if (!show) return null;
   return (
-    <div className="fixed inset-0 z-50"
-      style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
-      onClick={onClose}>
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-md animate-scale-in rounded-2xl p-6 shadow-2xl" style={{ background: "#fff" }}
+    <>
+      <div className="fixed inset-0 z-40"
+        style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
+        onClick={onClose} />
+      <div className="fixed bottom-0 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 animate-scale-in rounded-t-2xl p-6 pb-8 shadow-2xl" style={{ background: "#fff" }}
         onClick={(e) => e.stopPropagation()}>
         <h2 className="mb-4 text-[15px] font-extrabold text-gray-900">{edit ? "تعديل صنف" : "إضافة صنف"}</h2>
         <FL>اسم الصنف</FL>
@@ -350,7 +353,7 @@ function CatModal({ show, onClose, onSave, edit }: { show: boolean; onClose: () 
             style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>حفظ</button>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -381,10 +384,11 @@ function ToolModal({ show, onClose, onSave, onDelete, edit, cats }: {
 
   if (!show) return null;
   return (
-    <div className="fixed inset-0 z-50"
-      style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
-      onClick={onClose}>
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-full max-w-md animate-scale-in rounded-2xl p-6 shadow-2xl" style={{ background: "#fff", maxHeight: "75vh", overflowY: "auto" }}
+    <>
+      <div className="fixed inset-0 z-40"
+        style={{ background: "rgba(0,0,0,0.45)", backdropFilter: "blur(4px)" }}
+        onClick={onClose} />
+      <div className="fixed bottom-0 left-1/2 z-50 w-full max-w-lg -translate-x-1/2 animate-scale-in rounded-t-2xl p-6 pb-8 shadow-2xl" style={{ background: "#fff", maxHeight: "80vh", overflowY: "auto" }}
         onClick={(e) => e.stopPropagation()}>
         <h2 className="mb-4 text-[15px] font-extrabold text-gray-900">{edit ? "تعديل موقع" : "إضافة موقع"}</h2>
 
