@@ -1,28 +1,34 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { adminLogin, adminLogout, isAdminAuthed, uid, useCMS, type AiToolItem, type CatItem, type Post, type Slide, type UtilityItem } from "@/lib/admin-store";
-import { Lock, LogOut, Plus, Trash2, Save } from "lucide-react";
+import {
+  adminLogin, adminLogout, isAdminAuthed, uid,
+  useCMS, type AiToolItem, type Post, type Slide, type UtilityItem, type SyncStatus,
+} from "@/lib/admin-store";
+import { Lock, LogOut, Plus, Trash2, Save, Upload, Loader2, CheckCircle, AlertCircle, ImageIcon } from "lucide-react";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
+import { uploadImage } from "@/lib/api/sync.functions";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "لوحة التحكم — دليل" }] }),
   component: Admin,
 });
 
+/* ─── Shared styles ────────────────────────────────────────────────── */
 const inputSx: React.CSSProperties = {
   width: "100%",
   background: "rgba(255,255,255,0.80)",
   border: "1px solid rgba(200,195,185,0.35)",
   borderRadius: "0.75rem",
-  padding: "0.7rem 1rem",
-  fontSize: 14,
+  padding: "0.6rem 0.85rem",
+  fontSize: 13,
   color: "#1A1A24",
   outline: "none",
   fontFamily: "Tajawal, sans-serif",
   boxShadow: "0 1px 4px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.90)",
-  backdropFilter: "blur(12px)",
 };
 
+/* ─── Login screen ─────────────────────────────────────────────────── */
 function Admin() {
   const navigate = useNavigate();
   const [authed, setAuthed] = useState(false);
@@ -32,27 +38,42 @@ function Admin() {
   if (!authed) {
     return (
       <div className="flex min-h-screen items-center justify-center px-5 bg-white">
-        <div className="lg-panel w-full max-w-sm rounded-3xl p-6 shadow-xl animate-reveal-up">
+        <div className="lg-panel w-full max-w-sm rounded-3xl p-6 animate-reveal-up">
           <div className="lg-shine-stripe mb-5" />
           <div className="mb-5 flex items-center gap-3">
             <div className="lg-card flex h-11 w-11 items-center justify-center rounded-2xl">
-              <Lock className="h-5 w-5 text-[#8B7D6F]" />
+              <Lock className="h-5 w-5 text-logo" />
             </div>
             <div>
               <h1 className="text-[15px] font-extrabold text-gray-900">لوحة التحكم</h1>
               <p className="text-[11px] text-gray-400">أدخل كلمة السر للمتابعة</p>
             </div>
           </div>
-          <input type="password" value={pw} onChange={(e) => setPw(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter") { if (adminLogin(pw)) { setAuthed(true); toast.success("تم الدخول"); } else toast.error("كلمة سر خاطئة"); } }}
-            placeholder="كلمة السر" style={inputSx} />
-          <button type="button" onClick={() => { if (adminLogin(pw)) { setAuthed(true); toast.success("تم الدخول"); } else toast.error("كلمة سر خاطئة"); }}
-            className="mt-3 w-full rounded-2xl py-3 text-sm font-bold text-white transition-lg"
+          <input
+            type="password" value={pw}
+            onChange={(e) => setPw(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                if (adminLogin(pw)) { setAuthed(true); toast.success("تم الدخول"); }
+                else toast.error("كلمة سر خاطئة");
+              }
+            }}
+            placeholder="كلمة السر"
+            style={inputSx}
+          />
+          <button
+            type="button"
+            onClick={() => {
+              if (adminLogin(pw)) { setAuthed(true); toast.success("تم الدخول"); }
+              else toast.error("كلمة سر خاطئة");
+            }}
+            className="mt-3 w-full rounded-2xl py-3 text-sm font-bold text-white"
             style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 4px 16px rgba(181,168,152,0.38)" }}>
             دخول
           </button>
-          <button type="button" onClick={() => navigate({ to: "/home" })}
-            className="mt-2 w-full rounded-2xl py-2.5 text-[12px] font-semibold text-gray-500 transition-lg"
+          <button
+            type="button" onClick={() => navigate({ to: "/home" })}
+            className="mt-2 w-full rounded-2xl py-2.5 text-[12px] font-semibold text-gray-500"
             style={{ background: "rgba(255,255,255,0.80)", border: "1px solid rgba(200,195,185,0.28)" }}>
             رجوع
           </button>
@@ -60,146 +81,235 @@ function Admin() {
       </div>
     );
   }
-
   return <Dashboard onLogout={() => { adminLogout(); setAuthed(false); }} />;
 }
 
+/* ─── Save status badge ─────────────────────────────────────────────── */
+function StatusBadge({ status }: { status: SyncStatus }) {
+  if (status === "idle") return null;
+  const map = {
+    saving: { icon: <Loader2 className="h-3.5 w-3.5 animate-spin" />, text: "جاري الحفظ...", color: "#8B7D6F" },
+    saved:  { icon: <CheckCircle className="h-3.5 w-3.5" />,           text: "تم الحفظ ✓",   color: "#059669" },
+    error:  { icon: <AlertCircle className="h-3.5 w-3.5" />,           text: "فشل الحفظ!",   color: "#dc2626" },
+  }[status];
+  return (
+    <span className="flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold"
+      style={{ background: `${map.color}18`, color: map.color, border: `1px solid ${map.color}30` }}>
+      {map.icon}{map.text}
+    </span>
+  );
+}
+
+/* ─── Dashboard ─────────────────────────────────────────────────────── */
 function Dashboard({ onLogout }: { onLogout: () => void }) {
-  const [cms, setCms] = useCMS();
+  const [cms, setCms, syncStatus] = useCMS();
   const TABS = [
     { key: "slides", label: "السلايدر" },
-    { key: "posts",  label: "المنشورات" },
+    { key: "posts",  label: "منشورات"  },
     { key: "ai",     label: "أدوات AI" },
-    { key: "utils",  label: "الأدوات العامة" },
-    { key: "chat",   label: "المساعد" },
+    { key: "utils",  label: "أدوات عامة" },
+    { key: "chat",   label: "المساعد"  },
   ] as const;
   const [tab, setTab] = useState<typeof TABS[number]["key"]>("slides");
 
+  const handleSave = async (updated: typeof cms) => {
+    try {
+      await setCms(updated);
+      toast.success("تم الحفظ في قاعدة البيانات ✓");
+    } catch {
+      toast.error("فشل الحفظ — تحقق من الاتصال");
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-white" dir="rtl">
-      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-[rgba(200,195,185,0.22)] bg-white/90 px-6 py-4"
-        style={{ backdropFilter: "blur(12px)" }}>
-        <h1 className="text-lg font-extrabold logo-gradient">لوحة التحكم</h1>
-        <button type="button" onClick={onLogout}
-          className="flex items-center gap-1.5 rounded-lg border border-[rgba(200,195,185,0.28)] bg-white/80 px-4 py-2 text-[13px] font-semibold text-gray-500 transition-lg">
-          <LogOut className="h-4 w-4" /> خروج
+    <div className="min-h-screen pb-16 bg-white">
+      {/* Sticky header */}
+      <header className="sticky top-0 z-30 flex items-center justify-between px-5 py-3 lg-header">
+        <div className="flex items-center gap-2">
+          <h1 className="text-[16px] font-extrabold logo-gradient">لوحة التحكم</h1>
+          <StatusBadge status={syncStatus} />
+        </div>
+        <button
+          type="button" onClick={onLogout}
+          className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-semibold text-gray-500"
+          style={{ background: "rgba(255,255,255,0.80)", border: "1px solid rgba(200,195,185,0.28)" }}>
+          <LogOut className="h-3.5 w-3.5" /> خروج
         </button>
       </header>
 
-      <div className="mx-auto flex max-w-5xl gap-6 px-6 pt-6">
-        {/* Sidebar tabs */}
-        <div className="flex w-48 shrink-0 flex-col gap-1 rounded-xl border border-[rgba(200,195,185,0.22)] bg-[rgba(255,255,255,0.82)] p-2 h-fit sticky top-20 shadow-sm">
+      {/* Tabs */}
+      <div className="overflow-x-auto no-scrollbar px-4 pt-4">
+        <div className="inline-flex gap-1 rounded-2xl p-1 lg-card">
           {TABS.map((t) => (
             <button key={t.key} type="button" onClick={() => setTab(t.key)}
-              className="w-full rounded-lg px-4 py-3 text-sm font-semibold transition-all text-right"
+              className="whitespace-nowrap rounded-xl px-4 py-2 text-[12px] font-semibold transition-lg"
               style={tab === t.key
-                ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A", boxShadow: "0 2px 8px rgba(181,168,152,0.18)" }
-                : { color: "#9090A8" }
-              }>
+                ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A" }
+                : { color: "#9090A8" }}>
               {t.label}
             </button>
           ))}
         </div>
+      </div>
 
-        {/* Content */}
-        <div className="flex-1 min-w-0 pb-12 animate-reveal-fade" key={tab}>
-          {tab === "slides" && <SlidesEditor slides={cms.slides} onChange={async (s) => { try { await setCms({ ...cms, slides: s }); toast.success("تم الحفظ"); } catch { toast.error("فشل الحفظ"); } }} />}
-          {tab === "posts"  && <PostsEditor  posts={cms.posts}   onChange={async (p) => { try { await setCms({ ...cms, posts: p }); toast.success("تم الحفظ"); } catch { toast.error("فشل الحفظ"); } }} />}
-          {tab === "ai"     && <AiEditor    items={cms.aiTools}  cats={cms.aiCategories}   onChange={async (i, c) => { try { await setCms({ ...cms, aiTools: i, aiCategories: c }); toast.success("تم الحفظ"); } catch { toast.error("فشل الحفظ"); } }} />}
-          {tab === "utils"  && <UtilsEditor items={cms.utilities} cats={cms.utilCategories} onChange={async (i, c) => { try { await setCms({ ...cms, utilities: i, utilCategories: c }); toast.success("تم الحفظ"); } catch { toast.error("فشل الحفظ"); } }} />}
-          {tab === "chat"   && <ChatEditor prompt={cms.chatSystemPrompt} model={cms.chatModel} onSave={async (p, m) => { try { await setCms({ ...cms, chatSystemPrompt: p, chatModel: m }); toast.success("تم الحفظ"); } catch { toast.error("فشل الحفظ"); } }} />}
-        </div>
+      {/* Content */}
+      <div className="px-4 pt-4">
+        {tab === "slides" && (
+          <SlidesEditor slides={cms.slides}
+            onChange={(slides) => handleSave({ ...cms, slides })} />
+        )}
+        {tab === "posts" && (
+          <PostsEditor posts={cms.posts}
+            onChange={(posts) => handleSave({ ...cms, posts })} />
+        )}
+        {tab === "ai" && (
+          <AiEditor items={cms.aiTools} cats={cms.aiCategories}
+            onChange={(aiTools, aiCategories) => handleSave({ ...cms, aiTools, aiCategories })} />
+        )}
+        {tab === "utils" && (
+          <UtilsEditor items={cms.utilities} cats={cms.utilCategories}
+            onChange={(utilities, utilCategories) => handleSave({ ...cms, utilities, utilCategories })} />
+        )}
+        {tab === "chat" && (
+          <ChatEditor
+            prompt={cms.chatSystemPrompt}
+            model={cms.chatModel}
+            onSave={(chatSystemPrompt, chatModel) => handleSave({ ...cms, chatSystemPrompt, chatModel })}
+          />
+        )}
       </div>
     </div>
   );
 }
 
-function FL({ children }: { children: React.ReactNode }) {
-  return <label className="block text-[11px] font-semibold uppercase tracking-wider text-gray-400 mb-1.5">{children}</label>;
-}
-function GI(p: React.InputHTMLAttributes<HTMLInputElement>) {
-  return <input {...p} style={{ ...inputSx, ...(p.style ?? {}) }} onFocus={(e) => { e.target.style.borderColor = "rgba(181,168,152,0.55)"; }} onBlur={(e) => { e.target.style.borderColor = "rgba(200,195,185,0.35)"; }} />;
-}
-function GT(p: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return <textarea {...p} style={{ ...inputSx, resize: "vertical", minHeight: 100 }} onFocus={(e) => { e.target.style.borderColor = "rgba(181,168,152,0.55)"; }} onBlur={(e) => { e.target.style.borderColor = "rgba(200,195,185,0.35)"; }} />;
-}
-function GCard({ children, onDelete, onEdit }: { children: React.ReactNode; onDelete: () => void; onEdit?: () => void }) {
+/* ─── Image Upload button ───────────────────────────────────────────── */
+function ImageUpload({ onUrl }: { onUrl: (url: string) => void }) {
+  const [uploading, setUploading] = useState(false);
+  const doUpload = useServerFn(uploadImage);
+  const ref = useRef<HTMLInputElement>(null);
+
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const base64 = await new Promise<string>((res, rej) => {
+        const reader = new FileReader();
+        reader.onload = () => res(reader.result as string);
+        reader.onerror = rej;
+        reader.readAsDataURL(file);
+      });
+      const result = await doUpload({ data: { base64, folder: "daleel" } });
+      onUrl(result.url);
+      toast.success("تم رفع الصورة ✓");
+    } catch {
+      toast.error("فشل رفع الصورة");
+    } finally {
+      setUploading(false);
+      if (ref.current) ref.current.value = "";
+    }
+  };
+
   return (
-    <div className={`border border-[rgba(200,195,185,0.22)] rounded-2xl p-5 space-y-3 bg-white/80 shadow-sm ${onEdit ? "cursor-pointer" : ""}`}
-      onClick={(e) => { if (onEdit && (e.target as HTMLElement).tagName !== "BUTTON") onEdit(); }}>
+    <>
+      <input ref={ref} type="file" accept="image/*" className="hidden" onChange={handleFile} />
+      <button
+        type="button"
+        onClick={() => ref.current?.click()}
+        disabled={uploading}
+        className="inline-flex items-center gap-1 rounded-xl px-3 py-1.5 text-[11px] font-semibold text-white transition-lg disabled:opacity-50"
+        style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 8px rgba(181,168,152,0.35)" }}>
+        {uploading
+          ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          : <Upload className="h-3.5 w-3.5" />
+        }
+        {uploading ? "جاري الرفع..." : "رفع صورة"}
+      </button>
+    </>
+  );
+}
+
+/* ─── Shared sub-components ─────────────────────────────────────────── */
+function FL({ children }: { children: React.ReactNode }) {
+  return <label className="block text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-1">{children}</label>;
+}
+
+function GI(p: React.InputHTMLAttributes<HTMLInputElement>) {
+  return (
+    <input {...p} style={{ ...inputSx, ...(p.style ?? {}) }}
+      onFocus={(e) => { e.target.style.borderColor = "rgba(181,168,152,0.55)"; }}
+      onBlur={(e)  => { e.target.style.borderColor = "rgba(200,195,185,0.35)"; }}
+    />
+  );
+}
+
+function GT(p: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  return (
+    <textarea {...p} style={{ ...inputSx, resize: "vertical", minHeight: 80 }}
+      onFocus={(e) => { e.target.style.borderColor = "rgba(181,168,152,0.55)"; }}
+      onBlur={(e)  => { e.target.style.borderColor = "rgba(200,195,185,0.35)"; }}
+    />
+  );
+}
+
+function GCard({ children, onDelete }: { children: React.ReactNode; onDelete: () => void }) {
+  return (
+    <div className="lg-card rounded-2xl p-4 space-y-3">
+      <div className="lg-shine-stripe mb-1" />
       {children}
-      <button type="button" onClick={(e) => { e.stopPropagation(); onDelete(); }}
-        className="inline-flex items-center gap-1.5 rounded-lg border border-[rgba(239,68,68,0.18)] bg-red-50/80 px-3.5 py-1.5 text-[12px] font-semibold text-red-500 transition-lg">
-        <Trash2 className="h-3.5 w-3.5" /> حذف
+      <button type="button" onClick={onDelete}
+        className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] font-semibold text-red-500"
+        style={{ background: "rgba(254,242,242,0.80)", border: "1px solid rgba(239,68,68,0.18)" }}>
+        <Trash2 className="h-3 w-3" /> حذف
       </button>
     </div>
   );
 }
+
 function AddBtn({ onClick, label }: { onClick: () => void; label: string }) {
   return (
     <button type="button" onClick={onClick}
-      className="inline-flex items-center gap-1.5 rounded-lg border border-[rgba(255,255,255,0.15)] px-4 py-2 text-[13px] font-bold text-white transition-lg"
+      className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[12px] font-bold text-white"
       style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>
-      <Plus className="h-4 w-4" /> {label}
+      <Plus className="h-3.5 w-3.5" /> {label}
     </button>
   );
 }
 
+/* ── Image field: URL input + upload button ── */
+function ImageField({
+  label, value, onChange,
+}: { label: string; value: string; onChange: (v: string) => void }) {
+  return (
+    <div className="space-y-1">
+      <FL>{label}</FL>
+      <div className="flex gap-2 items-center">
+        <GI value={value} onChange={(e) => onChange(e.target.value)} placeholder="https://..." style={{ flex: 1 }} />
+        <ImageUpload onUrl={onChange} />
+      </div>
+      {value && (
+        <img src={value} alt="" className="mt-1 h-16 rounded-xl object-cover"
+          style={{ border: "1px solid rgba(200,195,185,0.28)" }}
+          onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+        />
+      )}
+    </div>
+  );
+}
+
+/* ─── Editors ───────────────────────────────────────────────────────── */
 function SlidesEditor({ slides, onChange }: { slides: Slide[]; onChange: (s: Slide[]) => void }) {
-  const [show, setShow] = useState(false);
-  const [imgData, setImgData] = useState("");
-  const [imgErr, setImgErr] = useState(false);
-  const [title, setTitle] = useState("");
-  const fileRef = useRef<HTMLInputElement>(null);
-
-  function open() { setImgData(""); setTitle(""); setImgErr(false); setShow(true); }
-  function save() {
-    if (!imgData) { setImgErr(true); return; }
-    onChange([...slides, { id: uid(), image: imgData, title: title.trim() || undefined }]);
-    setShow(false);
-  }
-
-  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
-    const f = e.target.files?.[0];
-    if (!f) return;
-    const r = new FileReader();
-    r.onload = () => { setImgData(r.result as string); setImgErr(false); };
-    r.readAsDataURL(f);
-  }
-
   return (
     <div className="space-y-3">
-      <AddBtn onClick={open} label="إضافة سلايد" />
-
-      {show && (
-        <div className="rounded-2xl border border-[rgba(200,195,185,0.22)] bg-white/80 p-5 shadow-sm space-y-3">
-          <h2 className="text-[15px] font-extrabold text-gray-900">إضافة سلايد</h2>
-          <FL>الصورة</FL>
-          <div onClick={() => fileRef.current?.click()}
-            className={`flex cursor-pointer items-center justify-center rounded-xl border-2 border-dashed p-4 transition-lg ${imgErr ? "border-red-400 bg-red-50" : "border-[rgba(200,195,185,0.5)] bg-[rgba(200,195,185,0.08)]"}`}>
-            {imgData
-              ? <img src={imgData} alt="" className="max-h-32 rounded-lg object-contain" />
-              : <span className="text-[12px] font-semibold text-gray-400">اضغط لاختيار صورة</span>}
-          </div>
-          <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
-          <FL>العنوان</FL>
-          <GI value={title} onChange={(e) => setTitle(e.target.value)} placeholder="عنوان السلايد (اختياري)" />
-          <div className="flex gap-2">
-            <button type="button" onClick={() => setShow(false)}
-              className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-gray-500 transition-lg"
-              style={{ background: "rgba(200,195,185,0.2)" }}>إلغاء</button>
-            <button type="button" onClick={save}
-              className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-white transition-lg"
-              style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>حفظ</button>
-          </div>
-        </div>
-      )}
-
+      <AddBtn onClick={() => onChange([...slides, { id: uid(), image: "", title: "" }])} label="إضافة سلايد" />
       {slides.map((s, i) => (
         <GCard key={s.id} onDelete={() => onChange(slides.filter((_, j) => j !== i))}>
-          {s.image && <img src={s.image} alt="" className="w-full rounded-xl object-cover max-h-40" />}
-          <FL>العنوان</FL><GI value={s.title??""} onChange={(e) => { const c=[...slides]; c[i]={...s,title:e.target.value}; onChange(c); }} />
-          <FL>الرابط</FL><GI value={s.link??""} onChange={(e) => { const c=[...slides]; c[i]={...s,link:e.target.value}; onChange(c); }} placeholder="https://..." />
+          <ImageField label="الصورة" value={s.image}
+            onChange={(v) => { const c = [...slides]; c[i] = { ...s, image: v }; onChange(c); }} />
+          <FL>عنوان (اختياري)</FL>
+          <GI value={s.title ?? ""} onChange={(e) => { const c = [...slides]; c[i] = { ...s, title: e.target.value }; onChange(c); }} />
+          <FL>رابط (اختياري)</FL>
+          <GI value={s.link ?? ""} onChange={(e) => { const c = [...slides]; c[i] = { ...s, link: e.target.value }; onChange(c); }} />
         </GCard>
       ))}
     </div>
@@ -207,414 +317,150 @@ function SlidesEditor({ slides, onChange }: { slides: Slide[]; onChange: (s: Sli
 }
 
 function PostsEditor({ posts, onChange }: { posts: Post[]; onChange: (p: Post[]) => void }) {
-  const [show, setShow] = useState(false);
-  const [editIdx, setEditIdx] = useState<number | null>(null);
-  const [imgData, setImgData] = useState("");
-  const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("");
-  const [url, setUrl] = useState("");
-  const [type, setType] = useState<Post["type"]>("new");
-  const fileRef = useRef<HTMLInputElement>(null);
-
-  function openForAdd() {
-    setEditIdx(null); setImgData(""); setTitle(""); setDesc(""); setUrl(""); setType("new"); setShow(true);
-  }
-  function openForEdit(i: number) {
-    const p = posts[i];
-    setEditIdx(i); setImgData(p.image ?? ""); setTitle(p.title); setDesc(p.description); setUrl(p.url ?? ""); setType(p.type); setShow(true);
-  }
-  function save() {
-    const post: Post = {
-      id: editIdx !== null ? posts[editIdx].id : uid(),
-      title,
-      description: desc,
-      image: imgData || undefined,
-      url: url || undefined,
-      type,
-      date: editIdx !== null ? posts[editIdx].date : new Date().toISOString(),
-      likes: editIdx !== null ? posts[editIdx].likes : 0,
-      comments: editIdx !== null ? posts[editIdx].comments : 0,
-    };
-    const c = [...posts];
-    if (editIdx !== null) c[editIdx] = post; else c.unshift(post);
-    onChange(c);
-    setShow(false);
-  }
-  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
-    const f = e.target.files?.[0];
-    if (!f) return;
-    const r = new FileReader();
-    r.onload = () => setImgData(r.result as string);
-    r.readAsDataURL(f);
-  }
-
   return (
     <div className="space-y-3">
-      <AddBtn onClick={openForAdd} label="إضافة منشور" />
-
-      {show && (
-        <div className="rounded-2xl border border-[rgba(200,195,185,0.22)] bg-white/80 p-5 shadow-sm space-y-3">
-          <h2 className="text-[15px] font-extrabold text-gray-900">
-            {editIdx !== null ? "تعديل منشور" : "إضافة منشور"}
-          </h2>
-
-          <div onClick={() => fileRef.current?.click()}
-            className="flex cursor-pointer items-center justify-center rounded-xl border-2 border-dashed p-4 transition-lg"
-            style={{ borderColor: "rgba(200,195,185,0.5)", background: "rgba(200,195,185,0.08)" }}>
-            {imgData
-              ? <img src={imgData} alt="" className="max-h-32 rounded-lg object-contain" />
-              : <span className="text-[12px] font-semibold text-gray-400">اضغط لاختيار صورة</span>}
-          </div>
-          <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
-
-          <FL>العنوان</FL>
-          <GI value={title} onChange={(e) => setTitle(e.target.value)} placeholder="العنوان (اختياري)" />
-          <FL>النص</FL>
-          <GT rows={3} value={desc} onChange={(e) => setDesc(e.target.value)} placeholder="النص (اختياري)" />
-          <FL>الرابط</FL>
-          <GI value={url} onChange={(e) => setUrl(e.target.value)} placeholder="رابط خارجي (اختياري)" />
-          <FL>النوع</FL>
-          <select value={type} onChange={(e) => setType(e.target.value as Post["type"])} style={inputSx}>
-            <option value="new">جديد</option><option value="tip">نصيحة</option><option value="update">تحديث</option><option value="ai">AI</option>
-          </select>
-
-          <div className="flex gap-2">
-            <button type="button" onClick={() => setShow(false)}
-              className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-gray-500 transition-lg"
-              style={{ background: "rgba(200,195,185,0.2)" }}>إلغاء</button>
-            <button type="button" onClick={save}
-              className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-white transition-lg"
-              style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>حفظ</button>
-          </div>
-        </div>
-      )}
-
+      <AddBtn
+        onClick={() => onChange([
+          { id: uid(), title: "", description: "", type: "new", date: new Date().toISOString(), likes: 0, comments: 0 },
+          ...posts,
+        ])}
+        label="إضافة منشور"
+      />
       {posts.map((p, i) => (
-        <GCard key={p.id} onEdit={() => openForEdit(i)} onDelete={() => onChange(posts.filter((_,j)=>j!==i))}>
-          {(p.image ?? imgData) && <img src={p.image} alt="" className="w-full rounded-xl object-cover max-h-40" />}
-          {p.title && <h3 className="text-[14px] font-bold text-gray-800">{p.title}</h3>}
-          {p.description && <p className="text-[12px] text-gray-500 leading-relaxed">{p.description}</p>}
+        <GCard key={p.id} onDelete={() => onChange(posts.filter((_, j) => j !== i))}>
+          <FL>العنوان</FL>
+          <GI value={p.title} onChange={(e) => { const c = [...posts]; c[i] = { ...p, title: e.target.value }; onChange(c); }} />
+          <FL>الوصف</FL>
+          <GT rows={3} value={p.description} onChange={(e) => { const c = [...posts]; c[i] = { ...p, description: e.target.value }; onChange(c); }} />
+          <ImageField label="الصورة (اختياري)" value={p.image ?? ""}
+            onChange={(v) => { const c = [...posts]; c[i] = { ...p, image: v }; onChange(c); }} />
+          <FL>رابط خارجي (اختياري)</FL>
+          <GI value={p.url ?? ""} onChange={(e) => { const c = [...posts]; c[i] = { ...p, url: e.target.value }; onChange(c); }} />
+          <FL>النوع</FL>
+          <select value={p.type}
+            onChange={(e) => { const c = [...posts]; c[i] = { ...p, type: e.target.value as Post["type"] }; onChange(c); }}
+            style={inputSx}>
+            <option value="new">جديد</option>
+            <option value="tip">نصيحة</option>
+            <option value="update">تحديث</option>
+            <option value="ai">AI</option>
+          </select>
         </GCard>
       ))}
     </div>
   );
 }
 
-type CatOrTool<T> = { cats: CatItem[]; items: T[]; onCats: (c: CatItem[]) => void; onItems: (i: T[]) => void; catLabel: string; itemLabel: string };
-
-function CatModal({ show, onClose, onSave, edit }: { show: boolean; onClose: () => void; onSave: (name: string, order: number) => void; edit?: CatItem }) {
-  const [name, setName] = useState("");
-  const [order, setOrder] = useState(0);
-  useEffect(() => { if (show) { setName(edit?.name ?? ""); setOrder(edit?.order ?? 0); } }, [show, edit]);
-  if (!show) return null;
+function CatMgr({ cats, onChange }: { cats: import("@/lib/admin-store").CatItem[]; onChange: (c: import("@/lib/admin-store").CatItem[]) => void }) {
+  const [v, setV] = useState("");
   return (
-    <div className="rounded-2xl border border-[rgba(200,195,185,0.22)] bg-white/80 p-5 shadow-sm space-y-3">
-      <h2 className="text-[15px] font-extrabold text-gray-900">{edit ? "تعديل صنف" : "إضافة صنف"}</h2>
-      <FL>اسم الصنف</FL>
-      <GI value={name} onChange={(e) => setName(e.target.value)} placeholder="اسم الصنف" />
-      <FL>الترتيب</FL>
-      <input type="number" value={order} onChange={(e) => setOrder(Number(e.target.value))}
-        style={inputSx} placeholder="0" min={0} />
-      <div className="flex gap-2">
-        <button type="button" onClick={onClose} className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-gray-500 transition-lg"
-          style={{ background: "rgba(200,195,185,0.2)" }}>إلغاء</button>
-        <button type="button" onClick={() => onSave(name, order)} className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-white transition-lg"
-          style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>حفظ</button>
+    <div className="lg-card rounded-2xl p-4">
+      <FL>الأصناف</FL>
+      <div className="mt-2 flex flex-wrap gap-1.5">
+        {cats.map((c) => (
+          <span key={c.id} className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold text-[#8B7D6F]"
+            style={{ background: "rgba(181,168,152,0.12)", border: "1px solid rgba(181,168,152,0.25)" }}>
+            {c.name}
+            <button type="button" onClick={() => onChange(cats.filter((x) => x.id !== c.id))} className="text-red-400 ml-1">×</button>
+          </span>
+        ))}
+      </div>
+      <div className="mt-2 flex gap-1.5">
+        <GI value={v} onChange={(e) => setV(e.target.value)} placeholder="اسم الصنف" />
+        <button type="button"
+          onClick={() => {
+            if (v.trim() && !cats.find((c) => c.name === v.trim())) {
+              onChange([...cats, { id: uid(), name: v.trim(), order: cats.length + 1 }]);
+              setV("");
+            }
+          }}
+          className="rounded-xl px-3 py-2 text-[12px] font-bold text-white"
+          style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", whiteSpace: "nowrap" }}>
+          إضافة
+        </button>
       </div>
     </div>
   );
 }
 
-function ToolModal({ show, onClose, onSave, onDelete, edit, cats }: {
-  show: boolean; onClose: () => void;
-  onSave: (data: { name: string; url: string; category: string; icon?: string; description?: string; order: number; imgData?: string }) => void;
-  onDelete?: () => void; edit?: AiToolItem | UtilityItem | null; cats: CatItem[];
+function AiEditor({
+  items, cats, onChange,
+}: {
+  items: AiToolItem[];
+  cats: import("@/lib/admin-store").CatItem[];
+  onChange: (i: AiToolItem[], c: import("@/lib/admin-store").CatItem[]) => void;
 }) {
-  const [name, setName] = useState("");
-  const [url, setUrl] = useState("");
-  const [category, setCategory] = useState("");
-  const [icon, setIcon] = useState("");
-  const [description, setDescription] = useState("");
-  const [order, setOrder] = useState(0);
-  const [imgData, setImgData] = useState("");
-  const fileRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (!show) return;
-    setName(edit?.name ?? ""); setUrl(edit?.url ?? ""); setCategory(edit?.category ?? cats[0]?.name ?? "");
-    setIcon(edit?.icon ?? ""); setDescription(edit?.description ?? ""); setOrder(edit?.order ?? 0); setImgData("");
-  }, [show, edit, cats]);
-
-  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
-    const f = e.target.files?.[0]; if (!f) return;
-    const r = new FileReader(); r.onload = () => setImgData(r.result as string); r.readAsDataURL(f);
-  }
-
-  if (!show) return null;
   return (
-    <div className="rounded-2xl border border-[rgba(200,195,185,0.22)] bg-white/80 p-5 shadow-sm space-y-3">
-      <h2 className="text-[15px] font-extrabold text-gray-900">{edit ? "تعديل موقع" : "إضافة موقع"}</h2>
-
-      <FL>رقم الموقع (الترتيب)</FL>
-      <input type="number" value={order} onChange={(e) => setOrder(Number(e.target.value))} style={inputSx} min={0} />
-
-      <FL>الاسم</FL>
-      <GI value={name} onChange={(e) => setName(e.target.value)} placeholder="اسم الموقع" />
-
-      <FL>الوصف</FL>
-      <GT rows={2} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="وصف الموقع (اختياري)" />
-
-      <FL>الصنف</FL>
-      <select value={category} onChange={(e) => setCategory(e.target.value)} style={inputSx}>
-        {cats.map((c) => <option key={c.id} value={c.name}>{c.name}</option>)}
-      </select>
-
-      <FL>الرابط</FL>
-      <GI value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://..." />
-
-      <FL>رابط الصورة (اختياري)</FL>
-      <GI value={icon} onChange={(e) => setIcon(e.target.value)} placeholder="https://..." />
-
-      <FL>رفع صورة (اختياري)</FL>
-      <div onClick={() => fileRef.current?.click()}
-        className="flex cursor-pointer items-center justify-center rounded-xl border-2 border-dashed p-3 transition-lg"
-        style={{ borderColor: "rgba(200,195,185,0.5)", background: "rgba(200,195,185,0.08)" }}>
-        {imgData
-          ? <img src={imgData} alt="" className="max-h-24 rounded-lg object-contain" />
-          : <span className="text-[12px] font-semibold text-gray-400">اضغط لاختيار صورة</span>}
-      </div>
-      <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFile} />
-
-      <div className="flex gap-2">
-        <button type="button" onClick={onClose} className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-gray-500 transition-lg"
-          style={{ background: "rgba(200,195,185,0.2)" }}>إلغاء</button>
-        <button type="button" onClick={() => onSave({ name, url, category, icon: icon || undefined, description: description || undefined, order, imgData: imgData || undefined })}
-          className="flex-1 rounded-xl py-2.5 text-[13px] font-bold text-white transition-lg"
-          style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>حفظ</button>
-        {edit && onDelete && (
-          <button type="button" onClick={onDelete} className="rounded-xl px-3 py-2.5 text-[13px] font-bold text-red-500 transition-lg"
-            style={{ background: "rgba(254,242,242,0.80)", border: "1px solid rgba(239,68,68,0.18)" }}>
-            <Trash2 className="inline h-3.5 w-3.5 ml-1" />حذف
-          </button>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function CatList({ cats, onEdit, onDelete }: { cats: CatItem[]; onEdit: (c: CatItem) => void; onDelete: (id: string) => void }) {
-  const sorted = [...cats].sort((a, b) => a.order - b.order);
-  return (
-    <div className="space-y-2">
-      {sorted.map((c) => (
-        <div key={c.id} onClick={() => onEdit(c)}
-          className="flex items-center justify-between rounded-xl border border-[rgba(200,195,185,0.22)] bg-white/80 px-4 py-3 cursor-pointer transition-lg shadow-sm">
-          <div className="flex items-center gap-3">
-            <span className="flex h-7 w-7 items-center justify-center rounded-full text-[12px] font-bold text-white"
-              style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)" }}>{c.order}</span>
-            <span className="text-[14px] font-semibold text-gray-700">{c.name}</span>
-          </div>
-          <button type="button" onClick={(e) => { e.stopPropagation(); onDelete(c.id); }}
-            className="rounded-lg border border-[rgba(239,68,68,0.18)] bg-red-50/80 px-3 py-1 text-[11px] font-semibold text-red-500">× حذف</button>
-        </div>
+    <div className="space-y-3">
+      <CatMgr cats={cats} onChange={(c) => onChange(items, c)} />
+      <AddBtn onClick={() => onChange([...items, { id: uid(), name: "", url: "", category: cats[0]?.name ?? "", order: items.length + 1 }], cats)} label="إضافة أداة AI" />
+      {items.map((x, i) => (
+        <GCard key={x.id} onDelete={() => onChange(items.filter((_, j) => j !== i), cats)}>
+          <FL>الاسم</FL>
+          <GI value={x.name} onChange={(e) => { const c=[...items]; c[i]={...x,name:e.target.value}; onChange(c,cats); }} />
+          <FL>الرابط</FL>
+          <GI value={x.url}  onChange={(e) => { const c=[...items]; c[i]={...x,url:e.target.value};  onChange(c,cats); }} />
+          <ImageField label="أيقونة الأداة" value={x.icon ?? ""}
+            onChange={(v) => { const c=[...items]; c[i]={...x,icon:v}; onChange(c,cats); }} />
+          <FL>الصنف</FL>
+          <select value={x.category} onChange={(e) => { const c=[...items]; c[i]={...x,category:e.target.value}; onChange(c,cats); }} style={inputSx}>
+            <option value="">—</option>
+            {cats.map((c) => <option key={c.id} value={c.name}>{c.name}</option>)}
+          </select>
+          <FL>الوصف (اختياري)</FL>
+          <GT rows={2} value={x.description??""} onChange={(e) => { const c=[...items]; c[i]={...x,description:e.target.value}; onChange(c,cats); }} />
+        </GCard>
       ))}
     </div>
   );
 }
 
-function AiEditor({ items, cats, onChange }: { items: AiToolItem[]; cats: CatItem[]; onChange: (i: AiToolItem[], c: CatItem[]) => void }) {
-  const [subTab, setSubTab] = useState<"cats" | "tools">("cats");
-  const [catShow, setCatShow] = useState(false); const [catEdit, setCatEdit] = useState<CatItem | undefined>();
-  const [toolShow, setToolShow] = useState(false); const [toolEditIdx, setToolEditIdx] = useState<number | null>(null);
-
-  function saveCat(name: string, order: number) {
-    if (!name.trim()) return;
-    if (catEdit) {
-      const c = cats.map((x) => x.id === catEdit.id ? { ...x, name: name.trim(), order } : x);
-      onChange(items, c);
-    } else {
-      onChange(items, [...cats, { id: uid(), name: name.trim(), order }]);
-    }
-    setCatShow(false); setCatEdit(undefined);
-  }
-  function deleteCat(id: string) {
-    onChange(items.filter((x) => x.category !== cats.find((c) => c.id === id)?.name), cats.filter((c) => c.id !== id));
-  }
-
-  function saveTool(data: { name: string; url: string; category: string; icon?: string; description?: string; order: number; imgData?: string }) {
-    if (!data.name.trim() || !data.url.trim()) return;
-    const tool: AiToolItem = {
-      id: toolEditIdx !== null ? items[toolEditIdx].id : uid(),
-      name: data.name.trim(), url: data.url.trim(), category: data.category,
-      icon: data.imgData || data.icon || undefined,
-      description: data.description?.trim() || undefined, order: data.order,
-    };
-    const c = [...items];
-    if (toolEditIdx !== null) c[toolEditIdx] = tool; else c.push(tool);
-    onChange(c, cats);
-    setToolShow(false); setToolEditIdx(null);
-  }
-  function deleteTool() {
-    if (toolEditIdx === null) return;
-    onChange(items.filter((_, j) => j !== toolEditIdx), cats);
-    setToolShow(false); setToolEditIdx(null);
-  }
-  function openToolAdd() { setToolEditIdx(null); setToolShow(true); }
-  function openToolEdit(i: number) { setToolEditIdx(i); setToolShow(true); }
-
-  const sortedItems = [...items].sort((a, b) => a.order - b.order);
-
+function UtilsEditor({
+  items, cats, onChange,
+}: {
+  items: UtilityItem[];
+  cats: import("@/lib/admin-store").CatItem[];
+  onChange: (i: UtilityItem[], c: import("@/lib/admin-store").CatItem[]) => void;
+}) {
   return (
-    <div>
-      <div className="mb-3 flex gap-2">
-        <button type="button" onClick={() => setSubTab("cats")} className="rounded-lg border border-[rgba(200,195,185,0.22)] px-4 py-2 text-[13px] font-bold transition-all"
-          style={subTab === "cats"
-            ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A", boxShadow: "0 2px 8px rgba(181,168,152,0.18)" }
-            : { background: "rgba(255,255,255,0.80)", color: "#9090A8" }}>الأصناف</button>
-        <button type="button" onClick={() => setSubTab("tools")} className="rounded-lg border border-[rgba(200,195,185,0.22)] px-4 py-2 text-[13px] font-bold transition-all"
-          style={subTab === "tools"
-            ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A", boxShadow: "0 2px 8px rgba(181,168,152,0.18)" }
-            : { background: "rgba(255,255,255,0.80)", color: "#9090A8" }}>المواقع</button>
-      </div>
-
-      {subTab === "cats" && (
-        <div className="space-y-3">
-          <AddBtn onClick={() => { setCatEdit(undefined); setCatShow(true); }} label="إضافة صنف" />
-          <CatModal show={catShow} onClose={() => { setCatShow(false); setCatEdit(undefined); }} onSave={saveCat} edit={catEdit} />
-          <CatList cats={cats} onEdit={(c) => { setCatEdit(c); setCatShow(true); }} onDelete={deleteCat} />
-        </div>
-      )}
-
-      {subTab === "tools" && (
-        <div className="space-y-3">
-          <AddBtn onClick={openToolAdd} label="إضافة موقع" />
-          <ToolModal show={toolShow} onClose={() => { setToolShow(false); setToolEditIdx(null); }}
-            onSave={saveTool} onDelete={toolEditIdx !== null ? deleteTool : undefined}
-            edit={toolEditIdx !== null ? items[toolEditIdx] : null} cats={cats} />
-          {sortedItems.map((x) => {
-            const realIdx = items.findIndex((t) => t.id === x.id);
-            return (
-              <GCard key={x.id} onEdit={() => openToolEdit(realIdx)} onDelete={() => onChange(items.filter((_, j) => j !== realIdx), cats)}>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold text-white"
-                    style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)" }}>{x.order}</span>
-                  <h3 className="text-[14px] font-bold text-gray-800">{x.name}</h3>
-                </div>
-                {x.description && <p className="text-[12px] text-gray-500 leading-relaxed">{x.description}</p>}
-                <span className="inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold text-[#8B7D6F]"
-                  style={{ background: "rgba(181,168,152,0.12)", border: "1px solid rgba(181,168,152,0.25)" }}>{x.category}</span>
-              </GCard>
-            );
-          })}
-        </div>
-      )}
-
+    <div className="space-y-3">
+      <CatMgr cats={cats} onChange={(c) => onChange(items, c)} />
+      <AddBtn onClick={() => onChange([...items, { id: uid(), name: "", url: "", category: cats[0]?.name ?? "", order: items.length + 1 }], cats)} label="إضافة أداة" />
+      {items.map((x, i) => (
+        <GCard key={x.id} onDelete={() => onChange(items.filter((_, j) => j !== i), cats)}>
+          <FL>الاسم</FL>
+          <GI value={x.name} onChange={(e) => { const c=[...items]; c[i]={...x,name:e.target.value}; onChange(c,cats); }} />
+          <FL>الرابط</FL>
+          <GI value={x.url}  onChange={(e) => { const c=[...items]; c[i]={...x,url:e.target.value};  onChange(c,cats); }} />
+          <ImageField label="أيقونة الأداة" value={x.icon ?? ""}
+            onChange={(v) => { const c=[...items]; c[i]={...x,icon:v}; onChange(c,cats); }} />
+          <FL>الصنف</FL>
+          <select value={x.category} onChange={(e) => { const c=[...items]; c[i]={...x,category:e.target.value}; onChange(c,cats); }} style={inputSx}>
+            <option value="">—</option>
+            {cats.map((c) => <option key={c.id} value={c.name}>{c.name}</option>)}
+          </select>
+          <FL>الوصف (اختياري)</FL>
+          <GT rows={2} value={x.description??""} onChange={(e) => { const c=[...items]; c[i]={...x,description:e.target.value}; onChange(c,cats); }} />
+        </GCard>
+      ))}
     </div>
   );
 }
 
-function UtilsEditor({ items, cats, onChange }: { items: UtilityItem[]; cats: CatItem[]; onChange: (i: UtilityItem[], c: CatItem[]) => void }) {
-  const [subTab, setSubTab] = useState<"cats" | "tools">("cats");
-  const [catShow, setCatShow] = useState(false); const [catEdit, setCatEdit] = useState<CatItem | undefined>();
-  const [toolShow, setToolShow] = useState(false); const [toolEditIdx, setToolEditIdx] = useState<number | null>(null);
-
-  function saveCat(name: string, order: number) {
-    if (!name.trim()) return;
-    if (catEdit) {
-      const c = cats.map((x) => x.id === catEdit.id ? { ...x, name: name.trim(), order } : x);
-      onChange(items, c);
-    } else {
-      onChange(items, [...cats, { id: uid(), name: name.trim(), order }]);
-    }
-    setCatShow(false); setCatEdit(undefined);
-  }
-  function deleteCat(id: string) {
-    onChange(items.filter((x) => x.category !== cats.find((c) => c.id === id)?.name), cats.filter((c) => c.id !== id));
-  }
-
-  function saveTool(data: { name: string; url: string; category: string; icon?: string; description?: string; order: number; imgData?: string }) {
-    if (!data.name.trim() || !data.url.trim()) return;
-    const tool: UtilityItem = {
-      id: toolEditIdx !== null ? items[toolEditIdx].id : uid(),
-      name: data.name.trim(), url: data.url.trim(), category: data.category,
-      icon: data.imgData || data.icon || undefined,
-      description: data.description?.trim() || undefined, order: data.order,
-    };
-    const c = [...items];
-    if (toolEditIdx !== null) c[toolEditIdx] = tool; else c.push(tool);
-    onChange(c, cats);
-    setToolShow(false); setToolEditIdx(null);
-  }
-  function deleteTool() {
-    if (toolEditIdx === null) return;
-    onChange(items.filter((_, j) => j !== toolEditIdx), cats);
-    setToolShow(false); setToolEditIdx(null);
-  }
-  function openToolAdd() { setToolEditIdx(null); setToolShow(true); }
-  function openToolEdit(i: number) { setToolEditIdx(i); setToolShow(true); }
-
-  const sortedItems = [...items].sort((a, b) => a.order - b.order);
-
-  return (
-    <div>
-      <div className="mb-3 flex gap-2">
-        <button type="button" onClick={() => setSubTab("cats")} className="rounded-lg border border-[rgba(200,195,185,0.22)] px-4 py-2 text-[13px] font-bold transition-all"
-          style={subTab === "cats"
-            ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A", boxShadow: "0 2px 8px rgba(181,168,152,0.18)" }
-            : { background: "rgba(255,255,255,0.80)", color: "#9090A8" }}>الأصناف</button>
-        <button type="button" onClick={() => setSubTab("tools")} className="rounded-lg border border-[rgba(200,195,185,0.22)] px-4 py-2 text-[13px] font-bold transition-all"
-          style={subTab === "tools"
-            ? { background: "linear-gradient(135deg,rgba(181,168,152,0.22),rgba(160,146,130,0.16))", border: "1px solid rgba(200,195,185,0.35)", color: "#72665A", boxShadow: "0 2px 8px rgba(181,168,152,0.18)" }
-            : { background: "rgba(255,255,255,0.80)", color: "#9090A8" }}>الأدوات</button>
-      </div>
-
-      {subTab === "cats" && (
-        <div className="space-y-3">
-          <AddBtn onClick={() => { setCatEdit(undefined); setCatShow(true); }} label="إضافة صنف" />
-          <CatModal show={catShow} onClose={() => { setCatShow(false); setCatEdit(undefined); }} onSave={saveCat} edit={catEdit} />
-          <CatList cats={cats} onEdit={(c) => { setCatEdit(c); setCatShow(true); }} onDelete={deleteCat} />
-        </div>
-      )}
-
-      {subTab === "tools" && (
-        <div className="space-y-3">
-          <AddBtn onClick={openToolAdd} label="إضافة أداة" />
-          <ToolModal show={toolShow} onClose={() => { setToolShow(false); setToolEditIdx(null); }}
-            onSave={saveTool} onDelete={toolEditIdx !== null ? deleteTool : undefined}
-            edit={toolEditIdx !== null ? items[toolEditIdx] : null} cats={cats} />
-          {sortedItems.map((x) => {
-            const realIdx = items.findIndex((t) => t.id === x.id);
-            return (
-              <GCard key={x.id} onEdit={() => openToolEdit(realIdx)} onDelete={() => onChange(items.filter((_, j) => j !== realIdx), cats)}>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold text-white"
-                    style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)" }}>{x.order}</span>
-                  <h3 className="text-[14px] font-bold text-gray-800">{x.name}</h3>
-                </div>
-                {x.description && <p className="text-[12px] text-gray-500 leading-relaxed">{x.description}</p>}
-                <span className="inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold text-[#8B7D6F]"
-                  style={{ background: "rgba(181,168,152,0.12)", border: "1px solid rgba(181,168,152,0.25)" }}>{x.category}</span>
-              </GCard>
-            );
-          })}
-        </div>
-      )}
-
-    </div>
-  );
-}
-
-function ChatEditor({ prompt, model, onSave }: { prompt: string; model: string; onSave: (p: string, m: string) => void }) {
+function ChatEditor({
+  prompt, model, onSave,
+}: { prompt: string; model: string; onSave: (p: string, m: string) => void }) {
   const [p, setP] = useState(prompt);
   const [m, setM] = useState(model);
   return (
-    <div className="space-y-4 rounded-2xl border border-[rgba(200,195,185,0.22)] bg-white/80 p-5 shadow-sm">
-      <div><FL>توجيه المساعد (System Prompt)</FL><GT rows={15} value={p} onChange={(e)=>setP(e.target.value)} /></div>
-      <div><FL>النموذج</FL><GI value={m} onChange={(e)=>setM(e.target.value)} placeholder="llama-3.3-70b-versatile" /></div>
-      <button type="button" onClick={()=>onSave(p,m)}
-        className="inline-flex items-center gap-1.5 rounded-lg border border-[rgba(255,255,255,0.15)] px-5 py-2.5 text-[13px] font-bold text-white transition-lg"
+    <div className="space-y-4 lg-card rounded-2xl p-4">
+      <div className="lg-shine-stripe mb-1" />
+      <div><FL>توجيه المساعد (System Prompt)</FL><GT rows={12} value={p} onChange={(e) => setP(e.target.value)} /></div>
+      <div><FL>النموذج</FL><GI value={m} onChange={(e) => setM(e.target.value)} /></div>
+      <button type="button" onClick={() => onSave(p, m)}
+        className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[12px] font-bold text-white"
         style={{ background: "linear-gradient(135deg,#B5A898,#8B7D6F)", boxShadow: "0 2px 10px rgba(181,168,152,0.38)" }}>
-        <Save className="h-4 w-4" /> حفظ
+        <Save className="h-3.5 w-3.5" /> حفظ الإعدادات
       </button>
     </div>
   );

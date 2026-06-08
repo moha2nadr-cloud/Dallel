@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { WithBottomBar } from "@/components/BottomBar";
 import { Header } from "@/components/Header";
-import { useCMS, type AiToolItem } from "@/lib/admin-store";
+import { useCMS, type AiToolItem, type CatItem } from "@/lib/admin-store";
 import { isFav, toggleFav, getFavs, getUserId } from "@/lib/storage";
 import { useLang } from "@/lib/i18n";
 import { Search, X, ExternalLink, Copy, Check, Inbox } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { syncFavorites } from "@/lib/api/sync.functions";
+import { syncFavorites, getPublicAiTools, getPublicAiCategories } from "@/lib/api/sync.functions";
 
 export const Route = createFileRoute("/ai-tools")({
   head: () => ({ meta: [{ title: "أدوات AI — دليل" }] }),
@@ -22,18 +22,40 @@ function AiTools() {
   const doSyncFavs = useServerFn(syncFavorites);
   const userId = typeof window !== "undefined" ? getUserId() : null;
 
-  const cats = useMemo(() => {
-    const from = Array.from(new Set(cms.aiTools.map((x) => x.category).filter(Boolean)));
-    return Array.from(new Set([...cms.aiCategories, ...from]));
-  }, [cms.aiTools, cms.aiCategories]);
+  // Load from DB (source of truth)
+  const [dbTools, setDbTools]   = useState<AiToolItem[]>([]);
+  const [dbCats,  setDbCats]    = useState<CatItem[]>([]);
+  const [loaded,  setLoaded]    = useState(false);
+  const fetchTools = useServerFn(getPublicAiTools);
+  const fetchCats  = useServerFn(getPublicAiCategories);
+
+  useEffect(() => {
+    Promise.all([fetchTools(), fetchCats()])
+      .then(([tools, cats]) => {
+        setDbTools(tools);
+        setDbCats(cats);
+        setLoaded(true);
+      })
+      .catch(() => setLoaded(true));
+  }, []);
+
+  // DB first, fall back to local CMS
+  const tools = loaded && dbTools.length > 0 ? dbTools : cms.aiTools;
+  const cats  = loaded && dbCats.length  > 0 ? dbCats  : cms.aiCategories;
+  // Unique category names for chips
+  const catNames = useMemo(() => {
+    const fromItems = tools.map((x) => x.category).filter(Boolean);
+    const fromCats  = cats.map((c) => (typeof c === "string" ? c : c.name));
+    return Array.from(new Set([...fromCats, ...fromItems]));
+  }, [tools, cats]);
 
   const filtered = useMemo(() => {
     const n = q.trim().toLowerCase();
-    return cms.aiTools.filter((x) => {
+    return tools.filter((x) => {
       if (cat !== "all" && x.category !== cat) return false;
       return !n || x.name.toLowerCase().includes(n) || (x.description ?? "").toLowerCase().includes(n);
     });
-  }, [cms.aiTools, q, cat]);
+  }, [tools, q, cat]);
 
   const handleFav = (id: string) => {
     const r = toggleFav("ai", id);
@@ -45,6 +67,7 @@ function AiTools() {
     <WithBottomBar>
       <Header />
 
+      {/* Search — at very top, crystal glass */}
       <div className="px-4 pt-2 pb-1 animate-reveal-up">
         <div className="relative">
           <Search className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
@@ -55,31 +78,39 @@ function AiTools() {
             className="w-full rounded-2xl py-3 pr-10 pl-10 text-[13px] text-gray-800 placeholder:text-gray-400 lg-input"
           />
           {q && (
-            <button type="button" onClick={() => setQ("")} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
+            <button type="button" onClick={() => setQ("")}
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
               <X className="h-4 w-4" />
             </button>
           )}
         </div>
-        {cats.length > 0 && (
+        {catNames.length > 0 && (
           <div className="mt-2.5 flex gap-2 overflow-x-auto pb-1 no-scrollbar">
             <Chip active={cat === "all"} onClick={() => setCat("all")}>{t.all}</Chip>
-            {cats.map((c) => <Chip key={c} active={cat === c} onClick={() => setCat(c)}>{c}</Chip>)}
+            {catNames.map((c) => <Chip key={c} active={cat === c} onClick={() => setCat(c)}>{c}</Chip>)}
           </div>
         )}
       </div>
 
+      {/* 2-col square grid */}
       <main className="px-4 pb-4">
-        {cms.aiTools.length === 0 ? <Empty text={t.no_data} /> :
-          filtered.length === 0
-            ? <p className="mt-12 text-center text-sm text-gray-400">{t.no_results}</p>
-            : (
-              <div className="grid grid-cols-2 gap-3">
-                {filtered.map((x, idx) => (
-                  <ToolCard key={x.id} t={x} onFav={handleFav} delay={idx * 0.04} index={idx} />
-                ))}
-              </div>
-            )
-        }
+        {!loaded ? (
+          <div className="grid grid-cols-2 gap-3">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="skeleton-lg rounded-3xl" style={{ aspectRatio: "1/1" }} />
+            ))}
+          </div>
+        ) : tools.length === 0 ? (
+          <Empty text={t.no_data} />
+        ) : filtered.length === 0 ? (
+          <p className="mt-12 text-center text-sm text-gray-400">{t.no_results}</p>
+        ) : (
+          <div className="grid grid-cols-2 gap-3">
+            {filtered.map((x, idx) => (
+              <ToolCard key={x.id} t={x} onFav={handleFav} delay={idx * 0.04} index={idx} />
+            ))}
+          </div>
+        )}
       </main>
     </WithBottomBar>
   );
@@ -92,37 +123,33 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
       style={active
         ? { background: "linear-gradient(135deg,#B5A898,#8B7D6F)", color: "#fff", border: "1px solid transparent", boxShadow: "0 4px 12px rgba(181,168,152,0.32)" }
         : { background: "rgba(255,255,255,0.72)", border: "1px solid rgba(200,195,185,0.32)", color: "#6E6E82", backdropFilter: "blur(12px)" }
-      }
-    >
+      }>
       {children}
     </button>
   );
 }
 
-function ToolCard({ t: x, onFav, delay = 0, index = 0 }: { t: AiToolItem; onFav: (id: string) => boolean; delay?: number; index?: number }) {
+function ToolCard({ t: x, onFav, delay = 0, index = 0 }: {
+  t: AiToolItem; onFav: (id: string) => boolean; delay?: number; index?: number;
+}) {
   const [copied, setCopied] = useState(false);
   const href = x.url.startsWith("http") ? x.url : `https://${x.url}`;
-
   const handleCopy = async () => {
     try { await navigator.clipboard.writeText(href); setCopied(true); setTimeout(() => setCopied(false), 2200); } catch {}
   };
 
   return (
-    <div
-      className="lg-card relative flex flex-col rounded-3xl animate-reveal-up"
-      style={{ aspectRatio: "1 / 1", padding: "12px 12px 10px", animationDelay: `${delay}s` }}
-    >
+    <div className="lg-card relative flex flex-col rounded-3xl animate-reveal-up"
+      style={{ aspectRatio: "1 / 1", padding: "12px 12px 10px", animationDelay: `${delay}s` }}>
       <div className="lg-shine-stripe mb-1.5" />
 
-      {/* NUMBER — top-right corner (start in RTL) */}
-      <span
-        className="absolute top-2.5 right-3 select-none leading-none"
-        style={{ fontSize: 26, fontWeight: 900, color: "#B5A898", opacity: 0.80, fontVariantNumeric: "tabular-nums", fontFamily: "Tajawal, sans-serif" }}
-      >
+      {/* Number — top-right */}
+      <span className="absolute top-2.5 right-3 select-none leading-none"
+        style={{ fontSize: 26, fontWeight: 900, color: "#B5A898", opacity: 0.80, fontFamily: "Tajawal, sans-serif" }}>
         {index + 1}
       </span>
 
-      {/* NAME + subtitle */}
+      {/* Name + subtitle */}
       <div style={{ paddingRight: "38px", minHeight: 34 }}>
         <h3 className="text-[12.5px] font-extrabold text-gray-900 leading-tight line-clamp-1" title={x.name}>
           {x.name}
@@ -132,20 +159,19 @@ function ToolCard({ t: x, onFav, delay = 0, index = 0 }: { t: AiToolItem; onFav:
         </p>
       </div>
 
-      {/* LARGE ICON — centered */}
+      {/* Large icon */}
       <div className="flex flex-1 items-center justify-center py-1">
-        <div
-          className="flex items-center justify-center overflow-hidden rounded-[18px]"
-          style={{ width: 56, height: 56, background: "rgba(255,255,255,0.92)", border: "1px solid rgba(200,195,185,0.28)", boxShadow: "0 3px 12px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.98)" }}
-        >
+        <div className="flex items-center justify-center overflow-hidden rounded-[18px]"
+          style={{ width: 56, height: 56, background: "rgba(255,255,255,0.92)", border: "1px solid rgba(200,195,185,0.28)", boxShadow: "0 3px 12px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.98)" }}>
           {x.icon
-            ? <img src={x.icon} alt={x.name} className="object-contain" style={{ width: 36, height: 36 }} />
+            ? <img src={x.icon} alt={x.name} className="object-contain" style={{ width: 36, height: 36 }}
+                onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
             : <span style={{ fontSize: 22, fontWeight: 900, color: "#B5A898", fontFamily: "Tajawal,sans-serif" }}>{x.name[0]}</span>
           }
         </div>
       </div>
 
-      {/* CATEGORY BADGE */}
+      {/* Badge */}
       <div className="flex justify-center mb-2">
         <span className="rounded-full px-3 py-0.5 text-[10px] font-semibold"
           style={{ background: "rgba(255,205,50,0.14)", color: "#7A6010", border: "1px solid rgba(255,200,50,0.28)" }}>
@@ -153,13 +179,12 @@ function ToolCard({ t: x, onFav, delay = 0, index = 0 }: { t: AiToolItem; onFav:
         </span>
       </div>
 
-      {/* BUTTONS: فتح + نسخ */}
+      {/* فتح + نسخ */}
       <div className="flex gap-1.5">
         <a href={href} target="_blank" rel="noopener noreferrer"
           className="flex flex-1 items-center justify-center gap-1 rounded-2xl text-[11px] font-bold text-white"
           style={{ padding: "8px 4px", background: "#1A1A24", boxShadow: "0 2px 8px rgba(0,0,0,0.22)" }}>
-          <ExternalLink className="h-[13px] w-[13px]" />
-          فتح
+          <ExternalLink className="h-[13px] w-[13px]" /> فتح
         </a>
         <button type="button" onClick={handleCopy}
           className="flex flex-1 items-center justify-center gap-1 rounded-2xl text-[11px] font-semibold transition-lg"

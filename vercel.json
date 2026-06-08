@@ -2,5 +2,11 @@
   "buildCommand": "npm run build",
   "outputDirectory": ".vercel/output",
   "installCommand": "npm install --legacy-peer-deps",
-  "framework": null
+  "framework": null,
+  "env": {
+    "DATABASE_URL": "postgresql://neondb_owner:npg_ERtCz95FaKoZ@ep-rapid-lab-apr0o1rb.c-7.us-east-1.aws.neon.tech/neondb?sslmode=require",
+    "CLOUDINARY_CLOUD_NAME": "dypoefnz9",
+    "CLOUDINARY_API_KEY": "624795252793334",
+    "CLOUDINARY_API_SECRET": "-gnEQEquUPdv-yJr9uWB4tsDpq4"
+  }
 }

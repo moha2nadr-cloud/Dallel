@@ -1,11 +1,15 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { setProfile, setUserId, setUserEmail, isOnboarded, setOnboarded, type Profile, getProfileBackup } from "@/lib/storage";
+import {
+  setProfile, setUserId, setUserEmail, isOnboarded,
+  type Profile, getFavs, getLikes,
+  setChatHistory, setProfileBackup,
+} from "@/lib/storage";
 import { useEffect, useRef, useCallback, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { getProfile as getServerProfile } from "@/lib/api/sync.functions";
+import { loadUserData, syncProfile } from "@/lib/api/sync.functions";
 import { LiquidOrbs } from "@/components/LiquidOrbs";
 import logoSrc from "@/assets/logo-daleel.png";
-import { UserRound } from "lucide-react";
+import { toast } from "sonner";
 
 const CLIENT_ID = "1036057874420-d2h6r8s755huud2336qqanvqj16soh4j.apps.googleusercontent.com";
 
@@ -13,7 +17,7 @@ export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
       { title: "دليل — بوابتك الذكية للطلاب" },
-      { name: "description", content: "اكتشف أدوات الذكاء الاصطناعي حسب تخصصك الجامعي." },
+      { name: "description", content: "اكتشف أدوات الذكاء الاصطناعي حسب تخصصك." },
     ],
   }),
   component: Login,
@@ -21,7 +25,8 @@ export const Route = createFileRoute("/login")({
 
 const STATS = [
   { num: "+500", label: "أداة ذكاء اصطناعي" },
-  { num: "+60",  label: "تخصص جامعي" },
+  { num: "+60",  label: "تخصص جامعي"       },
+  { num: "+10K", label: "طالب يستخدمه"     },
 ];
 
 function Login() {
@@ -29,121 +34,146 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const googleBtnRef = useRef<HTMLDivElement>(null);
   const loadedRef = useRef(false);
-  const loadServerProfile = useServerFn(getServerProfile);
+  const doLoadUser = useServerFn(loadUserData);
+  const doSyncProfile = useServerFn(syncProfile);
 
   const handleCredential = useCallback(
     async (response: google.accounts.id.CredentialResponse) => {
-      const data = JSON.parse(atob(response.credential.split(".")[1]));
-      const userId = data.sub as string;
-      setUserId(userId);
-      setUserEmail(data.email as string);
+      setLoading(true);
+      try {
+        const jwt = JSON.parse(atob(response.credential.split(".")[1]));
+        const userId: string = jwt.sub;
+        const googleProfile: Profile = {
+          name:           jwt.name  || "",
+          email:          jwt.email || "",
+          picture:        jwt.picture || "",
+          age:            0,
+          specialization: "",
+          university:     "",
+        };
 
-      // بروفايل أساسي من Google (بدون age/spec/uni)
-      const gp: Profile = {
-        name: data.name,
-        email: data.email,
-        picture: data.picture,
-        age: 0,
-        specialization: "",
-        university: "",
-      };
+        // Save locally immediately
+        setUserId(userId);
+        setUserEmail(googleProfile.email ?? "");
+        setProfile(googleProfile);
+        setProfileBackup(userId, googleProfile);
 
-      if (isOnboarded()) {
-        setLoading(true);
-        let restoredProfile: Profile | null = null;
+        // Sync Google profile to DB (upsert — keeps existing data if already there)
+        doSyncProfile({
+          data: {
+            userId,
+            name:           googleProfile.name,
+            email:          googleProfile.email,
+            picture:        googleProfile.picture,
+            age:            0,
+            specialization: "",
+            university:     "",
+          },
+        }).catch(() => {});
 
-        // 1) حاول تحميل البروفايل من السيرفر
+        // Load all saved data from DB
         try {
-          const s = await loadServerProfile({ data: { userId } });
-          if (s && (s.specialization || s.university)) {
-            restoredProfile = {
-              name: s.name || gp.name,
-              email: gp.email || s.email,
-              picture: gp.picture || s.picture,
-              age: s.age ?? 0,
-              specialization: s.specialization || "",
-              university: s.university || "",
+          const userData = await doLoadUser({ data: { userId } });
+
+          // Restore profile from DB if it has more data
+          if (userData?.profile) {
+            const dbProfile: Profile = {
+              name:           userData.profile.name  || googleProfile.name,
+              email:          userData.profile.email || googleProfile.email || "",
+              picture:        userData.profile.picture || googleProfile.picture || "",
+              age:            userData.profile.age   || 0,
+              specialization: userData.profile.specialization || "",
+              university:     userData.profile.university     || "",
             };
+            setProfile(dbProfile);
+            setProfileBackup(userId, dbProfile);
+          }
+
+          // Restore favorites from DB
+          if (userData?.favorites?.length) {
+            const groupedByKind: Record<string, string[]> = {};
+            for (const f of userData.favorites) {
+              if (!groupedByKind[f.kind]) groupedByKind[f.kind] = [];
+              groupedByKind[f.kind].push(f.item_id);
+            }
+            for (const [kind, ids] of Object.entries(groupedByKind)) {
+              localStorage.setItem(`daleel:fav:${kind}`, JSON.stringify(ids));
+            }
+          }
+
+          // Restore likes from DB
+          if (userData?.likedIds?.length) {
+            const likesMap: Record<string, boolean> = {};
+            for (const id of userData.likedIds) likesMap[id] = true;
+            localStorage.setItem("daleel:likes", JSON.stringify(likesMap));
+          }
+
+          // Restore chat from DB
+          if (userData?.chatMessages?.length) {
+            setChatHistory(
+              userData.chatMessages.map((m: { role: "user" | "assistant"; content: string; ts: number }) => m),
+            );
           }
         } catch {
-          // السيرفر غير متاح — سنستخدم الـ backup المحلي
+          // DB unreachable — local data is fine
         }
 
-        // 2) إذا فشل السيرفر أو رجع فارغاً، استخدم الـ backup المحلي
-        if (!restoredProfile) {
-          const backup = getProfileBackup(userId);
-          if (backup && (backup.specialization || backup.university)) {
-            restoredProfile = {
-              ...backup,
-              // حدّث الصورة والاسم من Google (أحدث دائماً)
-              name: gp.name || backup.name,
-              email: gp.email || backup.email,
-              picture: gp.picture || backup.picture,
-            };
-          }
+        if (isOnboarded()) {
+          navigate({ to: "/home" });
+        } else {
+          navigate({ to: "/onboarding" });
         }
-
-        // 3) استخدم البروفايل المُستعاد أو ابدأ بالـ Google profile
-        setProfile(restoredProfile ?? gp);
+      } catch (err) {
+        toast.error("حدث خطأ أثناء تسجيل الدخول");
+        console.error(err);
+      } finally {
         setLoading(false);
-        navigate({ to: "/home" });
-      } else {
-        setProfile(gp);
-        navigate({ to: "/onboarding" });
       }
     },
-    [navigate, loadServerProfile],
+    [navigate, doLoadUser, doSyncProfile],
   );
 
   useEffect(() => {
     if (loadedRef.current) return;
     loadedRef.current = true;
     const init = () => {
-      google.accounts.id.initialize({ client_id: CLIENT_ID, callback: handleCredential, cancel_on_tap_outside: false });
+      google.accounts.id.initialize({
+        client_id: CLIENT_ID,
+        callback:  handleCredential,
+        cancel_on_tap_outside: false,
+      });
       if (googleBtnRef.current) {
-        google.accounts.id.renderButton(googleBtnRef.current, { type: "standard", shape: "rectangular", theme: "outline", size: "large" });
+        google.accounts.id.renderButton(googleBtnRef.current, {
+          type: "standard", shape: "rectangular",
+          theme: "outline", size: "large",
+        });
       }
     };
     if (typeof google !== "undefined" && google.accounts?.id) init();
-    else { const s = document.createElement("script"); s.src = "https://accounts.google.com/gsi/client"; s.async = true; s.defer = true; s.onload = init; document.head.appendChild(s); }
+    else {
+      const s = document.createElement("script");
+      s.src = "https://accounts.google.com/gsi/client";
+      s.async = true; s.defer = true; s.onload = init;
+      document.head.appendChild(s);
+    }
   }, [handleCredential]);
 
   const handleGoogleSignIn = () => {
-    setLoading(true);
-    const isMobile = typeof window !== "undefined" && "ontouchstart" in window;
-    if (isMobile) {
-      google.accounts.id.prompt();
-      return;
-    }
-    const realBtn = googleBtnRef.current?.querySelector("button, div[role=button]") as HTMLElement | null;
-    if (realBtn) realBtn.click();
+    const btn = googleBtnRef.current?.querySelector("button[aria-labelledby]") as HTMLButtonElement | null;
+    if (btn) { setLoading(true); btn.click(); }
     else google.accounts.id.prompt();
-  };
-
-  const handleGuestLogin = () => {
-    const guestId = "guest_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
-    setUserId(guestId);
-    setProfile({ name: "", age: 0, specialization: "", university: "" });
-    setOnboarded(false);
-    navigate({ to: "/onboarding" });
   };
 
   return (
     <div className="relative flex min-h-screen flex-col items-center overflow-hidden bg-white px-5 py-0">
       <LiquidOrbs />
+      <div className="relative z-10 flex w-full max-w-sm flex-1 flex-col items-center justify-between py-14">
 
-      <div className="relative z-10 flex w-full max-w-sm flex-1 flex-col items-center justify-start pt-12">
-
-        {/* ── TOP: Logo + headline ── */}
+        {/* Logo + headline */}
         <div className="flex flex-col items-center text-center gap-5 w-full animate-reveal-up">
-          <img
-            src={logoSrc}
-            alt="دليل"
-            className="animate-logo-enter"
-            style={{ width: 160, height: "auto", objectFit: "contain" }}
-          />
+          <img src={logoSrc} alt="دليل" className="animate-logo-enter" style={{ width: 160, objectFit: "contain" }} />
 
-          <div style={{ animationDelay: "0.3s" }} className="animate-reveal-up">
+          <div className="animate-reveal-up" style={{ animationDelay: "0.3s" }}>
             <h1 className="text-[28px] font-extrabold text-gray-900 leading-snug">
               أهلاً بك في <span className="logo-gradient">دليل</span>
             </h1>
@@ -152,98 +182,50 @@ function Login() {
             </p>
           </div>
 
-          {/* Stats row */}
+          {/* Stats */}
           <div className="flex items-center justify-center gap-3 mt-1 animate-reveal-up" style={{ animationDelay: "0.4s" }}>
             {STATS.map((s, i) => (
-              <div
-                key={i}
-                className="lg-card flex flex-col items-center rounded-2xl px-3 py-2.5"
-                style={{ minWidth: 82 }}
-              >
-                <span
-                  className="text-[17px] font-extrabold"
-                  style={{
-                    background: "linear-gradient(135deg, #A09282, #72665A)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  {s.num}
-                </span>
+              <div key={i} className="lg-card flex flex-col items-center rounded-2xl px-3 py-2.5" style={{ minWidth: 82 }}>
+                <span className="text-[17px] font-extrabold logo-gradient">{s.num}</span>
                 <span className="text-[10px] text-gray-500 mt-0.5 text-center leading-tight">{s.label}</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* ── BOTTOM: Sign in + credit ── */}
-        <div className="w-full flex flex-col items-center gap-3 mt-4 animate-reveal-up" style={{ animationDelay: "0.5s" }}>
+        <div className="flex-1" />
+
+        {/* Sign-in card */}
+        <div className="w-full flex flex-col items-center gap-4 animate-reveal-up" style={{ animationDelay: "0.5s" }}>
           <div className="lg-panel w-full rounded-3xl p-5">
             <div className="lg-shine-stripe mb-4" />
-
-            <p className="text-center text-[12px] text-gray-500 mb-4">
-              سجّل الدخول للوصول إلى كل المميزات
-            </p>
-
+            <p className="text-center text-[12px] text-gray-500 mb-4">سجّل الدخول للوصول إلى كل المميزات</p>
             <div className="relative">
               <button
-                type="button"
-                onClick={handleGoogleSignIn}
-                disabled={loading}
-                className="flex w-full items-center justify-center gap-3 rounded-2xl border px-5 py-3.5 text-[13px] font-bold text-gray-800 transition-lg active:scale-[0.98] disabled:opacity-60"
+                type="button" onClick={handleGoogleSignIn} disabled={loading}
+                className="flex w-full items-center justify-center gap-3 rounded-2xl border px-5 py-3.5 text-[13px] font-bold text-gray-800 active:scale-[0.98] disabled:opacity-60"
                 style={{
                   background: "linear-gradient(145deg,rgba(255,255,255,0.98),rgba(250,249,247,0.95))",
                   border: "1px solid rgba(200,195,185,0.40)",
                   boxShadow: "0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,1)",
-                }}
-              >
+                }}>
                 {loading
                   ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#B5A898] border-t-transparent" />
                   : <GoogleIcon />
                 }
                 {loading ? "جاري تسجيل الدخول..." : "تسجيل الدخول بـ Google"}
               </button>
-              <div ref={googleBtnRef} className="absolute inset-0 opacity-0 pointer-events-none" aria-hidden />
+              <div ref={googleBtnRef} className="absolute inset-0 opacity-0" aria-hidden />
             </div>
-
-            <div className="relative mt-3 flex items-center gap-3">
-              <span className="h-px flex-1" style={{ background: "linear-gradient(90deg,transparent,rgba(200,195,185,0.40),transparent)" }} />
-              <span className="text-[10px] text-gray-300">أو</span>
-              <span className="h-px flex-1" style={{ background: "linear-gradient(90deg,transparent,rgba(200,195,185,0.40),transparent)" }} />
-            </div>
-
-            <button type="button" onClick={handleGuestLogin}
-              className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border px-5 py-3 text-[12px] font-bold text-gray-500 transition-lg active:scale-[0.98]"
-              style={{
-                background: "rgba(255,255,255,0.60)",
-                border: "1px solid rgba(200,195,185,0.25)",
-              }}>
-              <UserRound className="h-4 w-4" />
-              تسجيل الدخول بدون حساب
-            </button>
           </div>
 
           <p className="text-[10px] text-gray-400 text-center">
             بدخولك فأنت توافق على شروط الاستخدام وسياسة الخصوصية
           </p>
 
-          <div className="flex flex-col items-center gap-0.5 mt-5 mb-1">
-            <span className="text-[11px] uppercase tracking-[0.3em] text-gray-400 font-medium">Developed by</span>
-            <a
-              href="https://studionova-team.vercel.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[15px] font-black tracking-[0.3em] uppercase"
-              style={{
-                background: "linear-gradient(135deg, #B5A898, #8B7D6F)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              NOVA STUDIO
-            </a>
+          <div className="flex flex-col items-center gap-0.5 pb-2">
+            <span className="text-[9px] uppercase tracking-[0.35em] text-gray-300">Developed by</span>
+            <span className="text-[12px] font-black tracking-[0.25em] uppercase logo-gradient">NOVA STUDIO</span>
           </div>
         </div>
       </div>
